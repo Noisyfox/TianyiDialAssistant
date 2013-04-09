@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">天翼密码助手</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="button_ok">确定</string>
+    <string name="button_getpsw">立即获取</string>
+    <string name="psw_err">密码获取失败</string>
+    <string name="psw_neverget">尚未获取过密码</string>
+    <string name="allow_add">允许显示广告来支持开发者</string>
+
+</resources>

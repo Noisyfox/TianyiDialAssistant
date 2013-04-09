@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">TianyiDialAssistant</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="button_ok">OK</string>
+    <string name="button_getpsw">Get psw now!</string>
+    <string name="psw_err">Password require fail!</string>
+    <string name="psw_neverget">No password recorded!</string>
+    <string name="aboutme">by Noisyfox NUAA</string>
+    <string name="allow_add">允许显示广告来支持开发者</string>
+
+</resources>
