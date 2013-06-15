@@ -98,13 +98,6 @@ public class MainActivity extends Activity implements UpdateScordNotifier {
 	}
 
 	@Override
-	protected void onStop() {
-		// TODO Auto-generated method stub
-		super.onStop();
-		this.finish();
-	}
-
-	@Override
 	protected void onResume() {
 		super.onResume();
 

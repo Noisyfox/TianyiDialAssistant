@@ -8,6 +8,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -16,6 +18,11 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.telephony.SmsManager;
+import android.view.View;
+import android.view.WindowManager;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class Util {
@@ -163,11 +170,36 @@ public class Util {
 	}
 
 	public static void showPswDialog(Context context, String psw) {
-		Intent i = new Intent();
-		i.setClass(context, PswDialog.class);
-		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		i.putExtra("psw", psw);
-		context.startActivity(i);
+
+		 //final Dialog d = new Dialog(arg0);
+		 //d.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+		 //d.show();
+		View v = View.inflate(context, R.layout.psw_dialog, null);
+		
+		final Dialog alertDialog = new AlertDialog.Builder(context).
+				setView(v). 
+                create(); 
+		alertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+
+        alertDialog.show(); 
+        
+		TextView t = (TextView)alertDialog.getWindow().findViewById(R.id.pswView);
+		t.setText(psw);
+		
+		Button b = (Button)alertDialog.getWindow().findViewById(R.id.button1);
+		b.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				alertDialog.dismiss();
+			}
+		});
+		
+        
+		//Intent i = new Intent();
+		//i.setClass(context, PswDialog.class);
+		//i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		//i.putExtra("psw", psw);
+		//context.startActivity(i);
 	}
 
 	public static String updateMainText(Context context) {

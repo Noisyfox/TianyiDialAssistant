@@ -25,11 +25,11 @@ public class SmsReceiver extends BroadcastReceiver {
 						String psw = Util.check(curMsg.getDisplayMessageBody());
 						if (!psw.equals("")) {
 							abortBroadcast();
-							Util.recordLastPsw(arg0, psw);
+							Util.recordLastPsw(arg0, psw); 
 							Util.showPswDialog(arg0, psw);
-							// final Dialog d=new Dialog(arg0);
-							// d.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-							// d.show();
+							 //final Dialog d=new Dialog(arg0);
+							 //d.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+							 //d.show();
 
 							// Toast.makeText(arg0, "Got The Password:" + psw,
 							// Toast.LENGTH_LONG).show();

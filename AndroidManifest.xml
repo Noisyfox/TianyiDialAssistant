@@ -18,6 +18,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />  
 
     <application
         android:allowBackup="true"
@@ -75,11 +76,6 @@
             android:name="org.foxteam.noisyfox.tianyidialassistant.WidgetReceiver"
             android:enabled="true" >
         </receiver>
-
-        <activity
-            android:name="org.foxteam.noisyfox.tianyidialassistant.PswDialog"
-            android:theme="@android:style/Theme.Dialog" >
-        </activity>
 
         <receiver android:name=".TYWidgetProvider" >
             <meta-data
