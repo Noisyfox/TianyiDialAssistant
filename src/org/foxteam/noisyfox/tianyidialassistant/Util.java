@@ -169,40 +169,62 @@ public class Util {
 		}
 	}
 
+	private static final Object pswDlgSyncObject = new Object();
+	private static Dialog pswDialog = null;
+
 	public static void showPswDialog(Context context, String psw) {
-
-		 //final Dialog d = new Dialog(arg0);
-		 //d.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-		 //d.show();
-		View v = View.inflate(context, R.layout.psw_dialog, null);
-		
-		final Dialog alertDialog = new AlertDialog.Builder(context).
-				setView(v). 
-                create(); 
-		alertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-
-        alertDialog.show(); 
-        
-		TextView t = (TextView)alertDialog.getWindow().findViewById(R.id.pswView);
-		t.setText(psw);
-		
-		Button b = (Button)alertDialog.getWindow().findViewById(R.id.button1);
-		b.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				alertDialog.dismiss();
+		synchronized (pswDlgSyncObject) {
+			// final Dialog d = new Dialog(arg0);
+			// d.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+			// d.show();
+			if(pswDialog != null){
+				pswDialog.dismiss();
+				pswDialog = null;
 			}
-		});
-		
-        
-		//Intent i = new Intent();
-		//i.setClass(context, PswDialog.class);
-		//i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		//i.putExtra("psw", psw);
-		//context.startActivity(i);
+			View v = View.inflate(context, R.layout.psw_dialog, null);
+
+			pswDialog = new AlertDialog.Builder(context)
+					.setView(v).create();
+			pswDialog.getWindow().setType(
+					WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+
+			pswDialog.show();
+
+			TextView t = (TextView) pswDialog.getWindow().findViewById(
+					R.id.pswView);
+			t.setText(psw);
+
+			Button b = (Button) pswDialog.getWindow().findViewById(
+					R.id.button_pswdialog_dismiss);
+			b.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View arg0) {
+					synchronized (pswDlgSyncObject) {
+						if(pswDialog != null){
+							pswDialog.dismiss();
+							pswDialog = null;
+						}
+					}
+				}
+			});
+
+			// Intent i = new Intent();
+			// i.setClass(context, PswDialog.class);
+			// i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			// i.putExtra("psw", psw);
+			// context.startActivity(i);
+		}
 	}
 
 	public static String updateMainText(Context context) {
+		// TelephonyManager tm =
+		// (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+		// String tel = tm.getLine1Number();
+		// String imei =tm.getSimSerialNumber();
+		// String imsi =tm.getSubscriberId();
+
+		// return tel+"\n" + imei+"\n"+ imsi;
+
 		synchronized (syncObj) {
 			SharedPreferences sp = context.getApplicationContext()
 					.getSharedPreferences("PSWRecord", Context.MODE_PRIVATE);
@@ -220,7 +242,8 @@ public class Util {
 				if (dTime_get > 5 * 60 * 60 * 1000) {
 					w += "\n密码可能已经过期!";
 				}
-				return w;
+
+				return w;// + "\n" +tel+"\n" + imei+"\n"+ imsi;
 			}
 		}
 	}
