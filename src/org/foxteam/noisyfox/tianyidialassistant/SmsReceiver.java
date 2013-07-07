@@ -10,9 +10,9 @@ public class SmsReceiver extends BroadcastReceiver {
 	private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
 
 	@Override
-	public void onReceive(Context arg0, Intent arg1) {
-		if (arg1.getAction().equals(SMS_RECEIVED)) {
-			Bundle bundle = arg1.getExtras();
+	public void onReceive(Context context, Intent intent) {
+		if (intent.getAction().equals(SMS_RECEIVED)) {
+			Bundle bundle = intent.getExtras();
 			if (bundle != null) {
 				Object[] pdus = (Object[]) bundle.get("pdus");
 				SmsMessage[] msg = new SmsMessage[pdus.length];
@@ -20,21 +20,31 @@ public class SmsReceiver extends BroadcastReceiver {
 					msg[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
 				}
 
+				PhoneNumberVerification nv = new PhoneNumberVerification(
+						context);
+				String phoneNumber = nv.getUnconfrimedNumber();
+
 				for (SmsMessage curMsg : msg) {
 					if (curMsg.getDisplayOriginatingAddress().equals("10001")) {
 						String psw = Util.check(curMsg.getDisplayMessageBody());
 						if (!psw.equals("")) {
 							abortBroadcast();
-							Util.recordLastPsw(arg0, psw); 
-							Util.showPswDialog(arg0, psw);
-							 //final Dialog d=new Dialog(arg0);
-							 //d.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-							 //d.show();
+							Util.recordLastPsw(context, psw);
+							Util.showPswDialog(context, psw);
+							// final Dialog d=new Dialog(arg0);
+							// d.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+							// d.show();
 
 							// Toast.makeText(arg0, "Got The Password:" + psw,
 							// Toast.LENGTH_LONG).show();
 
-							break;
+							// break;
+						}
+					} else if (curMsg.getDisplayOriginatingAddress().equals(
+							phoneNumber)) {
+						if (nv.confirmTextMessage(phoneNumber, curMsg
+								.getDisplayMessageBody())) {
+							abortBroadcast();
 						}
 					}
 				}

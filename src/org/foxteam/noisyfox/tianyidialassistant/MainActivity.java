@@ -95,6 +95,15 @@ public class MainActivity extends Activity implements UpdateScordNotifier {
 			}
 
 		});
+
+		PhoneNumberVerification pnv = new PhoneNumberVerification(this);
+		if (pnv.isPhoneNumberConfirmed()) {
+			Toast.makeText(this, pnv.getPhoneNumber(), Toast.LENGTH_LONG)
+					.show();
+			pnv.clearPhoneNumber();
+		} else {
+			pnv.beginConfirm();
+		}
 	}
 
 	@Override

@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">TianyiDialAssistant</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="button_ok">OK</string>
+    <string name="button_cancel">Cancel</string>
     <string name="button_getpsw">Get psw now!</string>
+    <string name="button_skip">Skip</string>
     <string name="psw_err">Password require fail!</string>
     <string name="psw_neverget">No password recorded!</string>
     <string name="aboutme">by Noisyfox NUAA</string>
     <string name="allow_add">允许显示广告来支持开发者</string>
-
+    <string name="dlgPhoneVer_noti_title">确认你的电话号码</string>
+    <string name="dlgPhoneVer_noti_text">\t现在将通过向本机发送一条一次性短信确认你的手机号码。\n\t进行确认并不会将你的号码分享给任何人，只是用来在服务器端进行身份识别。</string>
+	<string name="dlgPhoneVer_edit_title">Edit Phone Number</string>
+	<string name="dlgPhoneVer_edit_text">Phone:</string>
+	<string name="dlgPhoneVer_skip_title">跳过号码验证</string>
+	<string name="dlgPhoneVer_skip_text">\t选择跳过号码验证将无法使用PC端一键登录功能，是否确认跳过号码验证？</string>
+	<string name="dlgPhoneVer_skipped_toast">你已跳过了号码验证，你可以稍后在菜单中选择再次进行号码验证</string>
+	<string name="dlgPhoneVer_vering_toast">正在发送验证短信，期间你可以做其他事情</string>
 </resources>
