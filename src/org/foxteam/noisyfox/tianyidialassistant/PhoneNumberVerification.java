@@ -17,10 +17,11 @@ import android.widget.Toast;
 
 public class PhoneNumberVerification {
 	static final String SP_NAME = "PhoneState";
-	static final String SP_VALUE_SAVEDNUMBER = "PhoneNumber";
-	static final String SP_VALUE_SAVEDNUMBER_ENCRYPT = "PhoneNumberEnc";
-	static final String SP_VALUE_UNCONFIRMEDNUMBER = "UPhoneNumber";
-	static final String SP_VALUE_CONFIRMSTRING = "ConfirmString";
+	static final String SP_VALUE_STR_SAVEDNUMBER = "PhoneNumber";
+	static final String SP_VALUE_STR_SAVEDNUMBER_ENCRYPT = "PhoneNumberEnc";
+	static final String SP_VALUE_STR_UNCONFIRMEDNUMBER = "UPhoneNumber";
+	static final String SP_VALUE_STR_CONFIRMSTRING = "ConfirmString";
+	static final String SP_VALUE_BOOL_RUNATONCE = "RunAtOnce";
 
 	private final static Object syncObject = new Object();
 	private Context mContext = null;
@@ -34,17 +35,23 @@ public class PhoneNumberVerification {
 		mPreferences = context.getApplicationContext().getSharedPreferences(
 				SP_NAME, Context.MODE_PRIVATE);
 	}
+	
+	//是否提示过了
+	boolean isRunAtOnce(){
+		boolean rao = mPreferences.getBoolean(SP_VALUE_BOOL_RUNATONCE, false);
+		return rao;
+	}
 
 	boolean isPhoneNumberConfirmed() {
 		synchronized (syncObject) {
 			// 获取储存的电话号码
 			String savedPhoneNumber = mPreferences.getString(
-					SP_VALUE_SAVEDNUMBER, "");
+					SP_VALUE_STR_SAVEDNUMBER, "");
 			if (savedPhoneNumber.equals("")) {
 				return false;
 			}
 			String savedPhoneNumberEnc = mPreferences.getString(
-					SP_VALUE_SAVEDNUMBER_ENCRYPT, "");
+					SP_VALUE_STR_SAVEDNUMBER_ENCRYPT, "");
 			if (savedPhoneNumberEnc.equals("")) {
 				return false;
 			}
@@ -161,8 +168,9 @@ public class PhoneNumberVerification {
 
 		Editor e = mPreferences.edit();
 		e.clear();
-		e.putString(SP_VALUE_UNCONFIRMEDNUMBER, number);
-		e.putString(SP_VALUE_CONFIRMSTRING, rk);
+		e.putString(SP_VALUE_STR_UNCONFIRMEDNUMBER, number);
+		e.putString(SP_VALUE_STR_CONFIRMSTRING, rk);
+		e.putBoolean(SP_VALUE_BOOL_RUNATONCE, true);
 		e.commit();
 
 		// 发送短信验证
@@ -174,7 +182,7 @@ public class PhoneNumberVerification {
 			if (number == null || msg == null)
 				return false;
 
-			String confirmStr = mPreferences.getString(SP_VALUE_CONFIRMSTRING,
+			String confirmStr = mPreferences.getString(SP_VALUE_STR_CONFIRMSTRING,
 					"");
 			if (confirmStr.equals("") || !number.equals(getUnconfrimedNumber())
 					|| !msg.equals(confirmStr)) {
@@ -186,8 +194,9 @@ public class PhoneNumberVerification {
 
 			Editor e = mPreferences.edit();
 			e.clear();
-			e.putString(SP_VALUE_SAVEDNUMBER, number);
-			e.putString(SP_VALUE_SAVEDNUMBER_ENCRYPT, enc);
+			e.putString(SP_VALUE_STR_SAVEDNUMBER, number);
+			e.putString(SP_VALUE_STR_SAVEDNUMBER_ENCRYPT, enc);
+			e.putBoolean(SP_VALUE_BOOL_RUNATONCE, true);
 			e.commit();
 
 			return true;
@@ -197,7 +206,7 @@ public class PhoneNumberVerification {
 	String getPhoneNumber() {
 		synchronized (syncObject) {
 			String savedPhoneNumber = mPreferences.getString(
-					SP_VALUE_SAVEDNUMBER, "");
+					SP_VALUE_STR_SAVEDNUMBER, "");
 			if (savedPhoneNumber.equals(""))
 				return null;
 
@@ -208,7 +217,7 @@ public class PhoneNumberVerification {
 	String getUnconfrimedNumber() {
 		synchronized (syncObject) {
 			String savedPhoneNumber = mPreferences.getString(
-					SP_VALUE_UNCONFIRMEDNUMBER, "");
+					SP_VALUE_STR_UNCONFIRMEDNUMBER, "");
 			if (savedPhoneNumber.equals(""))
 				return null;
 
@@ -224,6 +233,7 @@ public class PhoneNumberVerification {
 			// e.remove(SP_VALUE_UNCONFIRMEDNUMBER);
 			// e.remove(SP_VALUE_CONFIRMSTRING);
 			e.clear();
+			e.putBoolean(SP_VALUE_BOOL_RUNATONCE, true);
 			e.commit();
 		}
 	}

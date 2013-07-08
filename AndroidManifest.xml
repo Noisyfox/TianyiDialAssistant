@@ -18,7 +18,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />  
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:allowBackup="true"
@@ -54,7 +54,6 @@
         <activity
             android:name="com.emar.escore.sdk.view.WebActivity"
             android:configChanges="keyboardHidden|orientation" />
-        
         <activity
             android:name="org.foxteam.noisyfox.tianyidialassistant.MainActivity"
             android:label="@string/app_name" >
@@ -76,8 +75,7 @@
             android:name="org.foxteam.noisyfox.tianyidialassistant.WidgetReceiver"
             android:enabled="true" >
         </receiver>
-
-        <receiver android:name=".TYWidgetProvider" >
+        <receiver android:name="org.foxteam.noisyfox.tianyidialassistant.TYWidgetProvider" >
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/appwidgetproviderinfo" />
@@ -86,6 +84,15 @@
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name="org.foxteam.noisyfox.tianyidialassistant.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName="org.foxteam.noisyfox.tianyidialassistant.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.foxteam.noisyfox.tianyidialassistant.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

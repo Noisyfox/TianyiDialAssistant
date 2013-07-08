@@ -4,12 +4,14 @@ import java.lang.ref.WeakReference;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -27,9 +29,10 @@ import com.emar.escore.sdk.widget.UpdateScordNotifier;
 
 public class MainActivity extends Activity implements UpdateScordNotifier {
 	public static final int MSG_PHONE_NUMBER_VERIFICATION_SUCCESS = 1;
-	public static final int MSG_UPDATE_MAIN_TEXT = 2;
+	public static final int MSG_PHONE_NUMBER_VERIFICATION_START = 2;
+	public static final int MSG_UPDATE_MAIN_TEXT = 3;
 
-	MainActivity mainActivity;
+	static MainActivity mainActivity;
 	TextView t;
 	LinearLayout linearLayout;
 	CheckBox allowAdd;
@@ -50,7 +53,11 @@ public class MainActivity extends Activity implements UpdateScordNotifier {
 				return;
 			switch (msg.what) {
 			case MSG_PHONE_NUMBER_VERIFICATION_SUCCESS:
-				
+				break;
+			case MSG_PHONE_NUMBER_VERIFICATION_START:
+				PhoneNumberVerification pnv = new PhoneNumberVerification(
+						activity);
+				pnv.beginConfirm();
 				break;
 			case MSG_UPDATE_MAIN_TEXT:
 				String w = Util.updateMainText(activity);
@@ -138,11 +145,11 @@ public class MainActivity extends Activity implements UpdateScordNotifier {
 
 		PhoneNumberVerification pnv = new PhoneNumberVerification(this);
 		if (pnv.isPhoneNumberConfirmed()) {
-			Toast.makeText(this, pnv.getPhoneNumber(), Toast.LENGTH_LONG)
-					.show();
-			pnv.clearPhoneNumber();
-		} else {
-			pnv.beginConfirm();
+			//Toast.makeText(this, pnv.getPhoneNumber(), Toast.LENGTH_LONG)
+			//		.show();
+		} else if (!pnv.isRunAtOnce()) {
+			mainHandler.sendMessage(mainHandler
+					.obtainMessage(MSG_PHONE_NUMBER_VERIFICATION_START));
 		}
 	}
 
@@ -162,6 +169,19 @@ public class MainActivity extends Activity implements UpdateScordNotifier {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		super.onOptionsItemSelected(item);
+		switch (item.getItemId()) {
+		case R.id.action_settings:
+			Intent intent = new Intent();
+			intent.setClass(this, SettingsActivity.class);
+			startActivity(intent);
+			break;
+		}
 		return true;
 	}
 
