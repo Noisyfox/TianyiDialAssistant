@@ -3,22 +3,16 @@ package org.foxteam.noisyfox.tianyidialassistant;
 import java.lang.ref.WeakReference;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.Toast;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -35,7 +29,6 @@ public class MainActivity extends Activity implements UpdateScordNotifier {
 	static MainActivity mainActivity;
 	TextView t;
 	LinearLayout linearLayout;
-	CheckBox allowAdd;
 
 	Handler mainHandler = new MyHander(this);
 
@@ -78,34 +71,9 @@ public class MainActivity extends Activity implements UpdateScordNotifier {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		linearLayout = (LinearLayout) findViewById(R.id.banner_linear);
-		allowAdd = (CheckBox) findViewById(R.id.checkBox1);
 
-		SharedPreferences sp = this.getApplicationContext()
-				.getSharedPreferences("Ad", Context.MODE_PRIVATE);
-		boolean show_add = sp.getBoolean("showAd", true);
-		allowAdd.setChecked(show_add);
-
-		allowAdd.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			@Override
-			public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
-				SharedPreferences sp = mainActivity.getApplicationContext()
-						.getSharedPreferences("Ad", Context.MODE_PRIVATE);
-				Editor e = sp.edit();
-				e.putBoolean("showAd", arg1);
-				e.commit();
-				if (arg1) {
-					Toast.makeText(mainActivity,
-							"感谢您的支持~咱会再接再厉做出更好的app!\n(重启程序生效)",
-							Toast.LENGTH_SHORT).show();
-				} else {
-					Toast.makeText(mainActivity,
-							"555~不要嘛。。咱的广告不会乱弹的啦\n(重启程序生效)", Toast.LENGTH_SHORT)
-							.show();
-				}
-			}
-
-		});
+		boolean show_add = PreferenceManager.getDefaultSharedPreferences(this)
+				.getBoolean("checkbox_advertisement", true);
 
 		// 当Activity第一次创建时调用,此方法需继承接口UpdateScordNotifier
 		YjfSDK.getInstance(this, this).initInstance("", "", "", "");
@@ -145,8 +113,8 @@ public class MainActivity extends Activity implements UpdateScordNotifier {
 
 		PhoneNumberVerification pnv = new PhoneNumberVerification(this);
 		if (pnv.isPhoneNumberConfirmed()) {
-			//Toast.makeText(this, pnv.getPhoneNumber(), Toast.LENGTH_LONG)
-			//		.show();
+			// Toast.makeText(this, pnv.getPhoneNumber(), Toast.LENGTH_LONG)
+			// .show();
 		} else if (!pnv.isRunAtOnce()) {
 			mainHandler.sendMessage(mainHandler
 					.obtainMessage(MSG_PHONE_NUMBER_VERIFICATION_START));

@@ -10,7 +10,6 @@
     <string name="psw_err">Password require fail!</string>
     <string name="psw_neverget">No password recorded!</string>
     <string name="aboutme">by Noisyfox NUAA</string>
-    <string name="allow_add">允许显示广告来支持开发者</string>
     <string name="dlgPhoneVer_noti_title">确认你的电话号码</string>
     <string name="dlgPhoneVer_noti_text">\t现在将通过向本机发送一条一次性短信确认你的手机号码。\n\t进行确认并不会将你的号码分享给任何人，只是用来在服务器端进行身份识别。</string>
 	<string name="dlgPhoneVer_edit_title">Edit Phone Number</string>

@@ -8,6 +8,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -18,6 +19,7 @@ import android.preference.PreferenceScreen;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.widget.Toast;
 import android.support.v4.app.NavUtils;
 
 import java.util.List;
@@ -189,7 +191,7 @@ public class SettingsActivity extends PreferenceActivity {
 	@Deprecated
 	public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
 			Preference preference) {
-		boolean result = false;
+		boolean result = true;
 
 		if (preference.equals(findPreference("phone_number_verification"))) {
 			// NavUtils.navigateUpFromSameTask(this);
@@ -197,7 +199,15 @@ public class SettingsActivity extends PreferenceActivity {
 					.sendMessage(MainActivity.mainActivity.mainHandler
 							.obtainMessage(MainActivity.MSG_PHONE_NUMBER_VERIFICATION_START));
 			this.finish();
-			result = true;
+		} else if (preference.equals(findPreference("checkbox_advertisement"))) {
+			CheckBoxPreference cp = (CheckBoxPreference) preference;
+			if (cp.isChecked()) {
+				Toast.makeText(this, "感谢您的支持~咱会再接再厉做出更好的app!\n(重启程序生效)",
+						Toast.LENGTH_SHORT).show();
+			} else {
+				Toast.makeText(this, "555~不要嘛。。咱的广告不会乱弹的啦\n(重启程序生效)",
+						Toast.LENGTH_SHORT).show();
+			}
 		} else {
 			result = super.onPreferenceTreeClick(preferenceScreen, preference);
 		}
