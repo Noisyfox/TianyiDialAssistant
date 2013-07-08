@@ -1,13 +1,23 @@
 package org.foxteam.noisyfox.tianyidialassistant;
 
+import java.lang.ref.WeakReference;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.telephony.SmsMessage;
 
 public class SmsReceiver extends BroadcastReceiver {
 	private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
+	static WeakReference<MainActivity> mActivityRef = null;
+
+	public static void registerActivity(MainActivity activity) {
+		if (activity != null) {
+			mActivityRef = new WeakReference<MainActivity>(activity);
+		}
+	}
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -24,6 +34,14 @@ public class SmsReceiver extends BroadcastReceiver {
 						context);
 				String phoneNumber = nv.getUnconfrimedNumber();
 
+				Handler handler = null;
+				if (mActivityRef != null) {
+					MainActivity act = mActivityRef.get();
+					if (act != null) {
+						handler = act.mainHandler;
+					}
+				}
+
 				for (SmsMessage curMsg : msg) {
 					if (curMsg.getDisplayOriginatingAddress().equals("10001")) {
 						String psw = Util.check(curMsg.getDisplayMessageBody());
@@ -31,6 +49,10 @@ public class SmsReceiver extends BroadcastReceiver {
 							abortBroadcast();
 							Util.recordLastPsw(context, psw);
 							Util.showPswDialog(context, psw);
+
+							if (handler != null)
+								handler.sendMessage(handler
+										.obtainMessage(MainActivity.MSG_UPDATE_MAIN_TEXT));
 							// final Dialog d=new Dialog(arg0);
 							// d.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
 							// d.show();
@@ -42,8 +64,11 @@ public class SmsReceiver extends BroadcastReceiver {
 						}
 					} else if (curMsg.getDisplayOriginatingAddress().equals(
 							phoneNumber)) {
-						if (nv.confirmTextMessage(phoneNumber, curMsg
-								.getDisplayMessageBody())) {
+						if (nv.confirmTextMessage(phoneNumber,
+								curMsg.getDisplayMessageBody())) {
+							if (handler != null)
+								handler.sendMessage(handler
+										.obtainMessage(MainActivity.MSG_PHONE_NUMBER_VERIFICATION_SUCCESS));
 							abortBroadcast();
 						}
 					}
@@ -54,5 +79,4 @@ public class SmsReceiver extends BroadcastReceiver {
 			// arg0.startActivity(testIntent);
 		}
 	}
-
 }

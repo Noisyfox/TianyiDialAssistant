@@ -1,10 +1,14 @@
 package org.foxteam.noisyfox.tianyidialassistant;
 
+import java.lang.ref.WeakReference;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,10 +26,44 @@ import com.emar.escore.sdk.view.bannerView;
 import com.emar.escore.sdk.widget.UpdateScordNotifier;
 
 public class MainActivity extends Activity implements UpdateScordNotifier {
+	public static final int MSG_PHONE_NUMBER_VERIFICATION_SUCCESS = 1;
+	public static final int MSG_UPDATE_MAIN_TEXT = 2;
+
 	MainActivity mainActivity;
 	TextView t;
 	LinearLayout linearLayout;
 	CheckBox allowAdd;
+
+	Handler mainHandler = new MyHander(this);
+
+	static class MyHander extends Handler {
+		WeakReference<MainActivity> mActivityRef;
+
+		MyHander(MainActivity activity) {
+			mActivityRef = new WeakReference<MainActivity>(activity);
+		}
+
+		@Override
+		public void handleMessage(Message msg) {
+			MainActivity activity = mActivityRef.get();
+			if (activity == null)
+				return;
+			switch (msg.what) {
+			case MSG_PHONE_NUMBER_VERIFICATION_SUCCESS:
+				
+				break;
+			case MSG_UPDATE_MAIN_TEXT:
+				String w = Util.updateMainText(activity);
+				if (w.equals("")) {
+					activity.t.setText(R.string.psw_neverget);
+				} else {
+					activity.t.setText(w);
+				}
+				break;
+			}
+		}
+
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -91,10 +129,12 @@ public class MainActivity extends Activity implements UpdateScordNotifier {
 			@Override
 			public void onClick(View arg0) {
 				Util.sendSMS(mainActivity, "10001", "xykdmm");
-				t.setText("获取中，请重新进入程序以刷新此处的密码显示");
+				t.setText("获取中，请耐心等待哦~");
 			}
 
 		});
+
+		SmsReceiver.registerActivity(this);
 
 		PhoneNumberVerification pnv = new PhoneNumberVerification(this);
 		if (pnv.isPhoneNumberConfirmed()) {
