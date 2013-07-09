@@ -96,8 +96,7 @@
 
         <receiver
             android:name="org.foxteam.noisyfox.tianyidialassistant.AlarmReceiver"
-            android:enabled="true"
-            android:exported="true" >
+            android:enabled="true" >
         </receiver>
     </application>
 
