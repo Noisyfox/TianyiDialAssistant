@@ -1,8 +1,28 @@
 package org.foxteam.noisyfox.tianyidialassistant;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.protocol.HTTP;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -168,6 +188,74 @@ public class Util {
 			// i.putExtra("psw", psw);
 			// context.startActivity(i);
 		}
+	}
+
+	public static String doHttpRequest(String url, Map<String, String> data) {
+
+		try {
+			List<BasicNameValuePair> postData = new ArrayList<BasicNameValuePair>();
+			for (Map.Entry<String, String> entry : data.entrySet()) {
+				postData.add(new BasicNameValuePair(entry.getKey(), entry
+						.getValue()));
+			}
+
+			DefaultHttpClient httpClient = new DefaultHttpClient();
+			// Represents a collection of HTTP protocol and framework parameters
+			HttpParams params = null;
+			params = httpClient.getParams();
+			// …Ë÷√≥¨ ±
+			HttpConnectionParams.setConnectionTimeout(params, 5000);
+			HttpConnectionParams.setSoTimeout(params, 35000);
+
+			HttpPost post = new HttpPost(url);
+			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(postData,
+					HTTP.UTF_8);
+			post.setEntity(entity);
+
+			HttpResponse response = httpClient.execute(post);
+			HttpEntity httpEntity = response.getEntity();
+			InputStream is = httpEntity.getContent();
+			StringBuffer sb = new StringBuffer();
+			BufferedReader br = new BufferedReader(new InputStreamReader(is));
+			String line = "";
+			while ((line = br.readLine()) != null) {
+				sb.append(line);
+			}
+
+			return sb.toString();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	public static String hashString(String data, String algorithm) {
+		if (data == null)
+			return null;
+		try {
+			MessageDigest mdInst = MessageDigest.getInstance(algorithm);
+			byte btInput[] = data.getBytes();
+			mdInst.update(btInput);
+			byte md[] = mdInst.digest();
+			StringBuilder sb = new StringBuilder(64);
+			for (byte b : md) {
+				sb.append(String.format("%02X", b));
+			}
+
+			return sb.toString();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }
