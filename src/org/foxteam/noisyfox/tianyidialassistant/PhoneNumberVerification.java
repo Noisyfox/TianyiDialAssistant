@@ -243,6 +243,10 @@ public class PhoneNumberVerification {
 		}
 	}
 
+	String getDeviceKey() {
+		return mTelephonyManager.getSubscriberId();
+	}
+
 	private final String EncryptPhoneNumber(String number) {
 		if (number == null)
 			return null;
