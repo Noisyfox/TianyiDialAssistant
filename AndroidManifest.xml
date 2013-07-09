@@ -93,6 +93,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.foxteam.noisyfox.tianyidialassistant.MainActivity" />
         </activity>
+
+        <receiver
+            android:name="org.foxteam.noisyfox.tianyidialassistant.AlarmReceiver"
+            android:enabled="true"
+            android:exported="true" >
+        </receiver>
     </application>
 
 </manifest>

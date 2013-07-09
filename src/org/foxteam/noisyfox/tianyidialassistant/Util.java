@@ -1,9 +1,6 @@
 package org.foxteam.noisyfox.tianyidialassistant;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,8 +12,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.telephony.SmsManager;
 import android.view.View;
 import android.view.WindowManager;
@@ -129,46 +124,6 @@ public class Util {
 		context.unregisterReceiver(BR_DELIVERED_SMS_ACTION);
 	}
 
-	static final Object syncObj = new Object();
-
-	public static void recordLastPsw(Context context, String psw) {
-		synchronized (syncObj) {
-			SharedPreferences sp = context.getApplicationContext()
-					.getSharedPreferences("PSWRecord", Context.MODE_PRIVATE);
-			Editor e = sp.edit();
-
-			e.putString("psw", psw);
-			e.putLong("time_get", System.currentTimeMillis());
-			e.putLong("time_request", System.currentTimeMillis());
-
-			e.commit();
-		}
-	}
-
-	public static String getLastPsw(Context context) {
-		synchronized (syncObj) {
-			SharedPreferences sp = context.getApplicationContext()
-					.getSharedPreferences("PSWRecord", Context.MODE_PRIVATE);
-			String psw = sp.getString("psw", "");
-			if (!psw.equals("")) {
-				Long dTime_get = System.currentTimeMillis()
-						- sp.getLong("time_get", 0);
-				Long dTime_request = System.currentTimeMillis()
-						- sp.getLong("time_request", 0);
-				if (dTime_get > 3 * 60 * 60 * 1000) {// 密码已经失效
-					psw = "";
-				} else if (dTime_request < 2 * 60 * 1000
-						&& dTime_request > 20 * 1000) {// 请求频繁，可能是密码失效了
-					psw = "";
-				}
-			}
-			Editor e = sp.edit();
-			e.putLong("time_request", System.currentTimeMillis());
-			e.commit();
-			return psw;
-		}
-	}
-
 	private static final Object pswDlgSyncObject = new Object();
 	private static Dialog pswDialog = null;
 
@@ -177,14 +132,13 @@ public class Util {
 			// final Dialog d = new Dialog(arg0);
 			// d.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
 			// d.show();
-			if(pswDialog != null){
+			if (pswDialog != null) {
 				pswDialog.dismiss();
 				pswDialog = null;
 			}
 			View v = View.inflate(context, R.layout.psw_dialog, null);
 
-			pswDialog = new AlertDialog.Builder(context)
-					.setView(v).create();
+			pswDialog = new AlertDialog.Builder(context).setView(v).create();
 			pswDialog.getWindow().setType(
 					WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
 
@@ -200,7 +154,7 @@ public class Util {
 				@Override
 				public void onClick(View arg0) {
 					synchronized (pswDlgSyncObject) {
-						if(pswDialog != null){
+						if (pswDialog != null) {
 							pswDialog.dismiss();
 							pswDialog = null;
 						}
@@ -216,35 +170,4 @@ public class Util {
 		}
 	}
 
-	public static String updateMainText(Context context) {
-		// TelephonyManager tm =
-		// (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-		// String tel = tm.getLine1Number();
-		// String imei =tm.getSimSerialNumber();
-		// String imsi =tm.getSubscriberId();
-
-		// return tel+"\n" + imei+"\n"+ imsi;
-
-		synchronized (syncObj) {
-			SharedPreferences sp = context.getApplicationContext()
-					.getSharedPreferences("PSWRecord", Context.MODE_PRIVATE);
-			String psw = sp.getString("psw", "");
-			if (psw.equals("")) {
-				return "";
-			} else {
-				Long time = sp.getLong("time_get", 0);
-				SimpleDateFormat formatter = new SimpleDateFormat(
-						"yyyy年MM月dd日\nHH:mm:ss", Locale.getDefault());
-				Date curDate = new Date(time);
-				String str = formatter.format(curDate);
-				String w = "当前密码:\n" + psw + "\n获取时间:\n" + str;
-				Long dTime_get = System.currentTimeMillis() - time;
-				if (dTime_get > 5 * 60 * 60 * 1000) {
-					w += "\n密码可能已经过期!";
-				}
-
-				return w;// + "\n" +tel+"\n" + imei+"\n"+ imsi;
-			}
-		}
-	}
 }

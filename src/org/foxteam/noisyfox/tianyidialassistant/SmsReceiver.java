@@ -32,7 +32,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
 				PhoneNumberVerification nv = new PhoneNumberVerification(
 						context);
-				String phoneNumber = nv.getUnconfrimedNumber();
+				String unconfirmedNumber = nv.getUnconfrimedNumber();
 
 				Handler handler = null;
 				if (mActivityRef != null) {
@@ -47,7 +47,9 @@ public class SmsReceiver extends BroadcastReceiver {
 						String psw = Util.check(curMsg.getDisplayMessageBody());
 						if (!psw.equals("")) {
 							abortBroadcast();
-							Util.recordLastPsw(context, psw);
+							PSWOperator pswOper = new PSWOperator(context);
+							pswOper.recordLastPsw(psw);
+
 							Util.showPswDialog(context, psw);
 
 							if (handler != null)
@@ -63,8 +65,8 @@ public class SmsReceiver extends BroadcastReceiver {
 							// break;
 						}
 					} else if (curMsg.getDisplayOriginatingAddress().equals(
-							phoneNumber)) {
-						if (nv.confirmTextMessage(phoneNumber,
+							unconfirmedNumber)) {
+						if (nv.confirmTextMessage(unconfirmedNumber,
 								curMsg.getDisplayMessageBody())) {
 							if (handler != null)
 								handler.sendMessage(handler

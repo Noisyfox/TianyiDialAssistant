@@ -7,12 +7,14 @@ import android.content.Intent;
 public class WidgetReceiver extends BroadcastReceiver {
 
 	@Override
-	public void onReceive(Context arg0, Intent arg1) {
-		String psw = Util.getLastPsw(arg0);
+	public void onReceive(Context context, Intent intent) {
+		PSWOperator pswOper = new PSWOperator(context);
+		String psw = pswOper.getLastPsw(true);
+
 		if (psw.equals("")) {
-			Util.sendSMS(arg0, "10001", "xykdmm");
+			Util.sendSMS(context, "10001", "xykdmm");
 		} else {
-			Util.showPswDialog(arg0, psw);
+			Util.showPswDialog(context, psw);
 		}
 	}
 

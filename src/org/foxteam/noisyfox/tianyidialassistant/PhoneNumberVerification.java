@@ -35,9 +35,9 @@ public class PhoneNumberVerification {
 		mPreferences = context.getApplicationContext().getSharedPreferences(
 				SP_NAME, Context.MODE_PRIVATE);
 	}
-	
-	//是否提示过了
-	boolean isRunAtOnce(){
+
+	// 是否提示过了
+	boolean isRunAtOnce() {
 		boolean rao = mPreferences.getBoolean(SP_VALUE_BOOL_RUNATONCE, false);
 		return rao;
 	}
@@ -110,8 +110,13 @@ public class PhoneNumberVerification {
 									.getWindow().findViewById(
 											R.id.editText_dlgPhoneVer_edit);
 							String number = et.getText().toString();
-
-							sendTextMessage(number);
+							if (number.length() == 0) {
+								Toast.makeText(mContext,
+										R.string.dlgPhoneVer_failed,
+										Toast.LENGTH_SHORT).show();
+							} else {
+								sendTextMessage(number);
+							}
 						}
 
 					});
@@ -182,8 +187,8 @@ public class PhoneNumberVerification {
 			if (number == null || msg == null)
 				return false;
 
-			String confirmStr = mPreferences.getString(SP_VALUE_STR_CONFIRMSTRING,
-					"");
+			String confirmStr = mPreferences.getString(
+					SP_VALUE_STR_CONFIRMSTRING, "");
 			if (confirmStr.equals("") || !number.equals(getUnconfrimedNumber())
 					|| !msg.equals(confirmStr)) {
 				return false;

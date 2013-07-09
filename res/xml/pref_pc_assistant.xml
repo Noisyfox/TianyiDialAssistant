@@ -3,7 +3,30 @@
 
     <Preference
         android:key="phone_number_verification"
-        android:title="@string/pre_title_phone_number_verification" >
-    </Preference>
+        android:title="@string/pre_title_phone_number_verification" />
+
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="enable_pc_assistant"
+        android:title="@string/pref_title_enable_pc_assistant" />
+
+    <EditTextPreference
+        android:defaultValue="0000"
+        android:dependency="enable_pc_assistant"
+        android:inputType="numberPassword"
+        android:key="pc_assistant_psw"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_title_pc_assistant_psw" />
+
+    <ListPreference
+        android:defaultValue="180"
+        android:dependency="enable_pc_assistant"
+        android:entries="@array/pref_update_frequency_titles"
+        android:entryValues="@array/pref_update_frequency_values"
+        android:key="update_frequency"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_title_update_frequency" />
 
 </PreferenceScreen>

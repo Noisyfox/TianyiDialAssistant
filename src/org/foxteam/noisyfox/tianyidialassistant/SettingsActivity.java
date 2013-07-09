@@ -1,7 +1,10 @@
 package org.foxteam.noisyfox.tianyidialassistant;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -43,6 +46,8 @@ public class SettingsActivity extends PreferenceActivity {
 	 * shown on tablets.
 	 */
 	private static final boolean ALWAYS_SIMPLE_PREFS = false;
+
+	SettingsActivity mActivity = this;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +109,10 @@ public class SettingsActivity extends PreferenceActivity {
 		fakeHeader.setTitle(R.string.pref_header_pc_assistant);
 		getPreferenceScreen().addPreference(fakeHeader);
 		addPreferencesFromResource(R.xml.pref_pc_assistant);
+		bindPreferenceSummaryToValue(findPreference("pc_assistant_psw"));
+		bindPreferenceSummaryToValue(findPreference("update_frequency"));
+		findPreference("enable_pc_assistant").setOnPreferenceChangeListener(
+				sPCAssistantListener);
 		// 读取配置
 		Preference phoneVer = findPreference("phone_number_verification");
 		PhoneNumberVerification pnv = new PhoneNumberVerification(this);
@@ -111,6 +120,9 @@ public class SettingsActivity extends PreferenceActivity {
 			phoneVer.setTitle(R.string.pre_title_phone_number_verification_ed);
 			phoneVer.setSummary(R.string.pre_description_phone_number_verification_ed);
 		} else {
+			((CheckBoxPreference) findPreference("enable_pc_assistant"))
+					.setChecked(false);
+
 			String pnum = pnv.getUnconfrimedNumber();
 			if (pnum != null) {
 				phoneVer.setTitle(R.string.pre_title_phone_number_verification_ing);
@@ -213,6 +225,55 @@ public class SettingsActivity extends PreferenceActivity {
 		}
 		return result;
 	}
+
+	private Preference.OnPreferenceChangeListener sPCAssistantListener = new Preference.OnPreferenceChangeListener() {
+
+		@Override
+		public boolean onPreferenceChange(Preference preference, Object value) {
+			if (preference.equals(findPreference("enable_pc_assistant"))) {
+				if (value.equals(true)) {
+					PhoneNumberVerification pnv = new PhoneNumberVerification(
+							mActivity);
+					if (pnv.isPhoneNumberConfirmed()) {
+						// 启动后台服务
+					} else {
+						AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(
+								mActivity);
+						AlertDialog dlg = dialogBuilder.create();
+						dlg.setTitle(R.string.dlgPhoneVer_need_to_ver_title);
+						dlg.setMessage(mActivity
+								.getText(R.string.dlgPhoneVer_need_to_ver_text));
+						dlg.setButton(Dialog.BUTTON_POSITIVE,
+								mActivity.getText(R.string.button_ver_now),
+								new Dialog.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface arg0,
+											int arg1) {
+										mActivity.finish();
+										MainActivity.mainActivity.mainHandler
+												.sendMessage(MainActivity.mainActivity.mainHandler
+														.obtainMessage(MainActivity.MSG_PHONE_NUMBER_VERIFICATION_START));
+									}
+								});
+						dlg.setButton(Dialog.BUTTON_NEGATIVE,
+								mActivity.getText(R.string.button_cancel),
+								new Dialog.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface arg0,
+											int arg1) {
+									}
+								});
+						dlg.show();
+						return false;
+					}
+				} else {
+					// 结束后台服务
+				}
+			}
+			return true;
+		}
+
+	};
 
 	/**
 	 * A preference value change listener that updates the preference's summary
@@ -362,7 +423,7 @@ public class SettingsActivity extends PreferenceActivity {
 			// to their values. When their values change, their summaries are
 			// updated to reflect the new value, per the Android Design
 			// guidelines.
-			bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+			// bindPreferenceSummaryToValue(findPreference("enable_pc_assistant"));
 		}
 	}
 }

@@ -1,6 +1,9 @@
 package org.foxteam.noisyfox.tianyidialassistant;
 
 import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -30,6 +33,9 @@ public class MainActivity extends Activity implements UpdateScordNotifier {
 	TextView t;
 	LinearLayout linearLayout;
 
+	PhoneNumberVerification mPhoneNumberVerification = null;
+	PSWOperator mPSWOperator = null;
+
 	Handler mainHandler = new MyHander(this);
 
 	static class MyHander extends Handler {
@@ -48,12 +54,10 @@ public class MainActivity extends Activity implements UpdateScordNotifier {
 			case MSG_PHONE_NUMBER_VERIFICATION_SUCCESS:
 				break;
 			case MSG_PHONE_NUMBER_VERIFICATION_START:
-				PhoneNumberVerification pnv = new PhoneNumberVerification(
-						activity);
-				pnv.beginConfirm();
+				activity.mPhoneNumberVerification.beginConfirm();
 				break;
 			case MSG_UPDATE_MAIN_TEXT:
-				String w = Util.updateMainText(activity);
+				String w = activity.updateMainText();
 				if (w.equals("")) {
 					activity.t.setText(R.string.psw_neverget);
 				} else {
@@ -67,8 +71,13 @@ public class MainActivity extends Activity implements UpdateScordNotifier {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		mainActivity = this;
 		super.onCreate(savedInstanceState);
+		mainActivity = this;
+
+		mPhoneNumberVerification = new PhoneNumberVerification(
+				this);
+		mPSWOperator = new PSWOperator(this);
+		
 		setContentView(R.layout.activity_main);
 		linearLayout = (LinearLayout) findViewById(R.id.banner_linear);
 
@@ -92,7 +101,7 @@ public class MainActivity extends Activity implements UpdateScordNotifier {
 		t = (TextView) this.findViewById(R.id.textView_info);
 		Button b = (Button) this.findViewById(R.id.button_getnow);
 
-		String w = Util.updateMainText(this);
+		String w = updateMainText();
 		if (w.equals("")) {
 			t.setText(R.string.psw_neverget);
 		} else {
@@ -111,11 +120,10 @@ public class MainActivity extends Activity implements UpdateScordNotifier {
 
 		SmsReceiver.registerActivity(this);
 
-		PhoneNumberVerification pnv = new PhoneNumberVerification(this);
-		if (pnv.isPhoneNumberConfirmed()) {
+		if (mPhoneNumberVerification.isPhoneNumberConfirmed()) {
 			// Toast.makeText(this, pnv.getPhoneNumber(), Toast.LENGTH_LONG)
 			// .show();
-		} else if (!pnv.isRunAtOnce()) {
+		} else if (!mPhoneNumberVerification.isRunAtOnce()) {
 			mainHandler.sendMessage(mainHandler
 					.obtainMessage(MSG_PHONE_NUMBER_VERIFICATION_START));
 		}
@@ -125,7 +133,7 @@ public class MainActivity extends Activity implements UpdateScordNotifier {
 	protected void onResume() {
 		super.onResume();
 
-		String w = Util.updateMainText(this);
+		String w = updateMainText();
 		if (w.equals("")) {
 			t.setText(R.string.psw_neverget);
 		} else {
@@ -170,6 +178,27 @@ public class MainActivity extends Activity implements UpdateScordNotifier {
 	public void updateScoreSuccess(int arg0, int arg1, int arg2, String arg3) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public String updateMainText() {
+		String psw = mPSWOperator.getLastPsw(false);
+
+		if (psw.equals("")) {
+			return "";
+		} else {
+			Long time = mPSWOperator.getRecordTime();
+			SimpleDateFormat formatter = new SimpleDateFormat(
+					"yyyy年MM月dd日\nHH:mm:ss", Locale.getDefault());
+			Date curDate = new Date(time);
+			String str = formatter.format(curDate);
+			String w = "当前密码:\n" + psw + "\n获取时间:\n" + str;
+			Long dTime_get = System.currentTimeMillis() - time;
+			if (dTime_get > 5 * 60 * 60 * 1000) {
+				w += "\n密码可能已经过期!";
+			}
+
+			return w;// + "\n" +tel+"\n" + imei+"\n"+ imsi;
+		}
 	}
 
 }

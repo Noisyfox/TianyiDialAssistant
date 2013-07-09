@@ -7,6 +7,7 @@
     <string name="button_cancel">Cancel</string>
     <string name="button_getpsw">Get psw now!</string>
     <string name="button_skip">Skip</string>
+    <string name="button_ver_now">现在去验证</string>
     <string name="psw_err">Password require fail!</string>
     <string name="psw_neverget">No password recorded!</string>
     <string name="aboutme">by Noisyfox NUAA</string>
@@ -18,4 +19,7 @@
 	<string name="dlgPhoneVer_skip_text">\t选择跳过号码验证将无法使用PC端一键登录功能，是否确认跳过号码验证？</string>
 	<string name="dlgPhoneVer_skipped_toast">你已跳过了号码验证，你可以稍后在菜单中选择再次进行号码验证</string>
 	<string name="dlgPhoneVer_vering_toast">正在发送验证短信，期间你可以做其他事情</string>
+	<string name="dlgPhoneVer_need_to_ver_title">需要验证电话号码</string>
+	<string name="dlgPhoneVer_need_to_ver_text">\t你还没有验证你的电话号码，暂时无法开启PC连接助手。</string>
+	<string name="dlgPhoneVer_failed">验证失败，请检查号码是否正确</string>
 </resources>

@@ -34,7 +34,23 @@
     <string name="pre_description_phone_number_verification_ing">%1$s\n点此尝试重新确认电话号码</string>
     <string name="pre_title_phone_number_verification_ed">已确认电话号码</string>
     <string name="pre_description_phone_number_verification_ed">点此更改电话号码</string>
-
+    <string name="pref_title_enable_pc_assistant">启用PC连接助手</string>
+    <string name="pref_title_pc_assistant_psw">设置连接密码</string>
+    <string name="pref_title_update_frequency">密码刷新间隔</string>
+    
+    <string-array name="pref_update_frequency_titles">
+        <item>30 分钟</item>
+        <item>1 小时</item>
+        <item>3 小时</item>
+        <item>5 小时</item>
+    </string-array>
+    <string-array name="pref_update_frequency_values">
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>300</item>
+    </string-array>
+    
     <!-- Example settings for Data & Sync -->
     <string name="pref_header_data_sync">Data &amp; sync</string>
     <string name="pref_title_sync_frequency">Sync frequency</string>
