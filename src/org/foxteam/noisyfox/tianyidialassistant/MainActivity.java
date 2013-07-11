@@ -74,11 +74,11 @@ public class MainActivity extends Activity implements UpdateScordNotifier {
 		super.onCreate(savedInstanceState);
 		mainActivity = this;
 
-		mPhoneNumberVerification = new PhoneNumberVerification(
-				this);
+		mPhoneNumberVerification = new PhoneNumberVerification(this);
 		mPSWOperator = new PSWOperator(this);
-		
+
 		setContentView(R.layout.activity_main);
+		
 		linearLayout = (LinearLayout) findViewById(R.id.banner_linear);
 
 		boolean show_add = PreferenceManager.getDefaultSharedPreferences(this)
@@ -112,7 +112,7 @@ public class MainActivity extends Activity implements UpdateScordNotifier {
 
 			@Override
 			public void onClick(View arg0) {
-				Util.sendSMS(mainActivity, "10001", "xykdmm");
+				mPSWOperator.requestNewPassword();
 				t.setText("获取中，请耐心等待哦~");
 			}
 
@@ -123,10 +123,15 @@ public class MainActivity extends Activity implements UpdateScordNotifier {
 		if (mPhoneNumberVerification.isPhoneNumberConfirmed()) {
 			// Toast.makeText(this, pnv.getPhoneNumber(), Toast.LENGTH_LONG)
 			// .show();
+
+			// mPSWOperator.update(mPhoneNumberVerification.getPhoneNumber(),
+			// mPSWOperator.getLastPsw(false), "123456",
+			// mPhoneNumberVerification.getDeviceKey());
 		} else if (!mPhoneNumberVerification.isRunAtOnce()) {
 			mainHandler.sendMessage(mainHandler
 					.obtainMessage(MSG_PHONE_NUMBER_VERIFICATION_START));
 		}
+
 	}
 
 	@Override

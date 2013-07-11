@@ -5,6 +5,7 @@ import java.lang.ref.WeakReference;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.telephony.SmsMessage;
@@ -48,9 +49,19 @@ public class SmsReceiver extends BroadcastReceiver {
 						if (!psw.equals("")) {
 							abortBroadcast();
 							PSWOperator pswOper = new PSWOperator(context);
-							pswOper.recordLastPsw(psw);
+							pswOper.onSmsReceived(psw);
 
-							Util.showPswDialog(context, psw);
+							SharedPreferences mPreferences = context
+									.getApplicationContext()
+									.getSharedPreferences("Runtime",
+											Context.MODE_PRIVATE);
+							long currentTime = System.currentTimeMillis();
+							long lstTime = mPreferences.getLong(
+									"WidgetRequired", 0);
+							long dTime = currentTime - lstTime;
+							if (dTime < 3 * 60 * 1000) {
+								Util.showPswDialog(context, psw);
+							}
 
 							if (handler != null)
 								handler.sendMessage(handler
