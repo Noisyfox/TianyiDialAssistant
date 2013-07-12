@@ -78,7 +78,7 @@ public class MainActivity extends Activity implements UpdateScordNotifier {
 		mPSWOperator = new PSWOperator(this);
 
 		setContentView(R.layout.activity_main);
-		
+
 		linearLayout = (LinearLayout) findViewById(R.id.banner_linear);
 
 		boolean show_add = PreferenceManager.getDefaultSharedPreferences(this)
@@ -131,6 +131,8 @@ public class MainActivity extends Activity implements UpdateScordNotifier {
 			mainHandler.sendMessage(mainHandler
 					.obtainMessage(MSG_PHONE_NUMBER_VERIFICATION_START));
 		}
+
+		AlarmReceiver.startAlarm(this);
 
 	}
 
