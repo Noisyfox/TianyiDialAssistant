@@ -113,10 +113,6 @@ public class PSWOperator {
 			long dTimeUpdate = currentTime - lstUpdateTime;
 			long dTimeRecord = currentTime - getRecordTime();
 
-			if (dTimeUpdate < frequency && dTimeRecord < frequency) {
-				return false;
-			}
-
 			if (dTimeRecord > frequency) {
 				requestNewPassword();
 			} else if (dTimeUpdate > frequency) {
