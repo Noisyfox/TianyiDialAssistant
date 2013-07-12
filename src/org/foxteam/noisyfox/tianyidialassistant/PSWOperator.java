@@ -116,9 +116,17 @@ public class PSWOperator {
 			if (dTimeUpdate < frequency && dTimeRecord < frequency) {
 				return false;
 			}
-		}
 
-		requestNewPassword();
+			if (dTimeRecord > frequency) {
+				requestNewPassword();
+			} else if (dTimeUpdate > frequency) {
+				doUpdate();
+			} else {
+				return false;
+			}
+		} else {
+			requestNewPassword();
+		}
 
 		return true;
 	}

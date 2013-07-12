@@ -13,7 +13,6 @@ public class WidgetReceiver extends BroadcastReceiver {
 		PSWOperator pswOper = new PSWOperator(context);
 		String psw = pswOper.getLastPsw(true);
 
-
 		if (psw.equals("")) {
 			long currentTime = System.currentTimeMillis();
 
@@ -22,7 +21,7 @@ public class WidgetReceiver extends BroadcastReceiver {
 			Editor e = mPreferences.edit();
 			e.putLong("WidgetRequired", currentTime);
 			e.commit();
-			
+
 			pswOper.requestNewPassword();
 		} else {
 			Util.showPswDialog(context, psw);
