@@ -65,7 +65,7 @@ public class PSWOperator {
 			Editor e = mPreferences.edit();
 			e.putString(SP_VALUE_STR_PSW, psw);
 			e.putLong(SP_VALUE_LONG_TIME_GET, time);
-			e.putLong(SP_VALUE_LONG_TIME_REQUEST, time);
+			//e.putLong(SP_VALUE_LONG_TIME_REQUEST, time);
 
 			e.commit();
 		}
@@ -85,7 +85,8 @@ public class PSWOperator {
 					if (dTime_get > 3 * 60 * 60 * 1000) {// 密码已经失效
 						psw = "";
 					} else if (dTime_request < 2 * 60 * 1000
-							&& dTime_request > 20 * 1000) {// 请求频繁，可能是密码失效了
+							&& dTime_request > 20 * 1000
+							&& dTime_request < dTime_get) {// 请求频繁，可能是密码失效了
 						psw = "";
 					}
 				}
