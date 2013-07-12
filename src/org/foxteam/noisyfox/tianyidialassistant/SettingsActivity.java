@@ -205,13 +205,13 @@ public class SettingsActivity extends PreferenceActivity {
 			Preference preference) {
 		boolean result = true;
 
-		if (preference.equals(findPreference("phone_number_verification"))) {
+		if (preference.getKey().equals("phone_number_verification")) {
 			// NavUtils.navigateUpFromSameTask(this);
 			MainActivity.mainActivity.mainHandler
 					.sendMessage(MainActivity.mainActivity.mainHandler
 							.obtainMessage(MainActivity.MSG_PHONE_NUMBER_VERIFICATION_START));
 			this.finish();
-		} else if (preference.equals(findPreference("checkbox_advertisement"))) {
+		} else if (preference.getKey().equals("checkbox_advertisement")) {
 			CheckBoxPreference cp = (CheckBoxPreference) preference;
 			if (cp.isChecked()) {
 				Toast.makeText(this, "感谢您的支持~咱会再接再厉做出更好的app!\n(重启程序生效)",
@@ -230,7 +230,7 @@ public class SettingsActivity extends PreferenceActivity {
 
 		@Override
 		public boolean onPreferenceChange(Preference preference, Object value) {
-			if (preference.equals(findPreference("enable_pc_assistant"))) {
+			if (preference.getKey().equals("enable_pc_assistant")) {
 				if (value.equals(true)) {
 					PhoneNumberVerification pnv = new PhoneNumberVerification(
 							mActivity);
@@ -350,26 +350,26 @@ public class SettingsActivity extends PreferenceActivity {
 						""));
 	}
 
-	// /**
-	// * This fragment shows general preferences only. It is used when the
-	// * activity is showing a two-pane settings UI.
-	// */
-	// @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	// public static class GeneralPreferenceFragment extends PreferenceFragment
-	// {
-	// @Override
-	// public void onCreate(Bundle savedInstanceState) {
-	// super.onCreate(savedInstanceState);
-	// addPreferencesFromResource(R.xml.pref_general);
-	//
-	// // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-	// // to their values. When their values change, their summaries are
-	// // updated to reflect the new value, per the Android Design
-	// // guidelines.
-	// bindPreferenceSummaryToValue(findPreference("example_text"));
-	// bindPreferenceSummaryToValue(findPreference("example_list"));
-	// }
-	// }
+	/**
+	 * This fragment shows general preferences only. It is used when the
+	 * activity is showing a two-pane settings UI.
+	 */
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	public static class GeneralPreferenceFragment extends PreferenceFragment {
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			addPreferencesFromResource(R.xml.pref_general);
+
+			// Bind the summaries of EditText/List/Dialog/Ringtone preferences
+			// to their values. When their values change, their summaries are
+			// updated to reflect the new value, per the Android Design
+			// guidelines.
+			// bindPreferenceSummaryToValue(findPreference("example_text"));
+			// bindPreferenceSummaryToValue(findPreference("example_list"));
+		}
+	}
+
 	//
 	// /**
 	// * This fragment shows notification preferences only. It is used when the
