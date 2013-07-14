@@ -28,5 +28,12 @@
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
         android:title="@string/pref_title_update_frequency" />
+    
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:dependency="enable_pc_assistant"
+        android:key="count_using_time"
+        android:title="@string/pref_title_count_using_time"
+        android:summary="@string/pref_description_count_using_time" />
 
 </PreferenceScreen>

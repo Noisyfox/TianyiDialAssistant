@@ -37,6 +37,8 @@
     <string name="pref_title_enable_pc_assistant">Enable PC assistant</string>
     <string name="pref_title_pc_assistant_psw">Change connection password</string>
     <string name="pref_title_update_frequency">Password update frequency</string>
+    <string name="pref_title_count_using_time">Online time counting</string>
+    <string name="pref_description_count_using_time">Enable the PC client to calculate your online duration.</string>
     
     <string-array name="pref_update_frequency_titles">
         <item>30 minutes</item>

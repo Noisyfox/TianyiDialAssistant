@@ -37,6 +37,8 @@
     <string name="pref_title_enable_pc_assistant">启用PC连接助手</string>
     <string name="pref_title_pc_assistant_psw">设置连接密码</string>
     <string name="pref_title_update_frequency">密码刷新间隔</string>
+    <string name="pref_title_count_using_time">上网时长统计</string>
+    <string name="pref_description_count_using_time">允许PC端统计你的上网时长</string>
     
     <string-array name="pref_update_frequency_titles">
         <item>30 分钟</item>

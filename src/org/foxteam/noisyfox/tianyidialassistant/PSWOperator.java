@@ -25,8 +25,11 @@ public class PSWOperator {
 	static final String STR_SERVER_ARGS_KEY_CODE = "code";
 	static final String STR_SERVER_ARGS_KEY_PWD = "pwd";
 	static final String STR_SERVER_ARGS_KEY_DEVICE_KEY = "device_key";
+	static final String STR_SERVER_ARGS_KEY_CLIENT = "client";
+	static final String STR_SERVER_ARGS_KEY_STAT = "stat";
 	static final String STR_SERVER_ARGS_VALUE_GET = "get";
 	static final String STR_SERVER_ARGS_VALUE_PUT = "put";
+	static final String STR_SERVER_ARGS_VALUE_CLIENT = "TianyiDA/%s";
 	static final String STR_SMS_NUMBER = "10001";
 	static final String STR_SMS_CONTENT = "xykdmm";
 
@@ -142,6 +145,14 @@ public class PSWOperator {
 		map.put(STR_SERVER_ARGS_KEY_CODE, code);
 		map.put(STR_SERVER_ARGS_KEY_PWD, Util.hashString(pwd, "SHA"));
 		map.put(STR_SERVER_ARGS_KEY_DEVICE_KEY, device_key);
+		map.put(STR_SERVER_ARGS_KEY_STAT, mDefaultPreferences.getBoolean(
+				"count_using_time", true) ? "1" : "0");
+		String version = Util.getVersionName(mContext);
+		if (version == null) {
+			version = "unknown";
+		}
+		version = String.format(STR_SERVER_ARGS_VALUE_CLIENT, version);
+		map.put(STR_SERVER_ARGS_KEY_CLIENT, version);
 
 		String httpResult = Util.doHttpRequest(STR_SERVER_URL, map);
 		// Toast.makeText(mContext, httpResult, Toast.LENGTH_LONG).show();
