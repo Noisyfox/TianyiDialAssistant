@@ -65,7 +65,7 @@ public class PSWOperator {
 			Editor e = mPreferences.edit();
 			e.putString(SP_VALUE_STR_PSW, psw);
 			e.putLong(SP_VALUE_LONG_TIME_GET, time);
-			//e.putLong(SP_VALUE_LONG_TIME_REQUEST, time);
+			// e.putLong(SP_VALUE_LONG_TIME_REQUEST, time);
 
 			e.commit();
 		}

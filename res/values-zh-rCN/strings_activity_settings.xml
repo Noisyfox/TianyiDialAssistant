@@ -1,14 +1,14 @@
 <resources>
 
-    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_settings">设置</string>
 
     <!-- Strings related to Settings -->
 
 
     <!-- General settings -->
-    <string name="pref_header_general">General</string>
-    <string name="pref_title_advertisement">Show advertisement</string>
-    <string name="pref_description_advertisement">Please show advertisement to support the developer.</string>
+    <string name="pref_header_general">常规</string>
+    <string name="pref_title_advertisement">显示广告</string>
+    <string name="pref_description_advertisement">请显示广告以支持开发者~</string>
     <!--
     <string name="pref_title_display_name">Display name</string>
     <string name="pref_default_display_name">John Smith</string>
@@ -28,21 +28,21 @@
 
 
     <!-- PC Assistant settings -->
-    <string name="pref_header_pc_assistant">PC assistant</string>
-    <string name="pre_title_phone_number_verification">Confirm phone number</string>
-    <string name="pre_title_phone_number_verification_ing">Now confirming phone number</string>
-    <string name="pre_description_phone_number_verification_ing">%1$s\nPress to re-confirm your phone number</string>
-    <string name="pre_title_phone_number_verification_ed">Phone confirmed</string>
-    <string name="pre_description_phone_number_verification_ed">Press to change your phone number</string>
-    <string name="pref_title_enable_pc_assistant">Enable PC assistant</string>
-    <string name="pref_title_pc_assistant_psw">Change connection password</string>
-    <string name="pref_title_update_frequency">Password update frequency</string>
+    <string name="pref_header_pc_assistant">PC连接助手</string>
+    <string name="pre_title_phone_number_verification">确认电话号码</string>
+    <string name="pre_title_phone_number_verification_ing">正在确认电话号码</string>
+    <string name="pre_description_phone_number_verification_ing">%1$s\n点此尝试重新确认电话号码</string>
+    <string name="pre_title_phone_number_verification_ed">已确认电话号码</string>
+    <string name="pre_description_phone_number_verification_ed">点此更改电话号码</string>
+    <string name="pref_title_enable_pc_assistant">启用PC连接助手</string>
+    <string name="pref_title_pc_assistant_psw">设置连接密码</string>
+    <string name="pref_title_update_frequency">密码刷新间隔</string>
     
     <string-array name="pref_update_frequency_titles">
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>3 hours</item>
-        <item>5 hours</item>
+        <item>30 分钟</item>
+        <item>1 小时</item>
+        <item>3 小时</item>
+        <item>5 小时</item>
     </string-array>
     <string-array name="pref_update_frequency_values">
         <item>30</item>
