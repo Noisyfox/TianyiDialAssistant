@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
@@ -216,6 +217,10 @@ public class Util {
 			post.setEntity(entity);
 
 			HttpResponse response = httpClient.execute(post);
+
+			if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK)
+				return null;
+
 			HttpEntity httpEntity = response.getEntity();
 			InputStream is = httpEntity.getContent();
 			StringBuffer sb = new StringBuffer();
