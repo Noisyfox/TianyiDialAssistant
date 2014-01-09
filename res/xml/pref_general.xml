@@ -5,6 +5,22 @@
         android:key="checkbox_advertisement"
         android:summary="@string/pref_description_advertisement"
         android:title="@string/pref_title_advertisement" />
+    
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="checkbox_auto_refresh"
+        android:summary="@string/pref_description_autorefresh"
+        android:title="@string/pref_title_autorefresh" />
+    
+    <ListPreference
+        android:defaultValue="300"
+        android:dependency="checkbox_auto_refresh"
+        android:entries="@array/pref_refresh_frequency_titles"
+        android:entryValues="@array/pref_refresh_frequency_values"
+        android:key="refresh_frequency"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_title_refresh_frequency" />
 
     <!-- NOTE: EditTextPreference accepts EditText attributes. -->
     <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->

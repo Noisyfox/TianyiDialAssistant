@@ -105,15 +105,17 @@ public class SettingsActivity extends PreferenceActivity {
 
 		// Add 'general' preferences.
 		addPreferencesFromResource(R.xml.pref_general);
+		bindPreferenceSummaryToValue(findPreference("refresh_frequency"));
 
+		// Add 'pc assistant' preferences.
 		PreferenceCategory fakeHeader = new PreferenceCategory(this);
 		fakeHeader.setTitle(R.string.pref_header_pc_assistant);
 		getPreferenceScreen().addPreference(fakeHeader);
 		addPreferencesFromResource(R.xml.pref_pc_assistant);
 		bindPreferenceSummaryToValue(findPreference("pc_assistant_psw"));
-		bindPreferenceSummaryToValue(findPreference("update_frequency"));
 		findPreference("enable_pc_assistant").setOnPreferenceChangeListener(
 				sPCAssistantListener);
+
 		// 读取配置
 		Preference phoneVer = findPreference("phone_number_verification");
 		PhoneNumberVerification pnv = new PhoneNumberVerification(this);
@@ -208,6 +210,8 @@ public class SettingsActivity extends PreferenceActivity {
 
 		if (preference.getKey().equals("phone_number_verification")) {
 			// NavUtils.navigateUpFromSameTask(this);
+			((CheckBoxPreference) findPreference("enable_pc_assistant"))
+					.setChecked(false);
 			MainActivity.mainActivity.mainHandler
 					.sendMessage(MainActivity.mainActivity.mainHandler
 							.obtainMessage(MainActivity.MSG_PHONE_NUMBER_VERIFICATION_START));
@@ -270,6 +274,7 @@ public class SettingsActivity extends PreferenceActivity {
 				} else {
 					// 结束后台服务
 				}
+				return false;// 目前强制关闭此功能
 			}
 			return true;
 		}

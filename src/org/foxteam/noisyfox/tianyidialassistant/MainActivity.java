@@ -200,7 +200,7 @@ public class MainActivity extends Activity implements UpdateScordNotifier {
 			String str = formatter.format(curDate);
 			String w = "当前密码:\n" + psw + "\n获取时间:\n" + str;
 			Long dTime_get = System.currentTimeMillis() - time;
-			if (dTime_get > 5 * 60 * 60 * 1000) {
+			if (dTime_get > 5.5 * 60 * 60 * 1000) {
 				w += "\n密码可能已经过期!";
 			}
 

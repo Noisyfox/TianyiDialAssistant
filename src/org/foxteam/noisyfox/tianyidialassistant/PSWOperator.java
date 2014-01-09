@@ -56,7 +56,7 @@ public class PSWOperator {
 	public void onSmsReceived(String psw) {
 		recordLastPsw(psw);
 
-		if (mDefaultPreferences.getBoolean("enable_pc_assistant", false)) {
+		if (isUpdateAvailable()) {
 			doUpdate();
 		}
 	}
@@ -74,18 +74,18 @@ public class PSWOperator {
 		}
 	}
 
-	public String getLastPsw(boolean update) {
+	public String getLastPsw(boolean checkUpdate) {
 		synchronized (syncObj) {
 			long time = System.currentTimeMillis();
 			String psw = mPreferences.getString(SP_VALUE_STR_PSW, "");
-			if (update) {
+			if (checkUpdate) {
 				if (!psw.equals("")) {
 					Long dTime_get = time
 							- mPreferences.getLong(SP_VALUE_LONG_TIME_GET, 0);
 					Long dTime_request = time
 							- mPreferences.getLong(SP_VALUE_LONG_TIME_REQUEST,
 									0);
-					if (dTime_get > 3 * 60 * 60 * 1000) {// 密码已经失效
+					if (dTime_get > 5.5 * 60 * 60 * 1000) {// 密码已经失效
 						psw = "";
 					} else if (dTime_request < 2 * 60 * 1000
 							&& dTime_request > 20 * 1000
@@ -105,13 +105,14 @@ public class PSWOperator {
 		return mPreferences.getLong(SP_VALUE_LONG_TIME_GET, 0);
 	}
 
-	public boolean checkAndUpdate(boolean forceUpdate) {
+	// ==============================================================================================
+	public boolean checkAndRefresh(boolean forceUpdate) {
 
 		if (!forceUpdate) {
 			long currentTime = System.currentTimeMillis();
 			long frequency = Long.valueOf(mDefaultPreferences.getString(
-					"update_frequency", "180")) * 60 * 1000;
-			// 检查上一次提交时间
+					"refresh_frequency", "300")) * 60 * 1000;
+			// 检查上一次刷新时间
 			long lstUpdateTime = mPreferences.getLong(
 					SP_VALUE_LONG_TIME_UPDATE, 0);
 			long dTimeUpdate = currentTime - lstUpdateTime;
@@ -119,8 +120,8 @@ public class PSWOperator {
 
 			if (dTimeRecord > frequency) {
 				requestNewPassword();
-			} else if (dTimeUpdate > frequency) {
-				doUpdate();
+			} else if (dTimeUpdate > frequency && isUpdateAvailable()) {
+				doUpdate(); // 提交服务器
 			} else {
 				return false;
 			}
@@ -129,6 +130,15 @@ public class PSWOperator {
 		}
 
 		return true;
+	}
+
+	/**
+	 * 检测是否可以更新，具体指 有没有开启更新以及有没有进行配对
+	 * 
+	 * @return
+	 */
+	private boolean isUpdateAvailable() {
+		return mDefaultPreferences.getBoolean("enable_pc_assistant", false);
 	}
 
 	private void doUpdate() {

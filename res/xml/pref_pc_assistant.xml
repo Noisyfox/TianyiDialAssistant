@@ -7,6 +7,7 @@
 
     <CheckBoxPreference
         android:defaultValue="false"
+        android:dependency="checkbox_auto_refresh"
         android:key="enable_pc_assistant"
         android:title="@string/pref_title_enable_pc_assistant" />
 
@@ -18,16 +19,6 @@
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:title="@string/pref_title_pc_assistant_psw" />
-
-    <ListPreference
-        android:defaultValue="180"
-        android:dependency="enable_pc_assistant"
-        android:entries="@array/pref_update_frequency_titles"
-        android:entryValues="@array/pref_update_frequency_values"
-        android:key="update_frequency"
-        android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
-        android:title="@string/pref_title_update_frequency" />
     
     <CheckBoxPreference
         android:defaultValue="true"

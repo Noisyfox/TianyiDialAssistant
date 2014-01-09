@@ -10,21 +10,18 @@ import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
 public class AlarmReceiver extends BroadcastReceiver {
-	public static final String ALARM_ACTION_UPDATEPSW = "org.foxteam.noisyfox.tianyidialassistant.updatePassword";
+	public static final String ALARM_ACTION_REFRESHPSW = "org.foxteam.noisyfox.tianyidialassistant.refreshPassword";
 	public static final String SP_VALUE_LONG_LAST_CHECK_TIME = "LastCheckTime";
-	public static final int SENDER_CODE_UPDATEPSW = 0;
-	public static final long INTERVAL_UPDATEPSW = 60 * 1000;
+	public static final int SENDER_CODE_REFRESHPSW = 0;
+	public static final long INTERVAL_REFRESHPSW = 1 * 60 * 1000;// 1分钟检测一次
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		if (ALARM_ACTION_UPDATEPSW.equals(intent.getAction())) {
-			PhoneNumberVerification pnv = new PhoneNumberVerification(context);
+		if (ALARM_ACTION_REFRESHPSW.equals(intent.getAction())) {
+			// 刷新当前密码
 			SharedPreferences defaultPreferences = PreferenceManager
 					.getDefaultSharedPreferences(context);
-			if (pnv.isPhoneNumberConfirmed()
-					&& defaultPreferences.getBoolean("enable_pc_assistant",
-							false)) {
-
+			if (defaultPreferences.getBoolean("checkbox_auto_refresh", true)) {
 				long currentTime = System.currentTimeMillis();
 				SharedPreferences sharedPreferences = context
 						.getApplicationContext().getSharedPreferences(
@@ -34,7 +31,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
 				if (currentTime - lastCheckTime > 3 * 60 * 1000) {
 					PSWOperator pswOperator = new PSWOperator(context);
-					boolean result = pswOperator.checkAndUpdate(false);
+					boolean result = pswOperator.checkAndRefresh(false);
 					if (result) {
 						Editor e = sharedPreferences.edit();
 						e.putLong(SP_VALUE_LONG_LAST_CHECK_TIME, currentTime);
@@ -48,13 +45,13 @@ public class AlarmReceiver extends BroadcastReceiver {
 	}
 
 	public static void startAlarm(Context context) {
-		Intent intent = new Intent(ALARM_ACTION_UPDATEPSW);
+		Intent intent = new Intent(ALARM_ACTION_REFRESHPSW);
 		PendingIntent pi = PendingIntent.getBroadcast(context,
-				SENDER_CODE_UPDATEPSW, intent,
+				SENDER_CODE_REFRESHPSW, intent,
 				PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager am = (AlarmManager) context
 				.getSystemService(Context.ALARM_SERVICE);
 		am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
-				INTERVAL_UPDATEPSW, pi);
+				INTERVAL_REFRESHPSW, pi);
 	}
 }

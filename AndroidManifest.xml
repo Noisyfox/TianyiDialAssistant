@@ -88,7 +88,7 @@
             android:name="org.foxteam.noisyfox.tianyidialassistant.AlarmReceiver"
             android:enabled="true" >
             <intent-filter>
-                <action android:name="org.foxteam.noisyfox.tianyidialassistant.updatePassword" />
+                <action android:name="org.foxteam.noisyfox.tianyidialassistant.refreshPassword" />
             </intent-filter>
         </receiver>
         <receiver
