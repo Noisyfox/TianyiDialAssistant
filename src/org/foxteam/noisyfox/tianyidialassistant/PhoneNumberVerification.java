@@ -66,9 +66,6 @@ public class PhoneNumberVerification {
 	}
 
 	void beginConfirm() {
-		// new Thread(){
-		// @Override
-		// public void run() {
 		synchronized (syncObject) {
 			clearPhoneNumber();
 
@@ -155,8 +152,6 @@ public class PhoneNumberVerification {
 
 			alertDialog_ver.show();
 		}
-		// }
-		// }.start();
 	}
 
 	void sendTextMessage(String number) {
@@ -233,10 +228,6 @@ public class PhoneNumberVerification {
 	void clearPhoneNumber() {
 		synchronized (syncObject) {
 			Editor e = mPreferences.edit();
-			// e.remove(SP_VALUE_SAVEDNUMBER);
-			// e.remove(SP_VALUE_SAVEDNUMBER_ENCRYPT);
-			// e.remove(SP_VALUE_UNCONFIRMEDNUMBER);
-			// e.remove(SP_VALUE_CONFIRMSTRING);
 			e.clear();
 			e.putBoolean(SP_VALUE_BOOL_RUNATONCE, true);
 			e.commit();
@@ -261,7 +252,6 @@ public class PhoneNumberVerification {
 		try {
 			mdInst = MessageDigest.getInstance("MD5");
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}

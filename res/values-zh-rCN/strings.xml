@@ -10,6 +10,7 @@
     <string name="psw_err">密码获取失败</string>
     <string name="psw_neverget">尚未获取过密码</string>
     <string name="aboutme">by Noisyfox NUAA</string>
+    <string name="dlgSettings_process_title">请稍后</string>
     <string name="dlgPhoneVer_noti_title">确认你的电话号码</string>
     <string name="dlgPhoneVer_noti_text">\t现在将通过向本机发送一条一次性短信确认你的手机号码。\n\t进行确认并不会将你的号码分享给任何人，只是用来在服务器端进行身份识别。</string>
     <string name="dlgPhoneVer_edit_title">修改电话号码</string>
@@ -21,4 +22,15 @@
 	<string name="dlgPhoneVer_need_to_ver_title">需要验证电话号码</string>
 	<string name="dlgPhoneVer_need_to_ver_text">\t你还没有验证你的电话号码，暂时无法开启PC连接助手。</string>
 	<string name="dlgPhoneVer_failed">验证失败，请检查号码是否正确</string>
+	<string name="dlgPpairing_remove_title">解除PC配对</string>
+	<string name="dlgPairing_remove_text">你确定要解除配对么？这将导致PC连接助手不可用。</string>
+    <string name="dlgPairing_remove_removing">解除 PC 配对中</string>
+    <string name="dlgPairing_primary_code_title">请输入配对码</string>
+    <string name="dlgPairing_secondary_code_title">动态密码</string>
+    <string name="dlgPairing_requiring_secondary">正在获取动态密码</string>
+    <string name="dlgPairing_verify">正在等待 PC 端完成配对</string>
+    <string name="toastPairing_remove_failed">解除配对失败</string>
+    <string name="toastPairing_remove_successful">解除配对成功</string>
+    <string name="toastPairing_pair_failed">配对失败</string>
+    <string name="toastPairing_pair_successful">配对成功</string>
 </resources>

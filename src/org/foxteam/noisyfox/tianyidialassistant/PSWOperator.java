@@ -1,12 +1,5 @@
 package org.foxteam.noisyfox.tianyidialassistant;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -145,61 +138,5 @@ public class PSWOperator {
 		if (!updateThread.isAlive())
 			updateThread.start();
 		updateThread.requireUpdate(this);
-	}
-
-	// 将储存的信息提交给服务器
-	boolean update(String number, String code, String pwd, String device_key) {
-		Map<String, String> map = new HashMap<String, String>();
-		map.put(STR_SERVER_ARGS_KEY_METHOD, STR_SERVER_ARGS_VALUE_PUT);
-		map.put(STR_SERVER_ARGS_KEY_NUMBER, number);
-		map.put(STR_SERVER_ARGS_KEY_CODE, code);
-		map.put(STR_SERVER_ARGS_KEY_PWD, Util.hashString(pwd, "SHA"));
-		map.put(STR_SERVER_ARGS_KEY_DEVICE_KEY, device_key);
-		map.put(STR_SERVER_ARGS_KEY_STAT, mDefaultPreferences.getBoolean(
-				"count_using_time", true) ? "1" : "0");
-		String version = Util.getVersionName(mContext);
-		if (version == null) {
-			version = "unknown";
-		}
-		version = String.format(STR_SERVER_ARGS_VALUE_CLIENT, version);
-		map.put(STR_SERVER_ARGS_KEY_CLIENT, version);
-
-		String httpResult = Util.doHttpRequest(STR_SERVER_URL, map);
-		// Toast.makeText(mContext, httpResult, Toast.LENGTH_LONG).show();
-		if (httpResult == null) {
-			new Exception("Failed to connect to server.").printStackTrace();
-			return false;
-		}
-
-		// Log.d("", httpResult);
-
-		try {
-			JSONTokener jsonParser = new JSONTokener(httpResult);
-			jsonParser.nextTo('{');
-			if (!jsonParser.more()) {
-				new Exception("Failed to read return value.").printStackTrace();
-				return false;
-			}
-			JSONObject jsonObj = (JSONObject) jsonParser.nextValue();
-			int result = jsonObj.getInt("result");
-			if (result == 1) {
-				return true;
-			} else {
-				// 记录日志
-				int err_code = jsonObj.getInt("error_code");
-				String err_msg = jsonObj.getString("error_msg");
-				StringBuilder sb = new StringBuilder();
-				sb.append("Update password failed!\nError code:");
-				sb.append(String.format("%03X", err_code));
-				sb.append("\nError message:");
-				sb.append(err_msg);
-				new Exception(sb.toString()).printStackTrace();
-			}
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return false;
 	}
 }

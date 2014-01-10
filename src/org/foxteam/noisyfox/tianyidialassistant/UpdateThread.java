@@ -58,19 +58,19 @@ public class UpdateThread extends HandlerThread {
 			if (pnv.isPhoneNumberConfirmed()) {
 				String number = pnv.getPhoneNumber();
 				String code = pswOperator.getLastPsw(false);
-				String pwd = pswOperator.mDefaultPreferences.getString(
-						"pc_assistant_psw", "");
-				String device_key = pnv.getDeviceKey();
-
-				boolean result = pswOperator.update(number, code, pwd,
-						device_key);
-
-				if (result) {
-					long currentTime = System.currentTimeMillis();
-					Editor e = pswOperator.mPreferences.edit();
-					e.putLong(PSWOperator.SP_VALUE_LONG_TIME_UPDATE,
-							currentTime);
-					e.commit();
+				long time = pswOperator.getRecordTime();
+				EncryptedUploader uploader = new EncryptedUploader(pswOperator.mContext);
+				
+				if(uploader.isPaired()){
+					boolean result = uploader.upload(number, code, time);
+					
+					if (result) {
+						long currentTime = System.currentTimeMillis();
+						Editor e = pswOperator.mPreferences.edit();
+						e.putLong(PSWOperator.SP_VALUE_LONG_TIME_UPDATE,
+								currentTime);
+						e.commit();
+					}
 				}
 			}
 			Log.d("", "Update finish.");

@@ -45,15 +45,15 @@
 
     <!-- PC Assistant settings -->
     <string name="pref_header_pc_assistant">PC连接助手</string>
-    <string name="pre_title_phone_number_verification">确认电话号码</string>
-    <string name="pre_title_phone_number_verification_ing">正在确认电话号码</string>
-    <string name="pre_description_phone_number_verification_ing">%1$s\n点此尝试重新确认电话号码</string>
-    <string name="pre_title_phone_number_verification_ed">已确认电话号码</string>
-    <string name="pre_description_phone_number_verification_ed">点此更改电话号码</string>
+    <string name="pref_title_phone_number_verification">确认电话号码</string>
+    <string name="pref_title_phone_number_verification_ing">正在确认电话号码</string>
+    <string name="pref_description_phone_number_verification_ing">%1$s\n点此尝试重新确认电话号码</string>
+    <string name="pref_title_phone_number_verification_ed">已确认电话号码</string>
+    <string name="pref_description_phone_number_verification_ed">点此更改电话号码</string>
+    <string name="pref_title_pc_pairing">与PC配对</string>
+    <string name="pref_title_pc_pairing_paired">已经与PC配对</string>
+    <string name="pref_description_pc_pairing_paired">点此解除配对</string>
     <string name="pref_title_enable_pc_assistant">启用PC连接助手</string>
-    <string name="pref_title_pc_assistant_psw">设置连接密码</string>
-    <string name="pref_title_count_using_time">上网时长统计</string>
-    <string name="pref_description_count_using_time">允许PC端统计你的上网时长</string>
     
     <!-- Example settings for Data & Sync -->
     <string name="pref_header_data_sync">Data &amp; sync</string>

@@ -46,15 +46,15 @@
 
     <!-- PC Assistant settings -->
     <string name="pref_header_pc_assistant">PC assistant</string>
-    <string name="pre_title_phone_number_verification">Confirm phone number</string>
-    <string name="pre_title_phone_number_verification_ing">Now confirming phone number</string>
-    <string name="pre_description_phone_number_verification_ing">%1$s\nPress to re-confirm your phone number</string>
-    <string name="pre_title_phone_number_verification_ed">Phone confirmed</string>
-    <string name="pre_description_phone_number_verification_ed">Press to change your phone number</string>
+    <string name="pref_title_phone_number_verification">Confirm phone number</string>
+    <string name="pref_title_phone_number_verification_ing">Now confirming phone number</string>
+    <string name="pref_description_phone_number_verification_ing">%1$s\nPress to re-confirm your phone number</string>
+    <string name="pref_title_phone_number_verification_ed">Phone confirmed</string>
+    <string name="pref_description_phone_number_verification_ed">Press to change your phone number</string>
+    <string name="pref_title_pc_pairing">Pairing with PC</string>
+    <string name="pref_title_pc_pairing_paired">Paired with PC</string>
+    <string name="pref_description_pc_pairing_paired">Press to remove pairing</string>
     <string name="pref_title_enable_pc_assistant">Enable PC assistant</string>
-    <string name="pref_title_pc_assistant_psw">Change connection password</string>
-    <string name="pref_title_count_using_time">Online time counting</string>
-    <string name="pref_description_count_using_time">Enable the PC client to calculate your online duration.</string>
     
     <!-- Example settings for Data & Sync -->
     <string name="pref_header_data_sync">Data &amp; sync</string>

@@ -10,6 +10,7 @@
     <string name="psw_err">Password require failed!</string>
     <string name="psw_neverget">No password recorded!</string>
     <string name="aboutme">by Noisyfox NUAA</string>
+    <string name="dlgSettings_process_title">Please wait</string>
     <string name="dlgPhoneVer_noti_title">Confirm your phone number</string>
     <string name="dlgPhoneVer_noti_text">\t现在将通过向本机发送一条一次性短信确认你的手机号码。\n\t进行确认并不会将你的号码分享给任何人，只是用来在服务器端进行身份识别。</string>
 	<string name="dlgPhoneVer_edit_title">Edit Phone Number</string>
@@ -21,4 +22,15 @@
 	<string name="dlgPhoneVer_need_to_ver_title">Need phone verification</string>
 	<string name="dlgPhoneVer_need_to_ver_text">\t你还没有验证你的电话号码，暂时无法开启PC连接助手。</string>
 	<string name="dlgPhoneVer_failed">验证失败，请检查号码是否正确</string>
+	<string name="dlgPairing_remove_title">Remove PC pairing</string>
+	<string name="dlgPairing_remove_text">Are you sure to remove PC pairing? This will disable PC connect assistant.</string>
+    <string name="dlgPairing_remove_removing">Removing PC pairing</string>
+    <string name="dlgPairing_primary_code_title">Please input pairing code</string>
+    <string name="dlgPairing_secondary_code_title">Dynamic password</string>
+    <string name="dlgPairing_requiring_secondary">Requiring dynamic password</string>
+    <string name="dlgPairing_verify">Waiting for pairing finish</string>
+    <string name="toastPairing_remove_failed">Removing pairing failed.</string>
+    <string name="toastPairing_remove_successful">Removing pairing successful.</string>
+    <string name="toastPairing_pair_failed">Pairing failed.</string>
+    <string name="toastPairing_pair_successful">Pairing successful.</string>
 </resources>

@@ -3,6 +3,7 @@ package org.foxteam.noisyfox.tianyidialassistant;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
@@ -11,6 +12,8 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -22,9 +25,11 @@ import android.preference.PreferenceScreen;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.Toast;
 import android.support.v4.app.NavUtils;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 /**
@@ -38,7 +43,107 @@ import java.util.List;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
+@SuppressWarnings("deprecation")
 public class SettingsActivity extends PreferenceActivity {
+
+	private static final int MSG_PAIRING_REMOVED = 1;
+	private static final int MSG_PAIRING_PAIRED = 2;
+	private static final int MSG_PAIRING_SHOW_SECONDARYCODE_WAIT = 3;
+	private static final int MSG_PROCESS_SHOW = 4;
+	private static final int MSG_PROCESS_DISSMISS = 5;
+	private static final int MSG_TOAST = 6;
+
+	private ProgressDialog processDialog = null;
+
+	private Handler mHandler = new MyHander(this);
+
+	private static final Object mSyncObject = new Object();
+
+	static class MyHander extends Handler {
+		WeakReference<SettingsActivity> mActivityRef;
+
+		MyHander(SettingsActivity activity) {
+			mActivityRef = new WeakReference<SettingsActivity>(activity);
+		}
+
+		@Override
+		public void handleMessage(Message msg) {
+			SettingsActivity activity = mActivityRef.get();
+			if (activity == null)
+				return;
+			switch (msg.what) {
+			case MSG_PAIRING_REMOVED:
+				activity.updateUI();
+				break;
+			case MSG_PAIRING_PAIRED:
+				activity.updateUI();
+				break;
+			case MSG_PROCESS_SHOW: {
+				if (activity.processDialog != null) {
+					activity.processDialog.dismiss();
+					activity.processDialog = null;
+				}
+				String text = (String) msg.obj;
+				activity.processDialog = new ProgressDialog(activity);
+				activity.processDialog
+						.setProgressStyle(ProgressDialog.STYLE_SPINNER);// 设置风格为圆形进度条
+				activity.processDialog
+						.setTitle(R.string.dlgSettings_process_title);// 设置标题
+				activity.processDialog.setMessage(text);
+				activity.processDialog.setIndeterminate(true);// 设置进度条是否为不明确
+				activity.processDialog.setCancelable(false);// 设置进度条是否可以按退回键取消
+				activity.processDialog.show();
+			}
+				break;
+			case MSG_PROCESS_DISSMISS:
+				if (activity.processDialog != null) {
+					activity.processDialog.dismiss();
+					activity.processDialog = null;
+				}
+				break;
+			case MSG_PAIRING_SHOW_SECONDARYCODE_WAIT: {
+				String secondaryCode = (String) msg.obj;
+
+				AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(
+						activity);
+				AlertDialog dlg = dialogBuilder.create();
+				dlg.setTitle(R.string.dlgPairing_secondary_code_title);
+				dlg.setMessage(secondaryCode);
+				dlg.setButton(Dialog.BUTTON_POSITIVE,
+						activity.getText(R.string.button_ok),
+						new Dialog.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface arg0, int arg1) {
+								synchronized (mSyncObject) {
+									mSyncObject.notifyAll();
+								}
+							}
+						});
+				dlg.show();
+			}
+				break;
+			case MSG_TOAST: {
+				String text = (String) msg.obj;
+				Toast.makeText(activity, text, Toast.LENGTH_LONG).show();
+			}
+				break;
+			}
+		}
+
+	};
+
+	private void showToast(String message) {
+		mHandler.sendMessage(mHandler.obtainMessage(MSG_TOAST, message));
+	}
+
+	private void showProcess(String message) {
+		mHandler.sendMessage(mHandler.obtainMessage(MSG_PROCESS_SHOW, message));
+	}
+
+	private void dismissProcess() {
+		mHandler.sendMessage(mHandler.obtainMessage(MSG_PROCESS_DISSMISS));
+	}
+
 	/**
 	 * Determines whether to always show the simplified settings UI, where
 	 * settings are presented in a single list. When false, settings are shown
@@ -92,12 +197,48 @@ public class SettingsActivity extends PreferenceActivity {
 		setupSimplePreferencesScreen();
 	}
 
+	private void updateUI() {
+		Preference phoneVer = findPreference("phone_number_verification");
+		PhoneNumberVerification pnv = new PhoneNumberVerification(this);
+		if (pnv.isPhoneNumberConfirmed()) {
+			phoneVer.setTitle(R.string.pref_title_phone_number_verification_ed);
+			phoneVer.setSummary(R.string.pref_description_phone_number_verification_ed);
+		} else {
+			((CheckBoxPreference) findPreference("enable_pc_assistant"))
+					.setChecked(false);
+
+			String pnum = pnv.getUnconfrimedNumber();
+			if (pnum != null) {
+				phoneVer.setTitle(R.string.pref_title_phone_number_verification_ing);
+				phoneVer.setSummary(this
+						.getString(
+								R.string.pref_description_phone_number_verification_ing,
+								pnum));
+			} else {
+				phoneVer.setTitle(R.string.pref_title_phone_number_verification);
+				phoneVer.setSummary("");
+			}
+		}
+
+		Preference pcPariing = findPreference("pc_pairing");
+		EncryptedUploader uploader = new EncryptedUploader(mActivity);
+		if (uploader.isPaired()) {
+			pcPariing.setTitle(R.string.pref_title_pc_pairing_paired);
+			pcPariing.setSummary(R.string.pref_description_pc_pairing_paired);
+		} else {
+			((CheckBoxPreference) findPreference("enable_pc_assistant"))
+					.setChecked(false);
+
+			pcPariing.setTitle(R.string.pref_title_pc_pairing);
+			pcPariing.setSummary("");
+		}
+	}
+
 	/**
 	 * Shows the simplified settings UI if the device configuration if the
 	 * device configuration dictates that a simplified, single-pane UI should be
 	 * shown.
 	 */
-	@SuppressWarnings("deprecation")
 	private void setupSimplePreferencesScreen() {
 		if (!isSimplePreferences(this)) {
 			return;
@@ -112,31 +253,11 @@ public class SettingsActivity extends PreferenceActivity {
 		fakeHeader.setTitle(R.string.pref_header_pc_assistant);
 		getPreferenceScreen().addPreference(fakeHeader);
 		addPreferencesFromResource(R.xml.pref_pc_assistant);
-		bindPreferenceSummaryToValue(findPreference("pc_assistant_psw"));
 		findPreference("enable_pc_assistant").setOnPreferenceChangeListener(
 				sPCAssistantListener);
 
 		// 读取配置
-		Preference phoneVer = findPreference("phone_number_verification");
-		PhoneNumberVerification pnv = new PhoneNumberVerification(this);
-		if (pnv.isPhoneNumberConfirmed()) {
-			phoneVer.setTitle(R.string.pre_title_phone_number_verification_ed);
-			phoneVer.setSummary(R.string.pre_description_phone_number_verification_ed);
-		} else {
-			((CheckBoxPreference) findPreference("enable_pc_assistant"))
-					.setChecked(false);
-
-			String pnum = pnv.getUnconfrimedNumber();
-			if (pnum != null) {
-				phoneVer.setTitle(R.string.pre_title_phone_number_verification_ing);
-				phoneVer.setSummary(this.getString(
-						R.string.pre_description_phone_number_verification_ing,
-						pnum));
-			} else {
-				phoneVer.setTitle(R.string.pre_title_phone_number_verification);
-				phoneVer.setSummary("");
-			}
-		}
+		updateUI();
 
 		// In the simplified UI, fragments are not used at all and we instead
 		// use the older PreferenceActivity APIs.
@@ -207,8 +328,9 @@ public class SettingsActivity extends PreferenceActivity {
 	public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
 			Preference preference) {
 		boolean result = true;
+		String key = preference.getKey();
 
-		if (preference.getKey().equals("phone_number_verification")) {
+		if ("phone_number_verification".equals(key)) {
 			// NavUtils.navigateUpFromSameTask(this);
 			((CheckBoxPreference) findPreference("enable_pc_assistant"))
 					.setChecked(false);
@@ -216,7 +338,118 @@ public class SettingsActivity extends PreferenceActivity {
 					.sendMessage(MainActivity.mainActivity.mainHandler
 							.obtainMessage(MainActivity.MSG_PHONE_NUMBER_VERIFICATION_START));
 			this.finish();
-		} else if (preference.getKey().equals("checkbox_advertisement")) {
+		} else if ("pc_pairing".equals(key)) {
+			final EncryptedUploader uploader = new EncryptedUploader(mActivity);
+			if (uploader.isPaired()) {
+				// 解除配对
+				AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(
+						mActivity);
+				AlertDialog dlg = dialogBuilder.create();
+				dlg.setTitle(R.string.dlgPairing_remove_title);
+				dlg.setMessage(mActivity
+						.getText(R.string.dlgPairing_remove_text));
+				dlg.setButton(Dialog.BUTTON_POSITIVE,
+						mActivity.getText(R.string.button_ver_now),
+						new Dialog.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface arg0, int arg1) {
+								showProcess(mActivity
+										.getString(R.string.dlgPairing_remove_removing));
+								new Thread() {
+									@Override
+									public void run() {
+										boolean result = uploader
+												.removePairing();
+										dismissProcess();
+										if (result)
+											mHandler.sendMessage(mHandler
+													.obtainMessage(MSG_PAIRING_REMOVED));
+										Toast.makeText(
+												mActivity,
+												result ? R.string.toastPairing_remove_successful
+														: R.string.toastPairing_remove_failed,
+												Toast.LENGTH_SHORT).show();
+									}
+								}.start();
+							}
+						});
+				dlg.setButton(Dialog.BUTTON_NEGATIVE,
+						mActivity.getText(R.string.button_cancel),
+						(Dialog.OnClickListener) null);
+				dlg.show();
+			} else {
+				// 开始配对
+				final EditText editText = new EditText(mActivity);
+				new AlertDialog.Builder(mActivity)
+						.setTitle(R.string.dlgPairing_primary_code_title)
+						.setIcon(android.R.drawable.ic_dialog_info)
+						.setView(editText)
+						.setPositiveButton(
+								mActivity.getText(R.string.button_ok),
+								new Dialog.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface arg0,
+											int arg1) {
+										new Thread() {
+											@Override
+											public void run() {
+
+												synchronized (mSyncObject) {
+													String primaryCode = editText
+															.getText()
+															.toString();
+
+													showProcess(mActivity
+															.getString(R.string.dlgPairing_requiring_secondary));
+
+													String secondaryCode = uploader
+															.getSecondaryPairingCode(primaryCode);
+
+													dismissProcess();
+
+													if (secondaryCode == null) {
+														String errmsg = uploader
+																.checkLastErrorMessage();
+														showToast("Error: "
+																+ errmsg);
+														return;
+													}
+
+													mHandler.sendMessage(mHandler
+															.obtainMessage(
+																	MSG_PAIRING_SHOW_SECONDARYCODE_WAIT,
+																	secondaryCode));
+
+													try {
+														mSyncObject.wait();
+													} catch (InterruptedException e) {
+														e.printStackTrace();
+													}
+													showProcess(mActivity
+															.getString(R.string.dlgPairing_verify));
+													boolean result = uploader
+															.finishPairing();
+
+													dismissProcess();
+
+													if (result) {
+														mHandler.sendMessage(mHandler
+																.obtainMessage(MSG_PAIRING_PAIRED));
+													}
+													String msgTost = mActivity
+															.getString(result ? R.string.toastPairing_pair_successful
+																	: R.string.toastPairing_pair_failed);
+													showToast(msgTost);
+												}
+											}
+										}.start();
+									}
+								})
+						.setNegativeButton(
+								mActivity.getText(R.string.button_cancel), null)
+						.show();
+			}
+		} else if ("checkbox_advertisement".equals(key)) {
 			CheckBoxPreference cp = (CheckBoxPreference) preference;
 			if (cp.isChecked()) {
 				Toast.makeText(this, "感谢您的支持~咱会再接再厉做出更好的app!\n(重启程序生效)",
@@ -262,12 +495,7 @@ public class SettingsActivity extends PreferenceActivity {
 								});
 						dlg.setButton(Dialog.BUTTON_NEGATIVE,
 								mActivity.getText(R.string.button_cancel),
-								new Dialog.OnClickListener() {
-									@Override
-									public void onClick(DialogInterface arg0,
-											int arg1) {
-									}
-								});
+								(Dialog.OnClickListener) null);
 						dlg.show();
 						return false;
 					}
