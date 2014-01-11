@@ -24,7 +24,10 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.support.v4.app.NavUtils;
@@ -377,11 +380,17 @@ public class SettingsActivity extends PreferenceActivity {
 				dlg.show();
 			} else {
 				// ¿ªÊ¼Åä¶Ô
-				final EditText editText = new EditText(mActivity);
+				LayoutInflater inflater = getLayoutInflater();
+				View layout = inflater.inflate(R.layout.pairing_primary_code,
+						(ViewGroup) findViewById(R.id.edit_primary_code));
+
+				final EditText editText = (EditText) layout
+						.findViewById(R.id.edit_primary_code);
+
 				new AlertDialog.Builder(mActivity)
 						.setTitle(R.string.dlgPairing_primary_code_title)
 						.setIcon(android.R.drawable.ic_dialog_info)
-						.setView(editText)
+						.setView(layout)
 						.setPositiveButton(
 								mActivity.getText(R.string.button_ok),
 								new Dialog.OnClickListener() {

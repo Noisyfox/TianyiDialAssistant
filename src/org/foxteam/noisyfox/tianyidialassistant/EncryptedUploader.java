@@ -105,7 +105,7 @@ public final class EncryptedUploader {
 		mKid_pairing = -1;
 		mPublicKey_pairing = null;
 		mPublicKeyBase64_pairing = null;
-		
+
 		mKid = -1;
 		mPublicKey = null;
 		mPublicKeyBase64 = null;
@@ -184,7 +184,7 @@ public final class EncryptedUploader {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
+
 			PostResult result = doHttpRequest(HOST_SERVER,
 					STR_SERVER_PATH_CHECK, queryStringMap, null);
 
@@ -229,7 +229,7 @@ public final class EncryptedUploader {
 	public void save() {
 		Editor e = mPreferences.edit();
 		e.clear();
-		
+
 		if (mPublicKey != null) {
 			e.putLong(SP_VALUE_LONG_KEYID, mKid);
 			e.putString(SP_VALUE_STR_PUBLICKEY, mPublicKeyBase64);
