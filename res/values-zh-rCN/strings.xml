@@ -7,6 +7,7 @@
     <string name="button_getpsw">立即获取</string>
     <string name="button_skip">跳过</string>
     <string name="button_ver_now">现在去验证</string>
+    <string name="button_remove_pairing">解除配对</string>
     <string name="psw_err">密码获取失败</string>
     <string name="psw_neverget">尚未获取过密码</string>
     <string name="aboutme">by Noisyfox NUAA</string>
@@ -22,7 +23,7 @@
 	<string name="dlgPhoneVer_need_to_ver_title">需要验证电话号码</string>
 	<string name="dlgPhoneVer_need_to_ver_text">\t你还没有验证你的电话号码，暂时无法开启PC连接助手。</string>
 	<string name="dlgPhoneVer_failed">验证失败，请检查号码是否正确</string>
-	<string name="dlgPpairing_remove_title">解除PC配对</string>
+	<string name="dlgPairing_remove_title">解除PC配对</string>
 	<string name="dlgPairing_remove_text">你确定要解除配对么？这将导致PC连接助手不可用。</string>
     <string name="dlgPairing_remove_removing">解除 PC 配对中</string>
     <string name="dlgPairing_primary_code_title">请输入配对码</string>

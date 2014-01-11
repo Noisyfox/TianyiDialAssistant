@@ -36,6 +36,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
+import com.rt.BASE64Decoder;
 import com.rt.BASE64Encoder;
 
 /**
@@ -104,6 +105,10 @@ public final class EncryptedUploader {
 		mKid_pairing = -1;
 		mPublicKey_pairing = null;
 		mPublicKeyBase64_pairing = null;
+		
+		mKid = -1;
+		mPublicKey = null;
+		mPublicKeyBase64 = null;
 
 		save();
 
@@ -144,9 +149,9 @@ public final class EncryptedUploader {
 			long key_id = result.resultObj.getLong(RESULT_KEY_KEYID);
 			double time = result.resultObj.getDouble(RESULT_KEY_TIME);
 			PublicKey publicKey = Encrypt.getPublicKey(keyBase64);
+			byte[] key = (new BASE64Decoder()).decodeBuffer(keyBase64);
 
-			String totp = Encrypt.generateTOTP(publicKey.getEncoded(), time, 8,
-					Encrypt.HMAC_SHA1);
+			String totp = Encrypt.generateTOTP(key, time, 6, Encrypt.HMAC_SHA1);
 
 			mKid_pairing = key_id;
 			mPublicKey_pairing = publicKey;
@@ -173,6 +178,13 @@ public final class EncryptedUploader {
 				String.valueOf(mKid_pairing));
 
 		checkLoop: while (true) {
+
+			try {
+				Thread.sleep(3 * 1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
 			PostResult result = doHttpRequest(HOST_SERVER,
 					STR_SERVER_PATH_CHECK, queryStringMap, null);
 
@@ -182,6 +194,8 @@ public final class EncryptedUploader {
 			case HttpStatus.SC_UNAUTHORIZED:
 				mErrMessage = "配对码无效/配对超时";
 				return false;
+			case -1:
+				continue;
 			default:
 				mErrMessage = "未知错误: " + result.statusCode;
 				return false;
@@ -196,12 +210,6 @@ public final class EncryptedUploader {
 				e.printStackTrace();
 				mErrMessage = "内部错误";
 				return false;
-			}
-
-			try {
-				Thread.sleep(3 * 1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
 			}
 		}
 
@@ -221,7 +229,7 @@ public final class EncryptedUploader {
 	public void save() {
 		Editor e = mPreferences.edit();
 		e.clear();
-
+		
 		if (mPublicKey != null) {
 			e.putLong(SP_VALUE_LONG_KEYID, mKid);
 			e.putString(SP_VALUE_STR_PUBLICKEY, mPublicKeyBase64);
@@ -238,14 +246,14 @@ public final class EncryptedUploader {
 		long key_id = mPreferences.getLong(SP_VALUE_LONG_KEYID, -1);
 		String keyBase64 = mPreferences.getString(SP_VALUE_STR_PUBLICKEY, null);
 
-		if (mPublicKeyBase64 == null || mKid == -1) {
+		if (keyBase64 == null || key_id == -1) {
 			mErrMessage = "读取现有配对信息失败";
 			return false;
 		}
 
 		PublicKey publicKey;
 		try {
-			publicKey = Encrypt.getPublicKey(mPublicKeyBase64);
+			publicKey = Encrypt.getPublicKey(keyBase64);
 		} catch (Exception e) {
 			e.printStackTrace();
 			mErrMessage = "读取现有配对信息失败";
@@ -331,7 +339,7 @@ public final class EncryptedUploader {
 			// Represents a collection of HTTP protocol and framework parameters
 			HttpParams params = httpClient.getParams();
 			// 设置超时
-			HttpConnectionParams.setConnectionTimeout(params, 5000);
+			HttpConnectionParams.setConnectionTimeout(params, 10000);
 			HttpConnectionParams.setSoTimeout(params, 35000);
 
 			String queryStr = "";

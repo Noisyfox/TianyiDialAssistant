@@ -7,7 +7,8 @@ import java.security.KeyFactory;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
-import java.security.spec.X509EncodedKeySpec;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.RSAPublicKeySpec;
 
 import javax.crypto.Cipher;
 import javax.crypto.Mac;
@@ -19,7 +20,7 @@ import com.rt.BASE64Decoder;
 
 public class Encrypt {
 	public static final String HMAC_SHA1 = "HmacSHA1";
-	
+
 	/**
 	 * RSA最大加密明文大小
 	 */
@@ -33,20 +34,25 @@ public class Encrypt {
 	/**
 	 * 得到公钥
 	 * 
-	 * @param key
-	 *            密钥字符串（经过base64编码）
+	 * @param modulus
+	 *            RSA公钥模数字符串（经过base64编码）
 	 * @return 获取失败返回null，否则返回公钥
 	 */
-	public static PublicKey getPublicKey(String key) throws Exception {
-		byte[] keyBytes = (new BASE64Decoder()).decodeBuffer(key);
+	public static PublicKey getPublicKey(String modulus) throws Exception {
+		byte[] modulusBytes = (new BASE64Decoder()).decodeBuffer(modulus);
+		byte[] exponentBytes = (new BASE64Decoder()).decodeBuffer("AQAB");
 
-		X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
+		BigInteger _modulus = new BigInteger(modulusBytes);
+		BigInteger _exponent = new BigInteger(exponentBytes);
+
 		KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-		PublicKey publicKey = keyFactory.generatePublic(keySpec);
+		RSAPublicKeySpec keySpec = new RSAPublicKeySpec(_modulus, _exponent);
+		RSAPublicKey publicKey = (RSAPublicKey) keyFactory
+				.generatePublic(keySpec);
 
 		return publicKey;
 	}
-	
+
 	/**
 	 * <p>
 	 * 公钥加密

@@ -349,7 +349,7 @@ public class SettingsActivity extends PreferenceActivity {
 				dlg.setMessage(mActivity
 						.getText(R.string.dlgPairing_remove_text));
 				dlg.setButton(Dialog.BUTTON_POSITIVE,
-						mActivity.getText(R.string.button_ver_now),
+						mActivity.getText(R.string.button_remove_pairing),
 						new Dialog.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface arg0, int arg1) {
@@ -364,11 +364,9 @@ public class SettingsActivity extends PreferenceActivity {
 										if (result)
 											mHandler.sendMessage(mHandler
 													.obtainMessage(MSG_PAIRING_REMOVED));
-										Toast.makeText(
-												mActivity,
-												result ? R.string.toastPairing_remove_successful
-														: R.string.toastPairing_remove_failed,
-												Toast.LENGTH_SHORT).show();
+										showToast(mActivity
+												.getString(result ? R.string.toastPairing_remove_successful
+														: R.string.toastPairing_remove_failed));
 									}
 								}.start();
 							}

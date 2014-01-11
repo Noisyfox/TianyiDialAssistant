@@ -12,6 +12,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 import javax.net.ssl.SSLContext;
@@ -42,6 +43,7 @@ import android.util.Log;
 
 public class NetworkHelper {
 	private static final String[] trustedDNS = { "8.8.8.8", "8.8.4.4" };
+	private static final Random ramdom = new Random();
 
 	public static class PostResult {
 		int statusCode = 0;
@@ -63,19 +65,25 @@ public class NetworkHelper {
 		String resolveAddress = "";
 	}
 
+	private static long lastResolveTime = -1;
+
 	@SuppressLint("DefaultLocale")
 	public static boolean resolveHost(StaticHost host) {
 		// hack Google 403
 		if (host.resolveAddress.toLowerCase().contains("google")) {
 			try {
 				InetAddress addr = InetAddress.getByName(host.resolveAddress);
-				if (addr.getHostAddress().startsWith("203.208")) {// google_CN
+				long cTime = System.currentTimeMillis();
+				if (addr.getHostAddress().startsWith("203.208")// google_CN
+						|| (lastResolveTime != -1 && cTime - lastResolveTime > 5 * 60 * 1000)) {// ∑¿÷πip ß–ß
+					lastResolveTime = cTime;
 					Set<String> ips = getAllIP(host.resolveAddress, trustedDNS);
 					int size = ips.size();
 					if (size > 0) {
 						String[] ip = new String[size];
 						ips.toArray(ip);
-						addDNSCache(host.resolveAddress, ip[0]);// google_HK
+						int k = ramdom.nextInt(size);
+						addDNSCache(host.resolveAddress, ip[k]);// google_HK
 					}
 				}
 			} catch (UnknownHostException e) {
