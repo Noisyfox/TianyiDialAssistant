@@ -55,6 +55,7 @@ public class SettingsActivity extends PreferenceActivity {
 	private static final int MSG_PROCESS_SHOW = 4;
 	private static final int MSG_PROCESS_DISSMISS = 5;
 	private static final int MSG_TOAST = 6;
+	private static final int MSG_UPDATE_UI = 7;
 
 	private ProgressDialog processDialog = null;
 
@@ -129,6 +130,9 @@ public class SettingsActivity extends PreferenceActivity {
 				String text = (String) msg.obj;
 				Toast.makeText(activity, text, Toast.LENGTH_LONG).show();
 			}
+				break;
+			case MSG_UPDATE_UI:
+				activity.updateUI();
 				break;
 			}
 		}
@@ -223,17 +227,25 @@ public class SettingsActivity extends PreferenceActivity {
 			}
 		}
 
-		Preference pcPariing = findPreference("pc_pairing");
+		Preference pcPairing = findPreference("pc_pairing");
+		Preference pcPairing_check = findPreference("pc_pairing_check");
 		EncryptedUploader uploader = new EncryptedUploader(mActivity);
 		if (uploader.isPaired()) {
-			pcPariing.setTitle(R.string.pref_title_pc_pairing_paired);
-			pcPariing.setSummary(R.string.pref_description_pc_pairing_paired);
+			pcPairing_check.setEnabled(false);
+			pcPairing.setTitle(R.string.pref_title_pc_pairing_paired);
+			pcPairing.setSummary(R.string.pref_description_pc_pairing_paired);
+		} else if (uploader.isPairing()) {
+			pcPairing_check.setEnabled(true);
+			pcPairing.setTitle(R.string.pref_title_pc_pairing_pairing);
+			pcPairing.setSummary(R.string.pref_description_pc_pairing_pairing);
 		} else {
+			pcPairing_check.setEnabled(false);
+
 			((CheckBoxPreference) findPreference("enable_pc_assistant"))
 					.setChecked(false);
 
-			pcPariing.setTitle(R.string.pref_title_pc_pairing);
-			pcPariing.setSummary("");
+			pcPairing.setTitle(R.string.pref_title_pc_pairing);
+			pcPairing.setSummary("");
 		}
 	}
 
@@ -378,6 +390,36 @@ public class SettingsActivity extends PreferenceActivity {
 						mActivity.getText(R.string.button_cancel),
 						(Dialog.OnClickListener) null);
 				dlg.show();
+			} else if (uploader.isPairing()) {
+				// 放弃配对
+				AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(
+						mActivity);
+				AlertDialog dlg = dialogBuilder.create();
+				dlg.setTitle(R.string.dlgPairing_giveup_title);
+				dlg.setMessage(mActivity
+						.getText(R.string.dlgPairing_giveup_text));
+				dlg.setButton(Dialog.BUTTON_POSITIVE,
+						mActivity.getText(R.string.button_giveup_pairing),
+						new Dialog.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface arg0, int arg1) {
+								showProcess(mActivity
+										.getString(R.string.dlgPairing_giveup_givingup));
+								new Thread() {
+									@Override
+									public void run() {
+										uploader.giveupPairing();
+										mHandler.sendMessage(mHandler
+												.obtainMessage(MSG_UPDATE_UI));
+										dismissProcess();
+									}
+								}.start();
+							}
+						});
+				dlg.setButton(Dialog.BUTTON_NEGATIVE,
+						mActivity.getText(R.string.button_cancel),
+						(Dialog.OnClickListener) null);
+				dlg.show();
 			} else {
 				// 开始配对
 				LayoutInflater inflater = getLayoutInflater();
@@ -432,21 +474,7 @@ public class SettingsActivity extends PreferenceActivity {
 													} catch (InterruptedException e) {
 														e.printStackTrace();
 													}
-													showProcess(mActivity
-															.getString(R.string.dlgPairing_verify));
-													boolean result = uploader
-															.finishPairing();
-
-													dismissProcess();
-
-													if (result) {
-														mHandler.sendMessage(mHandler
-																.obtainMessage(MSG_PAIRING_PAIRED));
-													}
-													String msgTost = mActivity
-															.getString(result ? R.string.toastPairing_pair_successful
-																	: R.string.toastPairing_pair_failed);
-													showToast(msgTost);
+													checkPairing(uploader);
 												}
 											}
 										}.start();
@@ -455,6 +483,17 @@ public class SettingsActivity extends PreferenceActivity {
 						.setNegativeButton(
 								mActivity.getText(R.string.button_cancel), null)
 						.show();
+			}
+		} else if ("pc_pairing_check".equals(key)) {
+			// 重试配对
+			final EncryptedUploader uploader = new EncryptedUploader(mActivity);
+			if (uploader.isPairing()) {
+				new Thread() {
+					@Override
+					public void run() {
+						checkPairing(uploader);
+					}
+				}.start();
 			}
 		} else if ("checkbox_advertisement".equals(key)) {
 			CheckBoxPreference cp = (CheckBoxPreference) preference;
@@ -469,6 +508,23 @@ public class SettingsActivity extends PreferenceActivity {
 			result = super.onPreferenceTreeClick(preferenceScreen, preference);
 		}
 		return result;
+	}
+
+	private void checkPairing(EncryptedUploader uploader) {
+		showProcess(mActivity.getString(R.string.dlgPairing_verify));
+		boolean result = uploader.finishPairing();
+
+		dismissProcess();
+
+		if (result) {
+			mHandler.sendMessage(mHandler.obtainMessage(MSG_PAIRING_PAIRED));
+		} else {
+			mHandler.sendMessage(mHandler.obtainMessage(MSG_UPDATE_UI));
+		}
+		String msgTost = mActivity
+				.getString(result ? R.string.toastPairing_pair_successful
+						: R.string.toastPairing_pair_failed);
+		showToast(msgTost);
 	}
 
 	private Preference.OnPreferenceChangeListener sPCAssistantListener = new Preference.OnPreferenceChangeListener() {

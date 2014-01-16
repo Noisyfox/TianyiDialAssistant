@@ -8,6 +8,10 @@
     <Preference
         android:key="pc_pairing"
         android:title="@string/pref_title_pc_pairing" />
+    
+    <Preference
+        android:key="pc_pairing_check"
+        android:title="@string/pref_title_pc_pairing_check" />
 
     <CheckBoxPreference
         android:defaultValue="false"

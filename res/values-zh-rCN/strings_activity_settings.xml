@@ -25,6 +25,7 @@
         <item>180</item>
         <item>300</item>
     </string-array>
+    
     <!--
     <string name="pref_title_display_name">Display name</string>
     <string name="pref_default_display_name">John Smith</string>
@@ -52,7 +53,10 @@
     <string name="pref_description_phone_number_verification_ed">点此更改电话号码</string>
     <string name="pref_title_pc_pairing">与PC配对</string>
     <string name="pref_title_pc_pairing_paired">已经与PC配对</string>
+    <string name="pref_title_pc_pairing_pairing">正在与PC配对</string>
     <string name="pref_description_pc_pairing_paired">点此解除配对</string>
+    <string name="pref_description_pc_pairing_pairing">点此放弃配对</string>
+    <string name="pref_title_pc_pairing_check">重试配对</string>
     <string name="pref_title_enable_pc_assistant">启用PC连接助手</string>
     
     <!-- Example settings for Data & Sync -->

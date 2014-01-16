@@ -8,6 +8,7 @@
     <string name="button_skip">Skip</string>
     <string name="button_ver_now">Confirm now</string>
     <string name="button_remove_pairing">Remove</string>
+    <string name="button_giveup_pairing">Giveup</string>
     <string name="psw_err">Password require failed!</string>
     <string name="psw_neverget">No password recorded!</string>
     <string name="aboutme">by Noisyfox NUAA</string>
@@ -21,11 +22,14 @@
 	<string name="dlgPhoneVer_skipped_toast">你已跳过了号码验证，你可以稍后在菜单中选择再次进行号码验证</string>
 	<string name="dlgPhoneVer_vering_toast">正在发送验证短信，期间你可以做其他事情</string>
 	<string name="dlgPhoneVer_need_to_ver_title">Need phone verification</string>
-	<string name="dlgPhoneVer_need_to_ver_text">\t你还没有验证你的电话号码，暂时无法开启PC连接助手。</string>
-	<string name="dlgPhoneVer_failed">验证失败，请检查号码是否正确</string>
+	<string name="dlgPhoneVer_need_to_ver_text">\t你还没有验证你的电话号码，暂时无法开启 PC 连接助手。</string>
+	<string name="dlgPhoneVer_failed">Verification failed, please check your phone number.</string>
 	<string name="dlgPairing_remove_title">Remove PC pairing</string>
 	<string name="dlgPairing_remove_text">Are you sure to remove PC pairing? This will disable PC connect assistant.</string>
     <string name="dlgPairing_remove_removing">Removing PC pairing</string>
+	<string name="dlgPairing_giveup_title">Give up PC pairing</string>
+	<string name="dlgPairing_giveup_text">Are you sure to give up PC pairing? After this, you have to do a full pairing next time.</string>
+    <string name="dlgPairing_giveup_givingup">Giving up PC pairing</string>
     <string name="dlgPairing_primary_code_title">Please input pairing code</string>
     <string name="dlgPairing_secondary_code_title">Dynamic password</string>
     <string name="dlgPairing_requiring_secondary">Requiring dynamic password</string>

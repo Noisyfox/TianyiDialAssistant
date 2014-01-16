@@ -53,7 +53,10 @@
     <string name="pref_description_phone_number_verification_ed">Press to change your phone number</string>
     <string name="pref_title_pc_pairing">Pairing with PC</string>
     <string name="pref_title_pc_pairing_paired">Paired with PC</string>
+    <string name="pref_title_pc_pairing_pairing">PC pairing…</string>
     <string name="pref_description_pc_pairing_paired">Press to remove pairing</string>
+    <string name="pref_description_pc_pairing_pairing">Press to give up pairing</string>
+    <string name="pref_title_pc_pairing_check">Retry pairing</string>
     <string name="pref_title_enable_pc_assistant">Enable PC assistant</string>
     
     <!-- Example settings for Data & Sync -->

@@ -8,6 +8,7 @@
     <string name="button_skip">跳过</string>
     <string name="button_ver_now">现在去验证</string>
     <string name="button_remove_pairing">解除配对</string>
+    <string name="button_giveup_pairing">放弃配对</string>
     <string name="psw_err">密码获取失败</string>
     <string name="psw_neverget">尚未获取过密码</string>
     <string name="aboutme">by Noisyfox NUAA</string>
@@ -21,11 +22,14 @@
 	<string name="dlgPhoneVer_skipped_toast">你已跳过了号码验证，你可以稍后在菜单中选择再次进行号码验证</string>
 	<string name="dlgPhoneVer_vering_toast">正在发送验证短信，期间你可以做其他事情</string>
 	<string name="dlgPhoneVer_need_to_ver_title">需要验证电话号码</string>
-	<string name="dlgPhoneVer_need_to_ver_text">\t你还没有验证你的电话号码，暂时无法开启PC连接助手。</string>
+	<string name="dlgPhoneVer_need_to_ver_text">\t你还没有验证你的电话号码，暂时无法开启 PC 连接助手。</string>
 	<string name="dlgPhoneVer_failed">验证失败，请检查号码是否正确</string>
-	<string name="dlgPairing_remove_title">解除PC配对</string>
+	<string name="dlgPairing_remove_title">解除 PC 配对</string>
 	<string name="dlgPairing_remove_text">你确定要解除配对么？这将导致PC连接助手不可用。</string>
     <string name="dlgPairing_remove_removing">解除 PC 配对中</string>
+	<string name="dlgPairing_giveup_title">放弃 PC 配对</string>
+	<string name="dlgPairing_giveup_text">你确定要放弃配对么？放弃本次配对将需要从头进行配对。</string>
+    <string name="dlgPairing_giveup_givingup">正在放弃配对</string>
     <string name="dlgPairing_primary_code_title">请输入配对码</string>
     <string name="dlgPairing_secondary_code_title">动态密码</string>
     <string name="dlgPairing_requiring_secondary">正在获取动态密码</string>

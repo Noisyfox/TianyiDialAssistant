@@ -59,11 +59,12 @@ public class UpdateThread extends HandlerThread {
 				String number = pnv.getPhoneNumber();
 				String code = pswOperator.getLastPsw(false);
 				long time = pswOperator.getRecordTime();
-				EncryptedUploader uploader = new EncryptedUploader(pswOperator.mContext);
-				
-				if(uploader.isPaired()){
+				EncryptedUploader uploader = new EncryptedUploader(
+						pswOperator.mContext);
+
+				if (uploader.isPaired()) {
 					boolean result = uploader.upload(number, code, time);
-					
+
 					if (result) {
 						long currentTime = System.currentTimeMillis();
 						Editor e = pswOperator.mPreferences.edit();

@@ -48,6 +48,8 @@ public final class EncryptedUploader {
 	private static final String SP_NAME = "Encrypt";
 	private static final String SP_VALUE_STR_PUBLICKEY = "PublicKey";
 	private static final String SP_VALUE_LONG_KEYID = "KeyID";
+	private static final String SP_VALUE_STR_PUBLICKEY_PAIRING = "PublicKeyP";
+	private static final String SP_VALUE_LONG_KEYID_PAIRING = "KeyIDP";
 
 	private static final String PAYLOAD_KEY_PHONENUMBER = "number";
 	private static final String PAYLOAD_KEY_PASSWD = "password";
@@ -60,11 +62,11 @@ public final class EncryptedUploader {
 	private static final String RESULT_KEY_TIME = "time";
 
 	private static final StaticHost HOST_SERVER = new StaticHost("https",
-			"noisyfoxtest.appspot.com", 443, "www.google.com");
+			"zend-yzwhome.rhcloud.com", 443, "zend-yzwhome.rhcloud.com");
 
-	private static final String STR_SERVER_PATH_DOWNLOAD = "/public_key/download";
-	private static final String STR_SERVER_PATH_CHECK = "/public_key/check";
-	private static final String STR_SERVER_PATH_UPLOAD = "/password/upload";
+	private static final String STR_SERVER_PATH_DOWNLOAD = "/TianyiP.php/public_key/download";
+	private static final String STR_SERVER_PATH_CHECK = "/TianyiP.php/public_key/check";
+	private static final String STR_SERVER_PATH_UPLOAD = "/TianyiP.php/password/upload";
 
 	private static final String STR_SERVER_ARGS_KEY_KEYID = "key_id";
 	private static final String STR_SERVER_ARGS_KEY_PAIRID = "pair_id";
@@ -75,11 +77,11 @@ public final class EncryptedUploader {
 
 	private SharedPreferences mPreferences = null;
 
-	private long mKid = -1; // 公钥持久编号
+	private String mKid = null; // 公钥持久编号
 	private PublicKey mPublicKey = null; // 加密用公钥
 	private String mPublicKeyBase64 = null; // base64加密后公钥字符串
 
-	private long mKid_pairing = -1; // 公钥持久编号--配对时
+	private String mKid_pairing = null; // 公钥持久编号--配对时
 	private PublicKey mPublicKey_pairing = null; // 加密用公钥--配对时
 	private String mPublicKeyBase64_pairing = null; // base64加密后公钥字符串--配对时
 
@@ -94,6 +96,10 @@ public final class EncryptedUploader {
 		return mPublicKey != null;
 	}
 
+	public boolean isPairing() {
+		return mPublicKey_pairing != null;
+	}
+
 	public String checkLastErrorMessage() {
 		String err = mErrMessage;
 		mErrMessage = null;
@@ -102,13 +108,23 @@ public final class EncryptedUploader {
 	}
 
 	public boolean removePairing() {
-		mKid_pairing = -1;
+		mKid_pairing = null;
 		mPublicKey_pairing = null;
 		mPublicKeyBase64_pairing = null;
 
-		mKid = -1;
+		mKid = null;
 		mPublicKey = null;
 		mPublicKeyBase64 = null;
+
+		save();
+
+		return true;
+	}
+
+	public boolean giveupPairing() {
+		mKid_pairing = null;
+		mPublicKey_pairing = null;
+		mPublicKeyBase64_pairing = null;
 
 		save();
 
@@ -123,7 +139,7 @@ public final class EncryptedUploader {
 	 * @return 若提取码失效，返回null； 否则返回配对密码
 	 */
 	public String getSecondaryPairingCode(String primaryPairingCode) {
-		mKid_pairing = -1;
+		mKid_pairing = null;
 		mPublicKey_pairing = null;
 		mPublicKeyBase64_pairing = null;
 
@@ -146,7 +162,7 @@ public final class EncryptedUploader {
 
 		try {
 			String keyBase64 = result.resultObj.getString(RESULT_KEY_KEY);
-			long key_id = result.resultObj.getLong(RESULT_KEY_KEYID);
+			String key_id = result.resultObj.getString(RESULT_KEY_KEYID);
 			double time = result.resultObj.getDouble(RESULT_KEY_TIME);
 			PublicKey publicKey = Encrypt.getPublicKey(keyBase64);
 			byte[] key = (new BASE64Decoder()).decodeBuffer(keyBase64);
@@ -156,6 +172,8 @@ public final class EncryptedUploader {
 			mKid_pairing = key_id;
 			mPublicKey_pairing = publicKey;
 			mPublicKeyBase64_pairing = keyBase64;
+
+			save();
 
 			return totp;
 		} catch (Exception e) {
@@ -172,13 +190,22 @@ public final class EncryptedUploader {
 	 * @return 是否配对成功
 	 */
 	public boolean finishPairing() {
+		mKid = null;
+		mPublicKey = null;
+		mPublicKeyBase64 = null;
 
 		Map<String, String> queryStringMap = new HashMap<String, String>();
 		queryStringMap.put(STR_SERVER_ARGS_KEY_KEYID,
 				String.valueOf(mKid_pairing));
 
-		checkLoop: while (true) {
+		int retryTimes = 0;
 
+		checkLoop: while (true) {
+			retryTimes++;
+			if (retryTimes > 5) {
+				mErrMessage = "配对超时";
+				return false;
+			}
 			try {
 				Thread.sleep(3 * 1000);
 			} catch (InterruptedException e) {
@@ -191,9 +218,6 @@ public final class EncryptedUploader {
 			switch (result.statusCode) {
 			case HttpStatus.SC_OK:
 				break;
-			case HttpStatus.SC_UNAUTHORIZED:
-				mErrMessage = "配对码无效/配对超时";
-				return false;
 			case -1:
 				continue;
 			default:
@@ -203,8 +227,15 @@ public final class EncryptedUploader {
 
 			try {
 				int pairResult = result.resultObj.getInt(RESULT_KEY_RESULT);
-				if (pairResult == 1) {
+				switch (pairResult) {
+				case 0: // 正在等待配对
+					break;
+				case 1: // 配对成功
 					break checkLoop;
+				case -1:// 配对码不存在或超时或错误
+				default:
+					mErrMessage = "配对失败";
+					return false;
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -218,7 +249,7 @@ public final class EncryptedUploader {
 		mPublicKey = mPublicKey_pairing;
 		mPublicKeyBase64 = mPublicKeyBase64_pairing;
 
-		mKid_pairing = -1;
+		mKid_pairing = null;
 		mPublicKey_pairing = null;
 		mPublicKeyBase64_pairing = null;
 
@@ -231,40 +262,66 @@ public final class EncryptedUploader {
 		e.clear();
 
 		if (mPublicKey != null) {
-			e.putLong(SP_VALUE_LONG_KEYID, mKid);
+			e.putString(SP_VALUE_LONG_KEYID, mKid);
 			e.putString(SP_VALUE_STR_PUBLICKEY, mPublicKeyBase64);
+		} else if (mPublicKey_pairing != null) {
+			e.putString(SP_VALUE_LONG_KEYID_PAIRING, mKid_pairing);
+			e.putString(SP_VALUE_STR_PUBLICKEY_PAIRING,
+					mPublicKeyBase64_pairing);
 		}
 
 		e.commit();
 	}
 
 	public boolean load() {
-		mKid = -1;
+		mKid = null;
 		mPublicKey = null;
 		mPublicKeyBase64 = null;
+		mKid_pairing = null;
+		mPublicKey_pairing = null;
+		mPublicKeyBase64_pairing = null;
 
-		long key_id = mPreferences.getLong(SP_VALUE_LONG_KEYID, -1);
+		String key_id = mPreferences.getString(SP_VALUE_LONG_KEYID, null);
 		String keyBase64 = mPreferences.getString(SP_VALUE_STR_PUBLICKEY, null);
+		String key_id_pairing = mPreferences.getString(
+				SP_VALUE_LONG_KEYID_PAIRING, null);
+		String keyBase64_pairing = mPreferences.getString(
+				SP_VALUE_STR_PUBLICKEY_PAIRING, null);
 
-		if (keyBase64 == null || key_id == -1) {
-			mErrMessage = "读取现有配对信息失败";
-			return false;
+		if (keyBase64 != null && key_id != null) {// 读取配对成功后状态
+			PublicKey publicKey;
+			try {
+				publicKey = Encrypt.getPublicKey(keyBase64);
+			} catch (Exception e) {
+				e.printStackTrace();
+				mErrMessage = "读取现有配对信息失败";
+				return false;
+			}
+
+			mKid = key_id;
+			mPublicKey = publicKey;
+			mPublicKeyBase64 = keyBase64;
+
+			return true;
+		} else if (keyBase64_pairing != null && key_id_pairing != null) {// 读取配对中状态
+			PublicKey publicKey_pairing;
+			try {
+				publicKey_pairing = Encrypt.getPublicKey(keyBase64_pairing);
+			} catch (Exception e) {
+				e.printStackTrace();
+				mErrMessage = "读取现有配对信息失败";
+				return false;
+			}
+
+			mKid_pairing = key_id_pairing;
+			mPublicKey_pairing = publicKey_pairing;
+			mPublicKeyBase64_pairing = keyBase64_pairing;
+
+			return true;
 		}
 
-		PublicKey publicKey;
-		try {
-			publicKey = Encrypt.getPublicKey(keyBase64);
-		} catch (Exception e) {
-			e.printStackTrace();
-			mErrMessage = "读取现有配对信息失败";
-			return false;
-		}
-
-		mKid = key_id;
-		mPublicKey = publicKey;
-		mPublicKeyBase64 = keyBase64;
-
-		return true;
+		mErrMessage = "读取现有配对信息失败";
+		return false;
 	}
 
 	/**
@@ -297,7 +354,7 @@ public final class EncryptedUploader {
 			Map<String, String> queryStringMap = new HashMap<String, String>();
 			Map<String, String> dataMap = new HashMap<String, String>();
 
-			queryStringMap.put(STR_SERVER_ARGS_KEY_KEYID, String.valueOf(mKid));
+			queryStringMap.put(STR_SERVER_ARGS_KEY_KEYID, mKid);
 			dataMap.put(STR_SERVER_ARGS_KEY_PAYLOAD, payloadEncryptedBase64);
 			dataMap.put(STR_SERVER_ARGS_KEY_HASH, payloadEncryptHash);
 
