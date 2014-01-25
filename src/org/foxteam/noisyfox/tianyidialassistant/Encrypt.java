@@ -68,7 +68,7 @@ public class Encrypt {
 	public static byte[] encryptByPublicKey(byte[] data, PublicKey publicKey)
 			throws Exception {
 		// 对数据加密
-		Cipher cipher = Cipher.getInstance("RSA");
+		Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
 		cipher.init(Cipher.ENCRYPT_MODE, publicKey);
 		int inputLen = data.length;
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
