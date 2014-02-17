@@ -55,15 +55,6 @@
         <activity
             android:name="com.emar.escore.sdk.view.WebActivity"
             android:configChanges="keyboardHidden|orientation" />
-        <activity
-            android:name="org.foxteam.noisyfox.tianyidialassistant.MainActivity"
-            android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
 
         <receiver
             android:name="org.foxteam.noisyfox.tianyidialassistant.SmsReceiver"
@@ -80,6 +71,7 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/appwidgetproviderinfo" />
+
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -102,10 +94,20 @@
         <activity
             android:name="org.foxteam.noisyfox.tianyidialassistant.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName="org.foxteam.noisyfox.tianyidialassistant.MainActivity" >
+            android:parentActivityName="org.foxteam.noisyfox.tianyidialassistant.TyMainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.foxteam.noisyfox.tianyidialassistant.MainActivity" />
+        </activity>
+        <activity
+            android:name="org.foxteam.noisyfox.tianyidialassistant.TyMainActivity"
+            android:label="@string/app_name" 
+            android:theme="@style/Theme.Sherlock.Light" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

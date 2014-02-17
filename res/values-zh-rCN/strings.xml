@@ -4,14 +4,10 @@
     <string name="action_settings">设置</string>
     <string name="button_ok">确定</string>
     <string name="button_cancel">取消</string>
-    <string name="button_getpsw">立即获取</string>
     <string name="button_skip">跳过</string>
     <string name="button_ver_now">现在去验证</string>
     <string name="button_remove_pairing">解除配对</string>
     <string name="button_giveup_pairing">放弃配对</string>
-    <string name="psw_err">密码获取失败</string>
-    <string name="psw_neverget">尚未获取过密码</string>
-    <string name="aboutme">by Noisyfox NUAA</string>
     <string name="dlgSettings_process_title">请稍后</string>
     <string name="dlgPhoneVer_noti_title">确认你的电话号码</string>
     <string name="dlgPhoneVer_noti_text">\t现在将通过向本机发送一条一次性短信确认你的手机号码。\n\t进行确认并不会将你的号码分享给任何人，只是用来在服务器端进行身份识别。</string>

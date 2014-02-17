@@ -1,0 +1,7 @@
+<resources>
+    <string name="title_activity_tyassistant">Pasasword</string>
+    <string name="button_getpsw">Get psw now!</string>
+    <string name="psw_err">Password require failed!</string>
+    <string name="psw_neverget">No password recorded!</string>
+    <string name="aboutme">by Noisyfox NUAA</string>
+</resources>

@@ -12,11 +12,11 @@ import android.telephony.SmsMessage;
 
 public class SmsReceiver extends BroadcastReceiver {
 	private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
-	static WeakReference<MainActivity> mActivityRef = null;
+	static WeakReference<TyMainActivity> mActivityRef = null;
 
-	public static void registerActivity(MainActivity activity) {
-		if (activity != null) {
-			mActivityRef = new WeakReference<MainActivity>(activity);
+	public static void registerActivity(TyMainActivity tyMainActivity) {
+		if (tyMainActivity != null) {
+			mActivityRef = new WeakReference<TyMainActivity>(tyMainActivity);
 		}
 	}
 
@@ -37,7 +37,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
 				Handler handler = null;
 				if (mActivityRef != null) {
-					MainActivity act = mActivityRef.get();
+					TyMainActivity act = mActivityRef.get();
 					if (act != null) {
 						handler = act.mainHandler;
 					}
@@ -65,7 +65,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
 							if (handler != null)
 								handler.sendMessage(handler
-										.obtainMessage(MainActivity.MSG_UPDATE_MAIN_TEXT));
+										.obtainMessage(TyMainActivity.MSG_UPDATE_MAIN_TEXT));
 							// final Dialog d=new Dialog(arg0);
 							// d.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
 							// d.show();
@@ -81,7 +81,7 @@ public class SmsReceiver extends BroadcastReceiver {
 								curMsg.getDisplayMessageBody())) {
 							if (handler != null)
 								handler.sendMessage(handler
-										.obtainMessage(MainActivity.MSG_PHONE_NUMBER_VERIFICATION_SUCCESS));
+										.obtainMessage(TyMainActivity.MSG_PHONE_NUMBER_VERIFICATION_SUCCESS));
 							abortBroadcast();
 						}
 					}

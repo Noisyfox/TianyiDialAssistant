@@ -48,6 +48,8 @@ import java.util.List;
  */
 @SuppressWarnings("deprecation")
 public class SettingsActivity extends PreferenceActivity {
+	public static final int RESULT_OK = 0;
+	public static final int RESULT_REQUIRE_PHONEVER = 1;
 
 	private static final int MSG_PAIRING_REMOVED = 1;
 	private static final int MSG_PAIRING_PAIRED = 2;
@@ -165,6 +167,8 @@ public class SettingsActivity extends PreferenceActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setupActionBar();
+
+		this.setResult(RESULT_OK);
 	}
 
 	/**
@@ -349,9 +353,11 @@ public class SettingsActivity extends PreferenceActivity {
 			// NavUtils.navigateUpFromSameTask(this);
 			((CheckBoxPreference) findPreference("enable_pc_assistant"))
 					.setChecked(false);
-			MainActivity.mainActivity.mainHandler
-					.sendMessage(MainActivity.mainActivity.mainHandler
-							.obtainMessage(MainActivity.MSG_PHONE_NUMBER_VERIFICATION_START));
+
+			// mParent.mainHandler
+			// .sendMessage(mParent.mainHandler
+			// .obtainMessage(TyMainActivity.MSG_PHONE_NUMBER_VERIFICATION_START));
+			this.setResult(RESULT_REQUIRE_PHONEVER);
 			this.finish();
 		} else if ("pc_pairing".equals(key)) {
 			final EncryptedUploader uploader = new EncryptedUploader(mActivity);
@@ -550,10 +556,9 @@ public class SettingsActivity extends PreferenceActivity {
 									@Override
 									public void onClick(DialogInterface arg0,
 											int arg1) {
+										mActivity
+												.setResult(RESULT_REQUIRE_PHONEVER);
 										mActivity.finish();
-										MainActivity.mainActivity.mainHandler
-												.sendMessage(MainActivity.mainActivity.mainHandler
-														.obtainMessage(MainActivity.MSG_PHONE_NUMBER_VERIFICATION_START));
 									}
 								});
 						dlg.setButton(Dialog.BUTTON_NEGATIVE,
