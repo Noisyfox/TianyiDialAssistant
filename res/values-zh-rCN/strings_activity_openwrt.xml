@@ -1,0 +1,8 @@
+<resources>
+    <string name="title_activity_openwrt">OpenWrt 助手</string>
+    <string name="button_check_status">检查拨号状态</string>
+    <string name="button_pppoe_connect">连接</string>
+    <string name="button_pppoe_stop">关闭</string>
+    <string name="button_passwd_update">上传拨号密码</string>
+    <string name="ssh_working">工作中…</string>
+</resources>

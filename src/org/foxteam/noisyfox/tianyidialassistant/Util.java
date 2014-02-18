@@ -1,5 +1,7 @@
 package org.foxteam.noisyfox.tianyidialassistant;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -161,34 +163,15 @@ public class Util {
 					}
 				}
 			});
-
-			// Intent i = new Intent();
-			// i.setClass(context, PswDialog.class);
-			// i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			// i.putExtra("psw", psw);
-			// context.startActivity(i);
 		}
 	}
 
-	/*
-	 * 
-	 * public static String hashString(String data, String algorithm) { if (data
-	 * == null) return null; try { MessageDigest mdInst =
-	 * MessageDigest.getInstance(algorithm); byte btInput[] = data.getBytes();
-	 * mdInst.update(btInput); byte md[] = mdInst.digest(); StringBuilder sb =
-	 * new StringBuilder(64); for (byte b : md) {
-	 * sb.append(String.format("%02X", b)); }
-	 * 
-	 * return sb.toString(); } catch (NoSuchAlgorithmException e) { // TODO
-	 * Auto-generated catch block e.printStackTrace(); } return null; }
-	 * 
-	 * public static String getVersionName(Context context) { try { //
-	 * 获取packagemanager的实例 PackageManager packageManager =
-	 * context.getPackageManager(); // getPackageName()是你当前类的包名，0代表是获取版本信息
-	 * PackageInfo packInfo; packInfo =
-	 * packageManager.getPackageInfo(context.getPackageName(), 0); String
-	 * version = packInfo.versionName; return version; } catch
-	 * (NameNotFoundException e) { // TODO Auto-generated catch block
-	 * e.printStackTrace(); } return null; }
-	 */
+	public static void safeClose(Closeable c) {
+		try {
+			if (c != null)
+				c.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

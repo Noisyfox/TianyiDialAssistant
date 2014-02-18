@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">天翼密码助手</string>
     <string name="action_settings">设置</string>
     <string name="button_ok">确定</string>
@@ -13,18 +14,18 @@
     <string name="dlgPhoneVer_noti_text">\t现在将通过向本机发送一条一次性短信确认你的手机号码。\n\t进行确认并不会将你的号码分享给任何人，只是用来在服务器端进行身份识别。</string>
     <string name="dlgPhoneVer_edit_title">修改电话号码</string>
     <string name="dlgPhoneVer_edit_text">电话号码:</string>
-	<string name="dlgPhoneVer_skip_title">跳过号码验证</string>
-	<string name="dlgPhoneVer_skip_text">\t选择跳过号码验证将无法使用PC端一键登录功能，是否确认跳过号码验证？</string>
-	<string name="dlgPhoneVer_skipped_toast">你已跳过了号码验证，你可以稍后在菜单中选择再次进行号码验证</string>
-	<string name="dlgPhoneVer_vering_toast">正在发送验证短信，期间你可以做其他事情</string>
-	<string name="dlgPhoneVer_need_to_ver_title">需要验证电话号码</string>
-	<string name="dlgPhoneVer_need_to_ver_text">\t你还没有验证你的电话号码，暂时无法开启 PC 连接助手。</string>
-	<string name="dlgPhoneVer_failed">验证失败，请检查号码是否正确</string>
-	<string name="dlgPairing_remove_title">解除 PC 配对</string>
-	<string name="dlgPairing_remove_text">你确定要解除配对么？这将导致PC连接助手不可用。</string>
+    <string name="dlgPhoneVer_skip_title">跳过号码验证</string>
+    <string name="dlgPhoneVer_skip_text">\t选择跳过号码验证将无法使用PC端一键登录功能，是否确认跳过号码验证？</string>
+    <string name="dlgPhoneVer_skipped_toast">你已跳过了号码验证，你可以稍后在菜单中选择再次进行号码验证</string>
+    <string name="dlgPhoneVer_vering_toast">正在发送验证短信，期间你可以做其他事情</string>
+    <string name="dlgPhoneVer_need_to_ver_title">需要验证电话号码</string>
+    <string name="dlgPhoneVer_need_to_ver_text">\t你还没有验证你的电话号码，暂时无法开启 PC 连接助手。</string>
+    <string name="dlgPhoneVer_failed">验证失败，请检查号码是否正确</string>
+    <string name="dlgPairing_remove_title">解除 PC 配对</string>
+    <string name="dlgPairing_remove_text">你确定要解除配对么？这将导致PC连接助手不可用。</string>
     <string name="dlgPairing_remove_removing">解除 PC 配对中</string>
-	<string name="dlgPairing_giveup_title">放弃 PC 配对</string>
-	<string name="dlgPairing_giveup_text">你确定要放弃配对么？放弃本次配对将需要从头进行配对。</string>
+    <string name="dlgPairing_giveup_title">放弃 PC 配对</string>
+    <string name="dlgPairing_giveup_text">你确定要放弃配对么？放弃本次配对将需要从头进行配对。</string>
     <string name="dlgPairing_giveup_givingup">正在放弃配对</string>
     <string name="dlgPairing_primary_code_title">请输入配对码</string>
     <string name="dlgPairing_secondary_code_title">动态密码</string>
@@ -34,4 +35,5 @@
     <string name="toastPairing_remove_successful">解除配对成功</string>
     <string name="toastPairing_pair_failed">配对失败</string>
     <string name="toastPairing_pair_successful">配对成功</string>
+
 </resources>

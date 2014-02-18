@@ -8,6 +8,9 @@
     <header
         android:fragment="org.foxteam.noisyfox.tianyidialassistant.SettingsActivity$PCAssistantPreferenceFragment"
         android:title="@string/pref_header_pc_assistant" />
+    <header
+        android:fragment="org.foxteam.noisyfox.tianyidialassistant.SettingsActivity$OpenWrtPreferenceFragment"
+        android:title="@string/pref_header_openwrt" />
     <!--
     <header
         android:fragment="org.foxteam.noisyfox.tianyidialassistant.SettingsActivity$NotificationPreferenceFragment"

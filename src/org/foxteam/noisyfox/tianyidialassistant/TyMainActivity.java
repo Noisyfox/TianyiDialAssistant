@@ -5,6 +5,8 @@ import java.util.HashMap;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
+
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,6 +21,9 @@ public class TyMainActivity extends SherlockFragmentActivity {
 	public static final int MSG_PHONE_NUMBER_VERIFICATION_SUCCESS = 1;
 	public static final int MSG_PHONE_NUMBER_VERIFICATION_START = 2;
 	public static final int MSG_UPDATE_MAIN_TEXT = 3;
+	public static final int MSG_PROGRESS_SHOW = 4;
+	public static final int MSG_PROGRESS_HIDE = 5;
+	public static final int MSG_UPDATE_PPPOE_STATUS = 6;
 
 	TabHost mTabHost;
 	ViewPager mViewPager;
@@ -26,6 +31,7 @@ public class TyMainActivity extends SherlockFragmentActivity {
 
 	PhoneNumberVerification mPhoneNumberVerification = null;
 	PSWOperator mPSWOperator = null;
+	private ProgressDialog mProgressDialog = null;
 
 	Handler mainHandler = new MyHander(this);
 
@@ -55,10 +61,40 @@ public class TyMainActivity extends SherlockFragmentActivity {
 					taf.updateMainText();
 				}
 				break;
+			case MSG_PROGRESS_SHOW:
+				if (activity.mProgressDialog != null) {
+					activity.mProgressDialog.dismiss();
+					activity.mProgressDialog = null;
+				}
+				activity.mProgressDialog = ProgressDialog.show(activity, null,
+						(String) msg.obj, true, false);
+				break;
+			case MSG_PROGRESS_HIDE:
+				if (activity.mProgressDialog != null) {
+					activity.mProgressDialog.dismiss();
+					activity.mProgressDialog = null;
+				}
+				break;
+			case MSG_UPDATE_PPPOE_STATUS:
+				OpenWrtFragment owf = (OpenWrtFragment) activity
+						.findRegisteredFragment(OpenWrtFragment.TAG);
+				if (owf != null) {
+					owf.updateStatus(msg.arg1);
+				}
+				break;
 			}
 		}
 
 	};
+
+	public void showProgress(String message) {
+		mainHandler.sendMessage(mainHandler.obtainMessage(MSG_PROGRESS_SHOW,
+				message));
+	}
+
+	public void hideProgress() {
+		mainHandler.sendMessage(mainHandler.obtainMessage(MSG_PROGRESS_HIDE));
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +137,7 @@ public class TyMainActivity extends SherlockFragmentActivity {
 			mainHandler.sendMessage(mainHandler
 					.obtainMessage(MSG_PHONE_NUMBER_VERIFICATION_START));
 		}
+
 	}
 
 	@Override
@@ -164,4 +201,5 @@ public class TyMainActivity extends SherlockFragmentActivity {
 	public Fragment findRegisteredFragment(String tag) {
 		return mRegisteredFragment.get(tag);
 	}
+
 }

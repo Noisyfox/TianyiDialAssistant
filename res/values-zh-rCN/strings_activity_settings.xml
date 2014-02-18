@@ -26,24 +26,6 @@
         <item>300</item>
     </string-array>
     
-    <!--
-    <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">John Smith</string>
-    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
-
-    <string-array name="pref_example_list_titles">
-        <item>Always</item>
-        <item>When possible</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_example_list_values">
-        <item>1</item>
-        <item>0</item>
-        <item>-1</item>
-    </string-array>
-    -->
-
-
     <!-- PC Assistant settings -->
     <string name="pref_header_pc_assistant">PC连接助手</string>
     <string name="pref_title_phone_number_verification">确认电话号码</string>
@@ -58,6 +40,14 @@
     <string name="pref_description_pc_pairing_pairing">点此放弃配对</string>
     <string name="pref_title_pc_pairing_check">重试配对</string>
     <string name="pref_title_enable_pc_assistant">启用PC连接助手</string>
+    
+    <!-- OpenWrt settings -->
+    <string name="pref_header_openwrt">OpenWrt 助手</string>
+    <string name="pref_title_ssh_address">路由器 IP</string>
+    <string name="pref_title_ssh_port">SSH 端口</string>
+    <string name="pref_title_login_user">登陆用户</string>
+    <string name="pref_title_login_passwd">登录密码</string>
+    <string name="pref_title_phone_number">电话号码</string>
     
     <!-- Example settings for Data & Sync -->
     <string name="pref_header_data_sync">Data &amp; sync</string>

@@ -5,11 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.util.Log;
 
 public class WidgetReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		Log.d("widget", "sddddddd");
 		PSWOperator pswOper = new PSWOperator(context);
 		String psw = pswOper.getLastPsw(true);
 

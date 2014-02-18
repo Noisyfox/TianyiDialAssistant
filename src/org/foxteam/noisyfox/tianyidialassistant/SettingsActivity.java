@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.CheckBoxPreference;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -23,6 +24,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.preference.RingtonePreference;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -33,6 +35,7 @@ import android.widget.Toast;
 import android.support.v4.app.NavUtils;
 
 import java.lang.ref.WeakReference;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -186,15 +189,6 @@ public class SettingsActivity extends PreferenceActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown. Use NavUtils to allow users
-			// to navigate up one level in the application structure. For
-			// more details, see the Navigation pattern on Android Design:
-			//
-			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-			//
-			// TODO: If Settings has multiple levels, Up should navigate up
-			// that hierarchy.
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
 		}
@@ -275,35 +269,20 @@ public class SettingsActivity extends PreferenceActivity {
 		findPreference("enable_pc_assistant").setOnPreferenceChangeListener(
 				sPCAssistantListener);
 
+		// Add 'openwrt' preferences.
+		fakeHeader = new PreferenceCategory(this);
+		fakeHeader.setTitle(R.string.pref_header_openwrt);
+		getPreferenceScreen().addPreference(fakeHeader);
+		addPreferencesFromResource(R.xml.pref_openwrt);
+		bindPreferenceSummaryToValue(findPreference("ssh_address"));
+		bindPreferenceSummaryToValue(findPreference("ssh_port"));
+		bindPreferenceSummaryToValue(findPreference("login_user"));
+		bindPreferenceSummaryToValue(findPreference("login_passwd"));
+		bindPreferenceSummaryToValue(findPreference("phone_number"));
+
 		// ∂¡»°≈‰÷√
 		updateUI();
 
-		// In the simplified UI, fragments are not used at all and we instead
-		// use the older PreferenceActivity APIs.
-
-		// Add 'general' preferences.
-		// addPreferencesFromResource(R.xml.pref_general);
-
-		// // Add 'notifications' preferences, and a corresponding header.
-		// PreferenceCategory fakeHeader = new PreferenceCategory(this);
-		// fakeHeader.setTitle(R.string.pref_header_notifications);
-		// getPreferenceScreen().addPreference(fakeHeader);
-		// addPreferencesFromResource(R.xml.pref_notification);
-		//
-		// // Add 'data and sync' preferences, and a corresponding header.
-		// fakeHeader = new PreferenceCategory(this);
-		// fakeHeader.setTitle(R.string.pref_header_data_sync);
-		// getPreferenceScreen().addPreference(fakeHeader);
-		// addPreferencesFromResource(R.xml.pref_data_sync);
-		//
-		// // Bind the summaries of EditText/List/Dialog/Ringtone preferences to
-		// // their values. When their values change, their summaries are
-		// updated
-		// // to reflect the new value, per the Android Design guidelines.
-		// bindPreferenceSummaryToValue(findPreference("example_text"));
-		// bindPreferenceSummaryToValue(findPreference("example_list"));
-		// bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
-		// bindPreferenceSummaryToValue(findPreference("sync_frequency"));
 	}
 
 	/** {@inheritDoc} */
@@ -620,6 +599,16 @@ public class SettingsActivity extends PreferenceActivity {
 					}
 				}
 
+			} else if (preference instanceof EditTextPreference) {
+				EditTextPreference p = (EditTextPreference) preference;
+				int iType = p.getEditText().getInputType();
+				if ((iType & InputType.TYPE_TEXT_VARIATION_PASSWORD) != 0) {
+					char c[] = new char[stringValue.length()];
+					Arrays.fill(c, '*');
+					preference.setSummary(String.valueOf(c));
+				} else {
+					preference.setSummary(stringValue);
+				}
 			} else {
 				// For all other preferences, set the summary to the value's
 				// simple string representation.
@@ -662,57 +651,9 @@ public class SettingsActivity extends PreferenceActivity {
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			addPreferencesFromResource(R.xml.pref_general);
-
-			// Bind the summaries of EditText/List/Dialog/Ringtone preferences
-			// to their values. When their values change, their summaries are
-			// updated to reflect the new value, per the Android Design
-			// guidelines.
-			// bindPreferenceSummaryToValue(findPreference("example_text"));
-			// bindPreferenceSummaryToValue(findPreference("example_list"));
 		}
 	}
 
-	//
-	// /**
-	// * This fragment shows notification preferences only. It is used when the
-	// * activity is showing a two-pane settings UI.
-	// */
-	// @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	// public static class NotificationPreferenceFragment extends
-	// PreferenceFragment {
-	// @Override
-	// public void onCreate(Bundle savedInstanceState) {
-	// super.onCreate(savedInstanceState);
-	// addPreferencesFromResource(R.xml.pref_notification);
-	//
-	// // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-	// // to their values. When their values change, their summaries are
-	// // updated to reflect the new value, per the Android Design
-	// // guidelines.
-	// bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
-	// }
-	// }
-	//
-	// /**
-	// * This fragment shows data and sync preferences only. It is used when the
-	// * activity is showing a two-pane settings UI.
-	// */
-	// @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	// public static class DataSyncPreferenceFragment extends PreferenceFragment
-	// {
-	// @Override
-	// public void onCreate(Bundle savedInstanceState) {
-	// super.onCreate(savedInstanceState);
-	// addPreferencesFromResource(R.xml.pref_data_sync);
-	//
-	// // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-	// // to their values. When their values change, their summaries are
-	// // updated to reflect the new value, per the Android Design
-	// // guidelines.
-	// bindPreferenceSummaryToValue(findPreference("sync_frequency"));
-	// }
-	// }
-	//
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public static class PCAssistantPreferenceFragment extends
 			PreferenceFragment {
@@ -720,7 +661,20 @@ public class SettingsActivity extends PreferenceActivity {
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			addPreferencesFromResource(R.xml.pref_pc_assistant);
+		}
+	}
 
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	public static class OpenWrtPreferenceFragment extends PreferenceFragment {
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			addPreferencesFromResource(R.xml.pref_openwrt);
+			bindPreferenceSummaryToValue(findPreference("ssh_address"));
+			bindPreferenceSummaryToValue(findPreference("ssh_port"));
+			bindPreferenceSummaryToValue(findPreference("login_user"));
+			bindPreferenceSummaryToValue(findPreference("login_passwd"));
+			bindPreferenceSummaryToValue(findPreference("phone_number"));
 			// Bind the summaries of EditText/List/Dialog/Ringtone preferences
 			// to their values. When their values change, their summaries are
 			// updated to reflect the new value, per the Android Design
