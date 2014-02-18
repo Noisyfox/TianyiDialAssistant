@@ -23,6 +23,7 @@ public class OpenWrtFragment extends SherlockFragment {
 	TyMainActivity father = null;
 	SSHManager ssh = new SSHManager();
 	String phoneNumber = "";
+	String wanInterface = "wan";
 
 	ImageView iv = null;
 
@@ -46,6 +47,7 @@ public class OpenWrtFragment extends SherlockFragment {
 		port = Integer.parseInt(defaultPreferences.getString("ssh_port", "22"));
 		user = defaultPreferences.getString("login_user", "root");
 		psw = defaultPreferences.getString("login_passwd", "");
+		wanInterface = defaultPreferences.getString("wan_interface", "wan");
 		phoneNumber = defaultPreferences.getString("phone_number", "");
 
 		ssh.setup(ip, port, user, psw);
@@ -106,7 +108,8 @@ public class OpenWrtFragment extends SherlockFragment {
 							@Override
 							public void run() {
 								String[] results = ssh
-										.exec("export PATH=/bin:/sbin:/usr/bin:/usr/sbin:$PATH && ifup wan");
+										.exec("export PATH=/bin:/sbin:/usr/bin:/usr/sbin:$PATH && ifup "
+												+ wanInterface);
 								if (results != null)
 									for (String r : results)
 										Log.d("result", r);
@@ -128,7 +131,8 @@ public class OpenWrtFragment extends SherlockFragment {
 							@Override
 							public void run() {
 								String[] results = ssh
-										.exec("export PATH=/bin:/sbin:/usr/bin:/usr/sbin:$PATH && ifdown wan");
+										.exec("export PATH=/bin:/sbin:/usr/bin:/usr/sbin:$PATH && ifdown "
+												+ wanInterface);
 								if (results != null)
 									for (String r : results)
 										Log.d("result", r);
@@ -160,15 +164,23 @@ public class OpenWrtFragment extends SherlockFragment {
 						StringBuilder sb = new StringBuilder();
 						sb.append("export PATH=/bin:/sbin:/usr/bin:/usr/sbin:$PATH");
 						sb.append("&&");
-						sb.append("uci set network.wan.proto=pppoe");
+						sb.append("uci set network.");
+						sb.append(wanInterface);
+						sb.append(".proto=pppoe");
 						sb.append("&&");
-						sb.append("uci set network.wan.username=^~2");
+						sb.append("uci set network.");
+						sb.append(wanInterface);
+						sb.append(".username=^~2");
 						sb.append(phoneNumber);
 						sb.append("&&");
-						sb.append("uci set network.wan.password=");
+						sb.append("uci set network.");
+						sb.append(wanInterface);
+						sb.append(".password=");
 						sb.append(psw);
 						sb.append("&&");
-						sb.append("uci set network.wan.pppd_options='noipdefault refuse-chap refuse-mschap refuse-mschap-v2 refuse-eap'");
+						sb.append("uci set network.");
+						sb.append(wanInterface);
+						sb.append(".pppd_options='noipdefault refuse-chap refuse-mschap refuse-mschap-v2 refuse-eap'");
 						sb.append("&&");
 						sb.append("uci commit");
 

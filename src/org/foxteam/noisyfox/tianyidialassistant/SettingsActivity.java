@@ -278,6 +278,7 @@ public class SettingsActivity extends PreferenceActivity {
 		bindPreferenceSummaryToValue(findPreference("ssh_port"));
 		bindPreferenceSummaryToValue(findPreference("login_user"));
 		bindPreferenceSummaryToValue(findPreference("login_passwd"));
+		bindPreferenceSummaryToValue(findPreference("wan_interface"));
 		bindPreferenceSummaryToValue(findPreference("phone_number"));
 
 		// ∂¡»°≈‰÷√
@@ -674,6 +675,7 @@ public class SettingsActivity extends PreferenceActivity {
 			bindPreferenceSummaryToValue(findPreference("ssh_port"));
 			bindPreferenceSummaryToValue(findPreference("login_user"));
 			bindPreferenceSummaryToValue(findPreference("login_passwd"));
+			bindPreferenceSummaryToValue(findPreference("wan_interface"));
 			bindPreferenceSummaryToValue(findPreference("phone_number"));
 			// Bind the summaries of EditText/List/Dialog/Ringtone preferences
 			// to their values. When their values change, their summaries are

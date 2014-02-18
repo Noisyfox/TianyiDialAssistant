@@ -47,6 +47,7 @@
     <string name="pref_title_ssh_port">SSH 端口</string>
     <string name="pref_title_login_user">登陆用户</string>
     <string name="pref_title_login_passwd">登录密码</string>
+    <string name="pref_title_wan_interface">拨号接口</string>
     <string name="pref_title_phone_number">电话号码</string>
     
     <!-- Example settings for Data & Sync -->

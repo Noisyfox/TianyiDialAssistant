@@ -40,6 +40,16 @@
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:title="@string/pref_title_login_passwd" />
+     
+     <EditTextPreference
+        android:capitalize="words"
+        android:defaultValue="wan"
+        android:inputType="textCapWords"
+        android:key="wan_interface"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_title_wan_interface" />
 
      <EditTextPreference
         android:capitalize="words"
