@@ -24,7 +24,7 @@ import android.widget.Toast;
 
 public class Util {
 	public static String check(String paramString) {
-		Matcher localMatcher = Pattern.compile("(?<=ÉÏÍøÃÜÂëÎª)\\d{6}").matcher(
+		Matcher localMatcher = Pattern.compile("(?<=ÃÜÂë)\\d{6}").matcher(
 				paramString);
 		if (localMatcher.find())
 			return localMatcher.group();
