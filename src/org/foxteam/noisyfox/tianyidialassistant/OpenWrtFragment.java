@@ -163,25 +163,21 @@ public class OpenWrtFragment extends SherlockFragment {
 
 						StringBuilder sb = new StringBuilder();
 						sb.append("export PATH=/bin:/sbin:/usr/bin:/usr/sbin:$PATH");
-						sb.append("&&");
+						sb.append(" && ");
 						sb.append("uci set network.");
 						sb.append(wanInterface);
 						sb.append(".proto=pppoe");
-						sb.append("&&");
+						sb.append(" && ");
 						sb.append("uci set network.");
 						sb.append(wanInterface);
-						sb.append(".username=^~2");
+						sb.append(".username=^#01");
 						sb.append(phoneNumber);
-						sb.append("&&");
+						sb.append(" && ");
 						sb.append("uci set network.");
 						sb.append(wanInterface);
 						sb.append(".password=");
 						sb.append(psw);
-						sb.append("&&");
-						sb.append("uci set network.");
-						sb.append(wanInterface);
-						sb.append(".pppd_options='noipdefault refuse-chap refuse-mschap refuse-mschap-v2 refuse-eap'");
-						sb.append("&&");
+						sb.append(" && ");
 						sb.append("uci commit");
 
 						final String cmd = sb.toString();
