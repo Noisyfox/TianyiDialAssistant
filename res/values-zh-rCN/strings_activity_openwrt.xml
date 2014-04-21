@@ -4,5 +4,6 @@
     <string name="button_pppoe_connect">连接</string>
     <string name="button_pppoe_stop">关闭</string>
     <string name="button_passwd_update">上传拨号密码</string>
+    <string name="button_passwd_override">密码覆盖</string>
     <string name="ssh_working">工作中…</string>
 </resources>

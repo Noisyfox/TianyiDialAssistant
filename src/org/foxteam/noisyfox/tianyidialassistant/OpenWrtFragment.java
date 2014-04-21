@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -26,6 +28,8 @@ public class OpenWrtFragment extends SherlockFragment {
 	String wanInterface = "wan";
 
 	ImageView iv = null;
+	EditText editText_psw_override = null;
+	CheckBox checkBox_psw_override = null;
 
 	String progressText;
 
@@ -56,15 +60,32 @@ public class OpenWrtFragment extends SherlockFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		View view = this.getView();
 
 		progressText = getString(R.string.ssh_working);
+	}
 
-		iv = (ImageView) view.findViewById(R.id.imageView_status);
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		father.unregisterFragment(TAG);
+		ssh.shutdown();
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View rootView = inflater.inflate(R.layout.activity_openwrt, container,
+				false);
+
+		iv = (ImageView) rootView.findViewById(R.id.imageView_status);
+		editText_psw_override = (EditText) rootView
+				.findViewById(R.id.editText_psw_override);
+		checkBox_psw_override = (CheckBox) rootView
+				.findViewById(R.id.checkBox_psw_override);
 
 		updateStatus(STATUS_UNKNOWN);
 
-		view.findViewById(R.id.button_check_status).setOnClickListener(
+		rootView.findViewById(R.id.button_check_status).setOnClickListener(
 				new OnClickListener() {
 					@Override
 					public void onClick(View arg0) {
@@ -98,7 +119,7 @@ public class OpenWrtFragment extends SherlockFragment {
 					}
 				});
 
-		view.findViewById(R.id.button_pppoe_connect).setOnClickListener(
+		rootView.findViewById(R.id.button_pppoe_connect).setOnClickListener(
 				new OnClickListener() {
 					@Override
 					public void onClick(View arg0) {
@@ -121,7 +142,7 @@ public class OpenWrtFragment extends SherlockFragment {
 					}
 				});
 
-		view.findViewById(R.id.button_pppoe_stop).setOnClickListener(
+		rootView.findViewById(R.id.button_pppoe_stop).setOnClickListener(
 				new OnClickListener() {
 					@Override
 					public void onClick(View arg0) {
@@ -144,14 +165,20 @@ public class OpenWrtFragment extends SherlockFragment {
 					}
 				});
 
-		view.findViewById(R.id.button_passwd_update).setOnClickListener(
+		rootView.findViewById(R.id.button_passwd_update).setOnClickListener(
 				new OnClickListener() {
 					@Override
 					public void onClick(View arg0) {
 						father.showProgress(progressText);
 						loadSSHSettings();
 
-						String psw = father.mPSWOperator.getLastPsw(false);
+						String psw = null;
+
+						if (checkBox_psw_override.isChecked()) {
+							psw = editText_psw_override.getText().toString();
+						} else {
+							psw = father.mPSWOperator.getLastPsw(false);
+						}
 
 						if (phoneNumber.isEmpty()) {
 							father.hideProgress();
@@ -195,19 +222,8 @@ public class OpenWrtFragment extends SherlockFragment {
 						}.start();
 					}
 				});
-	}
 
-	@Override
-	public void onDetach() {
-		super.onDetach();
-		father.unregisterFragment(TAG);
-		ssh.shutdown();
-	}
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.activity_openwrt, container, false);
+		return rootView;
 	}
 
 	@Override

@@ -4,5 +4,6 @@
     <string name="button_pppoe_connect">Connect</string>
     <string name="button_pppoe_stop">Stop</string>
     <string name="button_passwd_update">Update password</string>
+    <string name="button_passwd_override">Psw override</string>
     <string name="ssh_working">Working…</string>
 </resources>
