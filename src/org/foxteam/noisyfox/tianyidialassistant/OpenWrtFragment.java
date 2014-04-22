@@ -205,6 +205,10 @@ public class OpenWrtFragment extends SherlockFragment {
 						sb.append(".password=");
 						sb.append(psw);
 						sb.append(" && ");
+						sb.append("uci set network.");
+						sb.append(wanInterface);
+						sb.append(".pppd_options='ty_dial'");
+						sb.append("&&");
 						sb.append("uci commit");
 
 						final String cmd = sb.toString();
