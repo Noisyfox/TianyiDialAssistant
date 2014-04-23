@@ -10,6 +10,8 @@ import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,6 +37,7 @@ import android.widget.Toast;
 import android.support.v4.app.NavUtils;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -245,6 +248,29 @@ public class SettingsActivity extends PreferenceActivity {
 			pcPairing.setTitle(R.string.pref_title_pc_pairing);
 			pcPairing.setSummary("");
 		}
+
+		ListPreference lp_wifi_ssid = (ListPreference) findPreference("wifi_ssid");
+		WifiManager wifiService = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+		List<WifiConfiguration> wcs = wifiService.getConfiguredNetworks();
+		if (wcs.size() == 0) {
+			String ssid = lp_wifi_ssid.getSharedPreferences().getString(
+					"wifi_ssid", "");
+			if (!ssid.isEmpty()) {
+				String ssids[] = new String[] { ssid };
+				lp_wifi_ssid.setEntries(ssids);
+				lp_wifi_ssid.setEntryValues(ssids);
+			}
+		} else {
+			ArrayList<String> ssidsl = new ArrayList<String>();
+			for (WifiConfiguration wc : wcs) {
+				ssidsl.add(wc.SSID);
+			}
+			String ssids[] = new String[ssidsl.size()];
+			ssidsl.toArray(ssids);
+
+			lp_wifi_ssid.setEntries(ssids);
+			lp_wifi_ssid.setEntryValues(ssids);
+		}
 	}
 
 	/**
@@ -283,6 +309,7 @@ public class SettingsActivity extends PreferenceActivity {
 
 		// ∂¡»°≈‰÷√
 		updateUI();
+		bindPreferenceSummaryToValue(findPreference("wifi_ssid"));
 
 	}
 
@@ -671,6 +698,7 @@ public class SettingsActivity extends PreferenceActivity {
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			addPreferencesFromResource(R.xml.pref_openwrt);
+			bindPreferenceSummaryToValue(findPreference("wifi_ssid"));
 			bindPreferenceSummaryToValue(findPreference("ssh_address"));
 			bindPreferenceSummaryToValue(findPreference("ssh_port"));
 			bindPreferenceSummaryToValue(findPreference("login_user"));

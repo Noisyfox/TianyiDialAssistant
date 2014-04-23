@@ -43,6 +43,9 @@
     
     <!-- OpenWrt settings -->
     <string name="pref_header_openwrt">OpenWrt 助手</string>
+    <string name="pref_title_wifi_ssid">无线SSID</string>
+    <string name="pref_title_wifi_auto_connect">自动连接wifi</string>
+    <string name="pref_description_wifi_auto_connect">如果你没有连接wifi的话那么会自动连接至指定SSID，并在结束后自动关闭wifi</string>
     <string name="pref_title_ssh_address">路由器 IP</string>
     <string name="pref_title_ssh_port">SSH 端口</string>
     <string name="pref_title_login_user">登陆用户</string>

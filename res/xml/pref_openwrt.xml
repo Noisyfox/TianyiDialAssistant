@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-     <EditTextPreference
+    <ListPreference
+        android:dialogTitle="@string/pref_title_wifi_ssid"
+        android:key="wifi_ssid"
+        android:title="@string/pref_title_wifi_ssid" />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="wifi_auto_connect"
+        android:summary="@string/pref_description_wifi_auto_connect"
+        android:title="@string/pref_title_wifi_auto_connect" />
+    <EditTextPreference
         android:capitalize="words"
         android:defaultValue="192.168.1.1"
         android:inputType="textCapWords"
@@ -10,8 +19,7 @@
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:title="@string/pref_title_ssh_address" />
-     
-     <EditTextPreference
+    <EditTextPreference
         android:capitalize="words"
         android:defaultValue="22"
         android:inputType="number"
@@ -20,8 +28,7 @@
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:title="@string/pref_title_ssh_port" />
-     
-     <EditTextPreference
+    <EditTextPreference
         android:capitalize="words"
         android:defaultValue="root"
         android:inputType="textCapWords"
@@ -30,8 +37,7 @@
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:title="@string/pref_title_login_user" />
-     
-     <EditTextPreference
+    <EditTextPreference
         android:capitalize="words"
         android:defaultValue=""
         android:inputType="textPassword"
@@ -40,8 +46,7 @@
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:title="@string/pref_title_login_passwd" />
-     
-     <EditTextPreference
+    <EditTextPreference
         android:capitalize="words"
         android:defaultValue="wan"
         android:inputType="textCapWords"
@@ -50,8 +55,7 @@
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:title="@string/pref_title_wan_interface" />
-
-     <EditTextPreference
+    <EditTextPreference
         android:capitalize="words"
         android:defaultValue=""
         android:inputType="number"
@@ -60,5 +64,5 @@
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:title="@string/pref_title_phone_number" />
-     
+
 </PreferenceScreen>

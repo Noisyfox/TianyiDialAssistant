@@ -43,7 +43,7 @@ public class OpenWrtFragment extends SherlockFragment {
 	public void onDetach() {
 		super.onDetach();
 		father.unregisterFragment(TAG);
-		opHelper.shutdown();
+		opHelper.flushAll();
 	}
 
 	@Override
@@ -69,7 +69,11 @@ public class OpenWrtFragment extends SherlockFragment {
 						new Thread() {
 							@Override
 							public void run() {
+								boolean needWifiClose = opHelper
+										.beforeAction(father);
 								int status = opHelper.checkDialStatus();
+								opHelper.afterAction(father, needWifiClose,
+										true);
 
 								father.mainHandler.sendMessage(father.mainHandler
 										.obtainMessage(
@@ -91,7 +95,11 @@ public class OpenWrtFragment extends SherlockFragment {
 						new Thread() {
 							@Override
 							public void run() {
+								boolean needWifiClose = opHelper
+										.beforeAction(father);
 								opHelper.toggleDial(true);
+								opHelper.afterAction(father, needWifiClose,
+										true);
 
 								father.hideProgress();
 							}
@@ -109,7 +117,11 @@ public class OpenWrtFragment extends SherlockFragment {
 						new Thread() {
 							@Override
 							public void run() {
+								boolean needWifiClose = opHelper
+										.beforeAction(father);
 								opHelper.toggleDial(false);
+								opHelper.afterAction(father, needWifiClose,
+										true);
 
 								father.hideProgress();
 							}
@@ -136,7 +148,11 @@ public class OpenWrtFragment extends SherlockFragment {
 						new Thread() {
 							@Override
 							public void run() {
+								boolean needWifiClose = opHelper
+										.beforeAction(father);
 								opHelper.updatePSW(psw);
+								opHelper.afterAction(father, needWifiClose,
+										true);
 
 								father.hideProgress();
 							}
@@ -151,7 +167,7 @@ public class OpenWrtFragment extends SherlockFragment {
 	@Override
 	public void onDestroy() {
 		father.unregisterFragment(TAG);
-		opHelper.shutdown();
+		opHelper.flushAll();
 		super.onDestroy();
 	}
 
