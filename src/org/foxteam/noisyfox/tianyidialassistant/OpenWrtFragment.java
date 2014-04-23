@@ -1,10 +1,7 @@
 package org.foxteam.noisyfox.tianyidialassistant;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,14 +15,8 @@ import com.actionbarsherlock.app.SherlockFragment;
 public class OpenWrtFragment extends SherlockFragment {
 	static final String TAG = "OpenWrtFragment";
 
-	public static final int STATUS_ON = 1;
-	public static final int STATUS_OFF = 2;
-	public static final int STATUS_UNKNOWN = 3;
-
 	TyMainActivity father = null;
-	SSHManager ssh = new SSHManager();
-	String phoneNumber = "";
-	String wanInterface = "wan";
+	OpenWrtHelper opHelper = new OpenWrtHelper();
 
 	ImageView iv = null;
 	EditText editText_psw_override = null;
@@ -41,22 +32,6 @@ public class OpenWrtFragment extends SherlockFragment {
 		father.registerFragment(this, TAG);
 	}
 
-	private void loadSSHSettings() {
-		SharedPreferences defaultPreferences = PreferenceManager
-				.getDefaultSharedPreferences(father);
-		String ip, user, psw;
-		int port;
-
-		ip = defaultPreferences.getString("ssh_address", "192.168.1.1");
-		port = Integer.parseInt(defaultPreferences.getString("ssh_port", "22"));
-		user = defaultPreferences.getString("login_user", "root");
-		psw = defaultPreferences.getString("login_passwd", "");
-		wanInterface = defaultPreferences.getString("wan_interface", "wan");
-		phoneNumber = defaultPreferences.getString("phone_number", "");
-
-		ssh.setup(ip, port, user, psw);
-	}
-
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -68,7 +43,7 @@ public class OpenWrtFragment extends SherlockFragment {
 	public void onDetach() {
 		super.onDetach();
 		father.unregisterFragment(TAG);
-		ssh.shutdown();
+		opHelper.shutdown();
 	}
 
 	@Override
@@ -83,30 +58,18 @@ public class OpenWrtFragment extends SherlockFragment {
 		checkBox_psw_override = (CheckBox) rootView
 				.findViewById(R.id.checkBox_psw_override);
 
-		updateStatus(STATUS_UNKNOWN);
+		updateStatus(OpenWrtHelper.STATUS_UNKNOWN);
 
 		rootView.findViewById(R.id.button_check_status).setOnClickListener(
 				new OnClickListener() {
 					@Override
 					public void onClick(View arg0) {
 						father.showProgress(progressText);
-						loadSSHSettings();
+						opHelper.loadSSHSettings(father);
 						new Thread() {
 							@Override
 							public void run() {
-								String[] results = ssh
-										.exec("export PATH=/bin:/sbin:/usr/bin:/usr/sbin:$PATH && ifconfig|grep pppoe");
-
-								int status = STATUS_UNKNOWN;
-								if (results != null) {
-									for (String r : results)
-										Log.d("result", r);
-									if (results[0].isEmpty()) {
-										status = STATUS_OFF;
-									} else {
-										status = STATUS_ON;
-									}
-								}
+								int status = opHelper.checkDialStatus();
 
 								father.mainHandler.sendMessage(father.mainHandler
 										.obtainMessage(
@@ -124,16 +87,11 @@ public class OpenWrtFragment extends SherlockFragment {
 					@Override
 					public void onClick(View arg0) {
 						father.showProgress(progressText);
-						loadSSHSettings();
+						opHelper.loadSSHSettings(father);
 						new Thread() {
 							@Override
 							public void run() {
-								String[] results = ssh
-										.exec("export PATH=/bin:/sbin:/usr/bin:/usr/sbin:$PATH && ifup "
-												+ wanInterface);
-								if (results != null)
-									for (String r : results)
-										Log.d("result", r);
+								opHelper.toggleDial(true);
 
 								father.hideProgress();
 							}
@@ -147,16 +105,11 @@ public class OpenWrtFragment extends SherlockFragment {
 					@Override
 					public void onClick(View arg0) {
 						father.showProgress(progressText);
-						loadSSHSettings();
+						opHelper.loadSSHSettings(father);
 						new Thread() {
 							@Override
 							public void run() {
-								String[] results = ssh
-										.exec("export PATH=/bin:/sbin:/usr/bin:/usr/sbin:$PATH && ifdown "
-												+ wanInterface);
-								if (results != null)
-									for (String r : results)
-										Log.d("result", r);
+								opHelper.toggleDial(false);
 
 								father.hideProgress();
 							}
@@ -170,9 +123,9 @@ public class OpenWrtFragment extends SherlockFragment {
 					@Override
 					public void onClick(View arg0) {
 						father.showProgress(progressText);
-						loadSSHSettings();
+						opHelper.loadSSHSettings(father);
 
-						String psw = null;
+						final String psw;
 
 						if (checkBox_psw_override.isChecked()) {
 							psw = editText_psw_override.getText().toString();
@@ -180,45 +133,10 @@ public class OpenWrtFragment extends SherlockFragment {
 							psw = father.mPSWOperator.getLastPsw(false);
 						}
 
-						if (phoneNumber.isEmpty()) {
-							father.hideProgress();
-							return;
-						} else if (psw.isEmpty()) {
-							father.hideProgress();
-							return;
-						}
-
-						StringBuilder sb = new StringBuilder();
-						sb.append("export PATH=/bin:/sbin:/usr/bin:/usr/sbin:$PATH");
-						sb.append(" && ");
-						sb.append("uci set network.");
-						sb.append(wanInterface);
-						sb.append(".proto=pppoe");
-						sb.append(" && ");
-						sb.append("uci set network.");
-						sb.append(wanInterface);
-						sb.append(".username=^#01");
-						sb.append(phoneNumber);
-						sb.append(" && ");
-						sb.append("uci set network.");
-						sb.append(wanInterface);
-						sb.append(".password=");
-						sb.append(psw);
-						sb.append(" && ");
-						sb.append("uci set network.");
-						sb.append(wanInterface);
-						sb.append(".pppd_options='ty_dial'");
-						sb.append("&&");
-						sb.append("uci commit");
-
-						final String cmd = sb.toString();
 						new Thread() {
 							@Override
 							public void run() {
-								String[] results = ssh.exec(cmd);
-								if (results != null)
-									for (String r : results)
-										Log.d("result", r);
+								opHelper.updatePSW(psw);
 
 								father.hideProgress();
 							}
@@ -233,20 +151,20 @@ public class OpenWrtFragment extends SherlockFragment {
 	@Override
 	public void onDestroy() {
 		father.unregisterFragment(TAG);
-		ssh.shutdown();
+		opHelper.shutdown();
 		super.onDestroy();
 	}
 
 	public void updateStatus(int status) {
 		int resId;
 		switch (status) {
-		case STATUS_ON:
+		case OpenWrtHelper.STATUS_ON:
 			resId = R.drawable.status_on;
 			break;
-		case STATUS_OFF:
+		case OpenWrtHelper.STATUS_OFF:
 			resId = R.drawable.status_off;
 			break;
-		case STATUS_UNKNOWN:
+		case OpenWrtHelper.STATUS_UNKNOWN:
 		default:
 			resId = R.drawable.status_unknown;
 		}
