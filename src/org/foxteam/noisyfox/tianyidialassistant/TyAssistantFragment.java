@@ -46,7 +46,7 @@ public class TyAssistantFragment extends SherlockFragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		return inflater
-				.inflate(R.layout.activity_tyassistant, container, false);
+				.inflate(R.layout.fragment_tyassistant, container, false);
 	}
 
 	@Override

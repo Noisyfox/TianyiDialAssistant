@@ -49,7 +49,7 @@ public class OpenWrtFragment extends SherlockFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.activity_openwrt, container,
+		View rootView = inflater.inflate(R.layout.fragment_openwrt, container,
 				false);
 
 		iv = (ImageView) rootView.findViewById(R.id.imageView_status);
