@@ -50,11 +50,11 @@
             android:value="OPEN" />
         <!-- 注册详情Activity (必填) -->
         <activity
-            android:name="com.emar.escore.sdk.view.DetailActivity"
+            android:name="com.qiang.escore.sdk.view.DetailActivity"
             android:configChanges="keyboardHidden|orientation" />
         <!-- 注册网页Activity (必填) -->
         <activity
-            android:name="com.emar.escore.sdk.view.WebActivity"
+            android:name="com.qiang.escore.sdk.view.WebActivity"
             android:configChanges="keyboardHidden|orientation" />
 
         <receiver

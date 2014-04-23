@@ -273,6 +273,10 @@ public class OpenWrtHelper {
 		}
 
 		List<WifiConfiguration> wcs = wifiService.getConfiguredNetworks();
+		if (wcs == null) {
+			return false;
+		}
+
 		WifiConfiguration fwc = null;
 
 		for (WifiConfiguration wc : wcs) {
@@ -282,16 +286,19 @@ public class OpenWrtHelper {
 			}
 		}
 
-		if (fwc == null)
+		if (fwc == null) {
 			return false;
+		}
 
-		if (!wifiService.enableNetwork(fwc.networkId, true))
+		if (!wifiService.enableNetwork(fwc.networkId, true)) {
 			return false;
+		}
 
 		failCount = 0;
 		for (String ssid = wifiService.getConnectionInfo().getSSID(); ssid == null
-				|| !wifiSSID.equals("\"" + ssid + "\""); ssid = wifiService
-				.getConnectionInfo().getSSID()) {
+				|| !(wifiSSID.equals(ssid) || wifiSSID.equals("\"" + ssid
+						+ "\"")); ssid = wifiService.getConnectionInfo()
+				.getSSID()) {
 			if (failCount > 5) {
 				return false;
 			}
@@ -315,8 +322,9 @@ public class OpenWrtHelper {
 		WifiManager wifiService = (WifiManager) context
 				.getSystemService(Context.WIFI_SERVICE);
 
-		if (!wifiService.disconnect())
+		if (!wifiService.disconnect()) {
 			return false;
+		}
 
 		return wifiService.setWifiEnabled(false);
 	}

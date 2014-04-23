@@ -252,14 +252,17 @@ public class SettingsActivity extends PreferenceActivity {
 		ListPreference lp_wifi_ssid = (ListPreference) findPreference("wifi_ssid");
 		WifiManager wifiService = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 		List<WifiConfiguration> wcs = wifiService.getConfiguredNetworks();
-		if (wcs.size() == 0) {
+		if (wcs == null || wcs.size() == 0) {
 			String ssid = lp_wifi_ssid.getSharedPreferences().getString(
 					"wifi_ssid", "");
+			String ssids[];
 			if (!ssid.isEmpty()) {
-				String ssids[] = new String[] { ssid };
-				lp_wifi_ssid.setEntries(ssids);
-				lp_wifi_ssid.setEntryValues(ssids);
+				ssids = new String[] { ssid };
+			} else {
+				ssids = new String[] {};
 			}
+			lp_wifi_ssid.setEntries(ssids);
+			lp_wifi_ssid.setEntryValues(ssids);
 		} else {
 			ArrayList<String> ssidsl = new ArrayList<String>();
 			for (WifiConfiguration wc : wcs) {

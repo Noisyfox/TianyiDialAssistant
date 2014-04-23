@@ -16,10 +16,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
-import com.emar.escore.banner.BannerSDK;
-import com.emar.escore.sdk.YjfSDK;
-import com.emar.escore.sdk.view.bannerView;
-import com.emar.escore.sdk.widget.UpdateScordNotifier;
+import com.qiang.escore.banner.BannerSDK;
+import com.qiang.escore.sdk.YjfSDK;
+import com.qiang.escore.sdk.view.BannerView;
+import com.qiang.escore.sdk.widget.UpdateScordNotifier;
 
 public class TyAssistantFragment extends SherlockFragment implements
 		UpdateScordNotifier {
@@ -65,7 +65,7 @@ public class TyAssistantFragment extends SherlockFragment implements
 		// Banner广告---------------------------------------------------------------------------------------------------------------------------------
 		if (show_add) {
 			// 显示推广条
-			final bannerView bannerView = BannerSDK.getInstance(father)
+			final BannerView bannerView = BannerSDK.getInstance(father)
 					.getBanner();
 			linearLayout.addView(bannerView);
 			// 推广条轮转
