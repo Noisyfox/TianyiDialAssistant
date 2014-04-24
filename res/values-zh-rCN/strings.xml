@@ -35,5 +35,8 @@
     <string name="toastPairing_remove_successful">解除配对成功</string>
     <string name="toastPairing_pair_failed">配对失败</string>
     <string name="toastPairing_pair_successful">配对成功</string>
+    <string name="dlgPlan_title">计划任务</string>
+    <string name="dlgPlan_when">在</string>
+    <string name="dlgPlan_perform">执行</string>
 
 </resources>

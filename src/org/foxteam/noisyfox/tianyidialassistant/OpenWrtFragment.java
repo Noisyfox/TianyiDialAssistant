@@ -1,22 +1,35 @@
 package org.foxteam.noisyfox.tianyidialassistant;
 
+import org.foxteam.noisyfox.tianyidialassistant.PlanManager.OnPlanEditListener;
+import org.foxteam.noisyfox.tianyidialassistant.PlanManager.Plan;
+import org.foxteam.noisyfox.tianyidialassistant.PlanManager.PlanAdapter;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.HeaderViewListAdapter;
 import android.widget.ImageView;
-
+import android.widget.ListView;
 import com.actionbarsherlock.app.SherlockFragment;
 
-public class OpenWrtFragment extends SherlockFragment {
+public class OpenWrtFragment extends SherlockFragment implements
+		OnItemClickListener {
 	static final String TAG = "OpenWrtFragment";
 
 	TyMainActivity father = null;
-	OpenWrtHelper opHelper = new OpenWrtHelper();
+	OpenWrtHelper opHelper = MyApplication.getOpenWrtHelper();// new
+																// OpenWrtHelper();
+
+	View head_view = null;
+	View foot_view = null;
+	ListView listView = null;
 
 	ImageView iv = null;
 	EditText editText_psw_override = null;
@@ -52,15 +65,27 @@ public class OpenWrtFragment extends SherlockFragment {
 		View rootView = inflater.inflate(R.layout.fragment_openwrt, container,
 				false);
 
-		iv = (ImageView) rootView.findViewById(R.id.imageView_status);
-		editText_psw_override = (EditText) rootView
+		listView = (ListView) rootView.findViewById(R.id.listView_main);
+
+		head_view = LayoutInflater.from(getActivity()).inflate(
+				R.layout.fragment_openwrt_head, null);
+		foot_view = LayoutInflater.from(getActivity()).inflate(
+				R.layout.fragment_openwrt_foot, null);
+
+		listView.addHeaderView(head_view);
+		listView.addFooterView(foot_view);
+		listView.setAdapter(MyApplication.getPlanManager().getAdapter(father));
+		listView.setOnItemClickListener(this);
+
+		iv = (ImageView) head_view.findViewById(R.id.imageView_status);
+		editText_psw_override = (EditText) head_view
 				.findViewById(R.id.editText_psw_override);
-		checkBox_psw_override = (CheckBox) rootView
+		checkBox_psw_override = (CheckBox) head_view
 				.findViewById(R.id.checkBox_psw_override);
 
 		updateStatus(OpenWrtHelper.STATUS_UNKNOWN);
 
-		rootView.findViewById(R.id.button_check_status).setOnClickListener(
+		head_view.findViewById(R.id.button_check_status).setOnClickListener(
 				new OnClickListener() {
 					@Override
 					public void onClick(View arg0) {
@@ -86,7 +111,7 @@ public class OpenWrtFragment extends SherlockFragment {
 					}
 				});
 
-		rootView.findViewById(R.id.button_pppoe_connect).setOnClickListener(
+		head_view.findViewById(R.id.button_pppoe_connect).setOnClickListener(
 				new OnClickListener() {
 					@Override
 					public void onClick(View arg0) {
@@ -108,7 +133,7 @@ public class OpenWrtFragment extends SherlockFragment {
 					}
 				});
 
-		rootView.findViewById(R.id.button_pppoe_stop).setOnClickListener(
+		head_view.findViewById(R.id.button_pppoe_stop).setOnClickListener(
 				new OnClickListener() {
 					@Override
 					public void onClick(View arg0) {
@@ -130,7 +155,7 @@ public class OpenWrtFragment extends SherlockFragment {
 					}
 				});
 
-		rootView.findViewById(R.id.button_passwd_update).setOnClickListener(
+		head_view.findViewById(R.id.button_passwd_update).setOnClickListener(
 				new OnClickListener() {
 					@Override
 					public void onClick(View arg0) {
@@ -187,4 +212,33 @@ public class OpenWrtFragment extends SherlockFragment {
 
 		iv.setImageResource(resId);
 	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		if (view == head_view) {
+
+		} else if (view == foot_view) {
+			MyApplication.getPlanManager().createPlan(father,
+					new OnPlanEditListener() {
+						@Override
+						public void onPlanEdit(Plan plan) {
+							((PlanAdapter) ((HeaderViewListAdapter) listView
+									.getAdapter()).getWrappedAdapter())
+									.notifyDataSetChanged();
+						}
+					});
+		} else {
+			MyApplication.getPlanManager().editPlan(father, id,
+					new OnPlanEditListener() {
+						@Override
+						public void onPlanEdit(Plan plan) {
+							((PlanAdapter) ((HeaderViewListAdapter) listView
+									.getAdapter()).getWrappedAdapter())
+									.notifyDataSetChanged();
+						}
+					});
+		}
+	}
+
 }

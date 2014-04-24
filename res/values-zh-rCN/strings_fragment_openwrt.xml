@@ -1,0 +1,25 @@
+<resources>
+    <string name="title_activity_openwrt">OpenWrt 助手</string>
+    <string name="button_check_status">检查拨号状态</string>
+    <string name="button_pppoe_connect">连接</string>
+    <string name="button_pppoe_stop">关闭</string>
+    <string name="button_passwd_update">上传拨号密码</string>
+    <string name="button_passwd_override">密码覆盖</string>
+    <string name="ssh_working">工作中…</string>
+    <string name="text_plan">计划任务：</string>
+    <string name="text_add_plan">点此添加计划任务</string>
+    
+    <string name="text_plan_des_refresh">在 密码刷新时 %1$s</string>
+    <string name="text_plan_des_daytime">在 每天%1$02d:%2$02d时 %3$s</string>
+    
+    <string-array name="plan_time">
+        <item>密码刷新时</item>
+        <item>每天特定时刻</item>
+    </string-array>
+    <string-array name="plan_action">
+        <item>上传密码并连接网络</item>
+        <item>连接网络</item>
+        <item>断开网络</item>
+        <item>上传密码</item>
+    </string-array>
+</resources>

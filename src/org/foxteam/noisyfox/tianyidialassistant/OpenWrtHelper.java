@@ -171,7 +171,7 @@ public class OpenWrtHelper {
 		return status;
 	}
 
-	public void toggleDial(boolean on) {
+	public boolean toggleDial(boolean on) {
 		mHandler.delayJob(this);
 		String[] results = null;
 		if (on) {
@@ -188,14 +188,16 @@ public class OpenWrtHelper {
 			for (String r : results)
 				Log.d("result", r);
 		mHandler.delayJob(this);
+
+		return results != null;
 	}
 
-	public void updatePSW(String psw) {
+	public boolean updatePSW(String psw) {
 		mHandler.delayJob(this);
 		if (phoneNumber.isEmpty()) {
-			return;
+			return false;
 		} else if (psw.isEmpty()) {
-			return;
+			return false;
 		}
 
 		StringBuilder sb = new StringBuilder();
@@ -229,6 +231,8 @@ public class OpenWrtHelper {
 			for (String r : results)
 				Log.d("result", r);
 		mHandler.delayJob(this);
+
+		return results != null;
 	}
 
 	public void shutdown() {

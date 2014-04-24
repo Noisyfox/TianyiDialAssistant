@@ -1,5 +1,11 @@
 package org.foxteam.noisyfox.tianyidialassistant;
 
+import java.util.Calendar;
+import java.util.Iterator;
+import java.util.List;
+
+import org.foxteam.noisyfox.tianyidialassistant.PlanManager.Plan;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -39,8 +45,19 @@ public class AlarmReceiver extends BroadcastReceiver {
 					}
 				}
 			}
-			// return;
-			// Util.showPswDialog(context, "tick!");
+			Calendar ca = Calendar.getInstance();
+			int minute = ca.get(Calendar.MINUTE);// ·Ö
+			int hour = ca.get(Calendar.HOUR_OF_DAY);// Ð¡Ê±
+
+			List<Plan> plans = MyApplication.getPlanManager().getAllPlans(1);
+			Iterator<Plan> ip = plans.iterator();
+			while (ip.hasNext()) {
+				Plan p = ip.next();
+				if (p.time_hour != hour || p.time_minute != minute) {
+					ip.remove();
+				}
+			}
+			MyApplication.getPlanManager().postTask(plans);
 		}
 	}
 

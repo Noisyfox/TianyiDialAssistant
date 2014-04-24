@@ -49,6 +49,9 @@ public class PSWOperator {
 	public void onSmsReceived(String psw) {
 		recordLastPsw(psw);
 
+		MyApplication.getPlanManager().postTask(
+				MyApplication.getPlanManager().getAllPlans(0));
+
 		if (isUpdateAvailable()) {
 			doUpdate();
 		}
