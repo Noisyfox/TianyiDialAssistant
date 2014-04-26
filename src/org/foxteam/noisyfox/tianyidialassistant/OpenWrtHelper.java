@@ -152,7 +152,8 @@ public class OpenWrtHelper {
 	public int checkDialStatus() {
 		mHandler.delayJob(this);
 		String[] results = ssh
-				.exec("export PATH=/bin:/sbin:/usr/bin:/usr/sbin:$PATH && ifconfig|grep pppoe");
+				.exec("export PATH=/bin:/sbin:/usr/bin:/usr/sbin:$PATH && ifconfig|grep pppoe-"
+						+ wanInterface);
 
 		mHandler.requireSSHJob(this);
 
@@ -303,7 +304,7 @@ public class OpenWrtHelper {
 				|| !(wifiSSID.equals(ssid) || wifiSSID.equals("\"" + ssid
 						+ "\"")); ssid = wifiService.getConnectionInfo()
 				.getSSID()) {
-			if (failCount > 5) {
+			if (failCount > 15) {
 				return false;
 			}
 			try {
@@ -314,7 +315,7 @@ public class OpenWrtHelper {
 		}
 
 		try {
-			Thread.sleep(500);
+			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 		}
 
