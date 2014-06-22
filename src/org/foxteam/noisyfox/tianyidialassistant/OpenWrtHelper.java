@@ -210,9 +210,9 @@ public class OpenWrtHelper {
 		sb.append(" && ");
 		sb.append("uci set network.");
 		sb.append(wanInterface);
-		sb.append(".username=^#01");
+		sb.append(".username=^#02");
 		sb.append(phoneNumber);
-		sb.append(" && ");
+		sb.append("@njxy && ");
 		sb.append("uci set network.");
 		sb.append(wanInterface);
 		sb.append(".password=");
