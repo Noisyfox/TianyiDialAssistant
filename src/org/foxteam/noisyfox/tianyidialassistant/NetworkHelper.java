@@ -75,7 +75,7 @@ public class NetworkHelper {
 				InetAddress addr = InetAddress.getByName(host.resolveAddress);
 				long cTime = System.currentTimeMillis();
 				if (addr.getHostAddress().startsWith("203.208")// google_CN
-						|| (lastResolveTime != -1 && cTime - lastResolveTime > 5 * 60 * 1000)) {// ·ÀÖ¹ipÊ§Ğ§
+						|| (lastResolveTime != -1 && cTime - lastResolveTime > 5 * 60 * 1000)) {// é˜²æ­¢ipå¤±æ•ˆ
 					lastResolveTime = cTime;
 					Set<String> ips = getAllIP(host.resolveAddress, trustedDNS);
 					int size = ips.size();
@@ -108,11 +108,11 @@ public class NetworkHelper {
 	}
 
 	/**
-	 * ÊÖ¶¯Ìí¼ÓDNS»º´æ£¬ÒÔÈÆ¹ı¹úÄÚµÄDNSÎÛÈ¾
+	 * æ‰‹åŠ¨æ·»åŠ DNSç¼“å­˜ï¼Œä»¥ç»•è¿‡å›½å†…çš„DNSæ±¡æŸ“
 	 * 
 	 * @param host
 	 * @param ip
-	 * @return ÊÇ·ñ³É¹¦
+	 * @return æ˜¯å¦æˆåŠŸ
 	 */
 	public static boolean addDNSCache(String host, String ip) {
 		try {
@@ -208,12 +208,12 @@ public class NetworkHelper {
 	}
 
 	/**
-	 * »ñÈ¡ÓòÃûËùÓĞIP
+	 * è·å–åŸŸåæ‰€æœ‰IP
 	 * 
 	 * @param domain
-	 *            ÓòÃû
+	 *            åŸŸå
 	 * @param dnsServers
-	 *            DNS·şÎñÆ÷ÁĞ±í
+	 *            DNSæœåŠ¡å™¨åˆ—è¡¨
 	 * @return
 	 */
 	public static Set<String> getAllIP(String domain, String[] dnsServers) {

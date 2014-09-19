@@ -19,12 +19,12 @@ public class AlarmReceiver extends BroadcastReceiver {
 	public static final String ALARM_ACTION_REFRESHPSW = "org.foxteam.noisyfox.tianyidialassistant.refreshPassword";
 	public static final String SP_VALUE_LONG_LAST_CHECK_TIME = "LastCheckTime";
 	public static final int SENDER_CODE_REFRESHPSW = 0;
-	public static final long INTERVAL_REFRESHPSW = 1 * 60 * 1000;// 1·ÖÖÓ¼ì²âÒ»´Î
+	public static final long INTERVAL_REFRESHPSW = 1 * 60 * 1000;// 1åˆ†é’Ÿæ£€æµ‹ä¸€æ¬¡
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		if (ALARM_ACTION_REFRESHPSW.equals(intent.getAction())) {
-			// Ë¢ĞÂµ±Ç°ÃÜÂë
+			// åˆ·æ–°å½“å‰å¯†ç 
 			SharedPreferences defaultPreferences = PreferenceManager
 					.getDefaultSharedPreferences(context);
 			if (defaultPreferences.getBoolean("checkbox_auto_refresh", true)) {
@@ -46,8 +46,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 				}
 			}
 			Calendar ca = Calendar.getInstance();
-			int minute = ca.get(Calendar.MINUTE);// ·Ö
-			int hour = ca.get(Calendar.HOUR_OF_DAY);// Ğ¡Ê±
+			int minute = ca.get(Calendar.MINUTE);// åˆ†
+			int hour = ca.get(Calendar.HOUR_OF_DAY);// å°æ—¶
 
 			List<Plan> plans = MyApplication.getPlanManager().getAllPlans(1);
 			Iterator<Plan> ip = plans.iterator();

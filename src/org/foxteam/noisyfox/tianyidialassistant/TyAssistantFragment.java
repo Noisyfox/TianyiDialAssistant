@@ -60,18 +60,18 @@ public class TyAssistantFragment extends SherlockFragment implements
 				.getDefaultSharedPreferences(father).getBoolean(
 						"checkbox_advertisement", true);
 
-		// µ±ActivityµÚÒ»´Î´´½¨Ê±µ÷ÓÃ,´Ë·½·¨Ğè¼Ì³Ğ½Ó¿ÚUpdateScordNotifier
+		// å½“Activityç¬¬ä¸€æ¬¡åˆ›å»ºæ—¶è°ƒç”¨,æ­¤æ–¹æ³•éœ€ç»§æ‰¿æ¥å£UpdateScordNotifier
 		YjfSDK.getInstance(father, this).initInstance("", "", "", "");
-		// Banner¹ã¸æ---------------------------------------------------------------------------------------------------------------------------------
+		// Bannerå¹¿å‘Š---------------------------------------------------------------------------------------------------------------------------------
 		if (show_add) {
-			// ÏÔÊ¾ÍÆ¹ãÌõ
+			// æ˜¾ç¤ºæ¨å¹¿æ¡
 			final BannerView bannerView = BannerSDK.getInstance(father)
 					.getBanner();
 			linearLayout.addView(bannerView);
-			// ÍÆ¹ãÌõÂÖ×ª
+			// æ¨å¹¿æ¡è½®è½¬
 			BannerSDK.getInstance(father).showBanner(bannerView);
 		}
-		// Banner¹ã¸æ---------------------------------------------------------------------------------------------------------------------------------
+		// Bannerå¹¿å‘Š---------------------------------------------------------------------------------------------------------------------------------
 
 		t = (TextView) view.findViewById(R.id.textView_info);
 		Button b = (Button) view.findViewById(R.id.button_getnow);
@@ -83,7 +83,7 @@ public class TyAssistantFragment extends SherlockFragment implements
 			@Override
 			public void onClick(View arg0) {
 				father.mPSWOperator.requestNewPassword();
-				t.setText("»ñÈ¡ÖĞ£¬ÇëÄÍĞÄµÈ´ıÅ¶~");
+				t.setText("è·å–ä¸­ï¼Œè¯·è€å¿ƒç­‰å¾…å“¦~");
 			}
 
 		});
@@ -117,13 +117,13 @@ public class TyAssistantFragment extends SherlockFragment implements
 		} else {
 			Long time = father.mPSWOperator.getRecordTime();
 			SimpleDateFormat formatter = new SimpleDateFormat(
-					"yyyyÄêMMÔÂddÈÕ\nHH:mm:ss", Locale.getDefault());
+					"yyyyå¹´MMæœˆddæ—¥\nHH:mm:ss", Locale.getDefault());
 			Date curDate = new Date(time);
 			String str = formatter.format(curDate);
-			String w = "µ±Ç°ÃÜÂë:\n" + psw + "\n»ñÈ¡Ê±¼ä:\n" + str;
+			String w = "å½“å‰å¯†ç :\n" + psw + "\nè·å–æ—¶é—´:\n" + str;
 			Long dTime_get = System.currentTimeMillis() - time;
 			if (dTime_get > 5.5 * 60 * 60 * 1000) {
-				w += "\nÃÜÂë¿ÉÄÜÒÑ¾­¹ıÆÚ!";
+				w += "\nå¯†ç å¯èƒ½å·²ç»è¿‡æœŸ!";
 			}
 
 			t.setText(w);

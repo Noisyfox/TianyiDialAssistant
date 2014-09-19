@@ -40,7 +40,7 @@ import com.rt.BASE64Decoder;
 import com.rt.BASE64Encoder;
 
 /**
- * ¸ºÔğÅä¶Ô¡¢ÉÏ´«ÃÜÂëµÈÓë·şÎñÆ÷½»»¥µÄÀà
+ * è´Ÿè´£é…å¯¹ã€ä¸Šä¼ å¯†ç ç­‰ä¸æœåŠ¡å™¨äº¤äº’çš„ç±»
  * 
  * @author Noisyfox
  */
@@ -77,13 +77,13 @@ public final class EncryptedUploader {
 
 	private SharedPreferences mPreferences = null;
 
-	private String mKid = null; // ¹«Ô¿³Ö¾Ã±àºÅ
-	private PublicKey mPublicKey = null; // ¼ÓÃÜÓÃ¹«Ô¿
-	private String mPublicKeyBase64 = null; // base64¼ÓÃÜºó¹«Ô¿×Ö·û´®
+	private String mKid = null; // å…¬é’¥æŒä¹…ç¼–å·
+	private PublicKey mPublicKey = null; // åŠ å¯†ç”¨å…¬é’¥
+	private String mPublicKeyBase64 = null; // base64åŠ å¯†åå…¬é’¥å­—ç¬¦ä¸²
 
-	private String mKid_pairing = null; // ¹«Ô¿³Ö¾Ã±àºÅ--Åä¶ÔÊ±
-	private PublicKey mPublicKey_pairing = null; // ¼ÓÃÜÓÃ¹«Ô¿--Åä¶ÔÊ±
-	private String mPublicKeyBase64_pairing = null; // base64¼ÓÃÜºó¹«Ô¿×Ö·û´®--Åä¶ÔÊ±
+	private String mKid_pairing = null; // å…¬é’¥æŒä¹…ç¼–å·--é…å¯¹æ—¶
+	private PublicKey mPublicKey_pairing = null; // åŠ å¯†ç”¨å…¬é’¥--é…å¯¹æ—¶
+	private String mPublicKeyBase64_pairing = null; // base64åŠ å¯†åå…¬é’¥å­—ç¬¦ä¸²--é…å¯¹æ—¶
 
 	public EncryptedUploader(Context context) {
 		mPreferences = context.getApplicationContext().getSharedPreferences(
@@ -132,11 +132,11 @@ public final class EncryptedUploader {
 	}
 
 	/**
-	 * ÓÉ¹«Ô¿ÌáÈ¡ÂëÌáÈ¡¹«Ô¿²¢»ñÈ¡Åä¶ÔÃÜÂë
+	 * ç”±å…¬é’¥æå–ç æå–å…¬é’¥å¹¶è·å–é…å¯¹å¯†ç 
 	 * 
 	 * @param primaryPairingCode
-	 *            ¹«Ô¿ÌáÈ¡Âë
-	 * @return ÈôÌáÈ¡ÂëÊ§Ğ§£¬·µ»Ønull£» ·ñÔò·µ»ØÅä¶ÔÃÜÂë
+	 *            å…¬é’¥æå–ç 
+	 * @return è‹¥æå–ç å¤±æ•ˆï¼Œè¿”å›nullï¼› å¦åˆ™è¿”å›é…å¯¹å¯†ç 
 	 */
 	public String getSecondaryPairingCode(String primaryPairingCode) {
 		mKid_pairing = null;
@@ -153,10 +153,10 @@ public final class EncryptedUploader {
 		case HttpStatus.SC_OK:
 			break;
 		case HttpStatus.SC_UNAUTHORIZED:
-			mErrMessage = "Åä¶ÔÂë²»´æÔÚ/ÒÑÊ§Ğ§";
+			mErrMessage = "é…å¯¹ç ä¸å­˜åœ¨/å·²å¤±æ•ˆ";
 			return null;
 		default:
-			mErrMessage = "Î´Öª´íÎó: " + result.statusCode;
+			mErrMessage = "æœªçŸ¥é”™è¯¯: " + result.statusCode;
 			return null;
 		}
 
@@ -178,16 +178,16 @@ public final class EncryptedUploader {
 			return totp;
 		} catch (Exception e) {
 			e.printStackTrace();
-			mErrMessage = "ÄÚ²¿´íÎó";
+			mErrMessage = "å†…éƒ¨é”™è¯¯";
 		}
 
 		return null;
 	}
 
 	/**
-	 * ÑéÖ¤ÊÇ·ñÍê³ÉÅä¶Ô£¬²¢±£´æĞÅÏ¢
+	 * éªŒè¯æ˜¯å¦å®Œæˆé…å¯¹ï¼Œå¹¶ä¿å­˜ä¿¡æ¯
 	 * 
-	 * @return ÊÇ·ñÅä¶Ô³É¹¦
+	 * @return æ˜¯å¦é…å¯¹æˆåŠŸ
 	 */
 	public boolean finishPairing() {
 		mKid = null;
@@ -203,7 +203,7 @@ public final class EncryptedUploader {
 		checkLoop: while (true) {
 			retryTimes++;
 			if (retryTimes > 5) {
-				mErrMessage = "Åä¶Ô³¬Ê±";
+				mErrMessage = "é…å¯¹è¶…æ—¶";
 				return false;
 			}
 			try {
@@ -221,30 +221,30 @@ public final class EncryptedUploader {
 			case -1:
 				continue;
 			default:
-				mErrMessage = "Î´Öª´íÎó: " + result.statusCode;
+				mErrMessage = "æœªçŸ¥é”™è¯¯: " + result.statusCode;
 				return false;
 			}
 
 			try {
 				int pairResult = result.resultObj.getInt(RESULT_KEY_RESULT);
 				switch (pairResult) {
-				case 0: // ÕıÔÚµÈ´ıÅä¶Ô
+				case 0: // æ­£åœ¨ç­‰å¾…é…å¯¹
 					break;
-				case 1: // Åä¶Ô³É¹¦
+				case 1: // é…å¯¹æˆåŠŸ
 					break checkLoop;
-				case -1:// Åä¶ÔÂë²»´æÔÚ»ò³¬Ê±»ò´íÎó
+				case -1:// é…å¯¹ç ä¸å­˜åœ¨æˆ–è¶…æ—¶æˆ–é”™è¯¯
 				default:
-					mErrMessage = "Åä¶ÔÊ§°Ü";
+					mErrMessage = "é…å¯¹å¤±è´¥";
 					return false;
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
-				mErrMessage = "ÄÚ²¿´íÎó";
+				mErrMessage = "å†…éƒ¨é”™è¯¯";
 				return false;
 			}
 		}
 
-		// Åä¶ÔÍê³É
+		// é…å¯¹å®Œæˆ
 		mKid = mKid_pairing;
 		mPublicKey = mPublicKey_pairing;
 		mPublicKeyBase64 = mPublicKeyBase64_pairing;
@@ -288,13 +288,13 @@ public final class EncryptedUploader {
 		String keyBase64_pairing = mPreferences.getString(
 				SP_VALUE_STR_PUBLICKEY_PAIRING, null);
 
-		if (keyBase64 != null && key_id != null) {// ¶ÁÈ¡Åä¶Ô³É¹¦ºó×´Ì¬
+		if (keyBase64 != null && key_id != null) {// è¯»å–é…å¯¹æˆåŠŸåçŠ¶æ€
 			PublicKey publicKey;
 			try {
 				publicKey = Encrypt.getPublicKey(keyBase64);
 			} catch (Exception e) {
 				e.printStackTrace();
-				mErrMessage = "¶ÁÈ¡ÏÖÓĞÅä¶ÔĞÅÏ¢Ê§°Ü";
+				mErrMessage = "è¯»å–ç°æœ‰é…å¯¹ä¿¡æ¯å¤±è´¥";
 				return false;
 			}
 
@@ -303,13 +303,13 @@ public final class EncryptedUploader {
 			mPublicKeyBase64 = keyBase64;
 
 			return true;
-		} else if (keyBase64_pairing != null && key_id_pairing != null) {// ¶ÁÈ¡Åä¶ÔÖĞ×´Ì¬
+		} else if (keyBase64_pairing != null && key_id_pairing != null) {// è¯»å–é…å¯¹ä¸­çŠ¶æ€
 			PublicKey publicKey_pairing;
 			try {
 				publicKey_pairing = Encrypt.getPublicKey(keyBase64_pairing);
 			} catch (Exception e) {
 				e.printStackTrace();
-				mErrMessage = "¶ÁÈ¡ÏÖÓĞÅä¶ÔĞÅÏ¢Ê§°Ü";
+				mErrMessage = "è¯»å–ç°æœ‰é…å¯¹ä¿¡æ¯å¤±è´¥";
 				return false;
 			}
 
@@ -320,20 +320,20 @@ public final class EncryptedUploader {
 			return true;
 		}
 
-		mErrMessage = "¶ÁÈ¡ÏÖÓĞÅä¶ÔĞÅÏ¢Ê§°Ü";
+		mErrMessage = "è¯»å–ç°æœ‰é…å¯¹ä¿¡æ¯å¤±è´¥";
 		return false;
 	}
 
 	/**
-	 * ÉÏ´«¶¯Ì¬ÃÜÂë
+	 * ä¸Šä¼ åŠ¨æ€å¯†ç 
 	 * 
 	 * @param phoneNumber
-	 *            ÊÖ»úºÅÂë
+	 *            æ‰‹æœºå·ç 
 	 * @param passwd
-	 *            ¶¯Ì¬ÃÜÂë
+	 *            åŠ¨æ€å¯†ç 
 	 * @param getTime
-	 *            ÃÜÂë»ñÈ¡Ê±¼ä
-	 * @return ÊÇ·ñ³É¹¦
+	 *            å¯†ç è·å–æ—¶é—´
+	 * @return æ˜¯å¦æˆåŠŸ
 	 */
 	public boolean upload(String phoneNumber, String passwd, long getTime) {
 		try {
@@ -365,17 +365,17 @@ public final class EncryptedUploader {
 			case HttpStatus.SC_OK:
 				return true;
 			case HttpStatus.SC_UNAUTHORIZED:
-				mErrMessage = "Åä¶ÔÂë²»´æÔÚ/ÒÑÊ§Ğ§";
+				mErrMessage = "é…å¯¹ç ä¸å­˜åœ¨/å·²å¤±æ•ˆ";
 				break;
 			case HttpStatus.SC_FORBIDDEN:
-				mErrMessage = "hashÑéÖ¤Ê§°Ü";
+				mErrMessage = "hashéªŒè¯å¤±è´¥";
 				break;
 			default:
-				mErrMessage = "Î´Öª´íÎó: " + result.statusCode;
+				mErrMessage = "æœªçŸ¥é”™è¯¯: " + result.statusCode;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			mErrMessage = "ÄÚ²¿´íÎó";
+			mErrMessage = "å†…éƒ¨é”™è¯¯";
 		}
 
 		return false;
@@ -392,10 +392,10 @@ public final class EncryptedUploader {
 		result.statusCode = -1;
 		try {
 
-			HttpClient httpClient = NetworkHelper.getNewHttpClient();// »ñÈ¡Ò»¸öÃ»ÓĞSSLÖ¤ÊéºÍhostÑéÖ¤µÄHttpClient
+			HttpClient httpClient = NetworkHelper.getNewHttpClient();// è·å–ä¸€ä¸ªæ²¡æœ‰SSLè¯ä¹¦å’ŒhostéªŒè¯çš„HttpClient
 			// Represents a collection of HTTP protocol and framework parameters
 			HttpParams params = httpClient.getParams();
-			// ÉèÖÃ³¬Ê±
+			// è®¾ç½®è¶…æ—¶
 			HttpConnectionParams.setConnectionTimeout(params, 10000);
 			HttpConnectionParams.setSoTimeout(params, 35000);
 

@@ -36,7 +36,7 @@ public class PhoneNumberVerification {
 				SP_NAME, Context.MODE_PRIVATE);
 	}
 
-	// ÊÇ·ñÌáÊ¾¹ıÁË
+	// æ˜¯å¦æç¤ºè¿‡äº†
 	boolean isRunAtOnce() {
 		boolean rao = mPreferences.getBoolean(SP_VALUE_BOOL_RUNATONCE, false);
 		return rao;
@@ -44,7 +44,7 @@ public class PhoneNumberVerification {
 
 	boolean isPhoneNumberConfirmed() {
 		synchronized (syncObject) {
-			// »ñÈ¡´¢´æµÄµç»°ºÅÂë
+			// è·å–å‚¨å­˜çš„ç”µè¯å·ç 
 			String savedPhoneNumber = mPreferences.getString(
 					SP_VALUE_STR_SAVEDNUMBER, "");
 			if (savedPhoneNumber.equals("")) {
@@ -56,7 +56,7 @@ public class PhoneNumberVerification {
 				return false;
 			}
 
-			// ¼ÓÃÜ
+			// åŠ å¯†
 			String enc = EncryptPhoneNumber(savedPhoneNumber);
 			if (savedPhoneNumberEnc.equals(enc)) {
 				return true;
@@ -76,7 +76,7 @@ public class PhoneNumberVerification {
 			final AlertDialog alertDialog_edit = dialogBuilder.create();
 			final AlertDialog alertDialog_skip = dialogBuilder.create();
 
-			// ºÅÂëÑéÖ¤ÌáÊ¾¶Ô»°¿ò
+			// å·ç éªŒè¯æç¤ºå¯¹è¯æ¡†
 			alertDialog_ver.setMessage(mContext
 					.getText(R.string.dlgPhoneVer_noti_text));
 			// ad.setView(v);
@@ -92,7 +92,7 @@ public class PhoneNumberVerification {
 						}
 					});
 
-			// ºÅÂëÊäÈë¶Ô»°¿ò
+			// å·ç è¾“å…¥å¯¹è¯æ¡†
 			View v = View.inflate(mContext, R.layout.phone_edit_dialog, null);
 			alertDialog_edit.setView(v, 5, 5, 5, 5);
 			alertDialog_edit.setCancelable(false);
@@ -126,7 +126,7 @@ public class PhoneNumberVerification {
 						}
 					});
 
-			// Ìø¹ıÑéÖ¤¶Ô»°¿ò
+			// è·³è¿‡éªŒè¯å¯¹è¯æ¡†
 			alertDialog_skip.setCancelable(false);
 			alertDialog_skip.setTitle(R.string.dlgPhoneVer_skip_title);
 			alertDialog_skip.setMessage(mContext
@@ -158,7 +158,7 @@ public class PhoneNumberVerification {
 		Toast.makeText(mContext, R.string.dlgPhoneVer_vering_toast,
 				Toast.LENGTH_LONG).show();
 
-		// Éú³ÉËæ»ú´®
+		// ç”Ÿæˆéšæœºä¸²
 		Random randGen = new Random();
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < 5; i++)
@@ -173,7 +173,7 @@ public class PhoneNumberVerification {
 		e.putBoolean(SP_VALUE_BOOL_RUNATONCE, true);
 		e.commit();
 
-		// ·¢ËÍ¶ÌĞÅÑéÖ¤
+		// å‘é€çŸ­ä¿¡éªŒè¯
 		Util.sendSMS(mContext, number, rk);
 	}
 

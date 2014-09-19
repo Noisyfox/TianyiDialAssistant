@@ -117,16 +117,16 @@ public class PlanManager {
 				Log.d("task", "Task executed!");
 				boolean success = false;
 				switch (plan.action) {
-				case 0:// ÉÏ´«ÃÜÂë²¢Á¬½ÓÍøÂç
+				case 0:// ä¸Šä¼ å¯†ç å¹¶è¿æ¥ç½‘ç»œ
 					success = uploadPswAndConnect();
 					break;
-				case 1:// Á¬½ÓÍøÂç
+				case 1:// è¿æ¥ç½‘ç»œ
 					success = toggleConnection(true);
 					break;
-				case 2:// ¶Ï¿ªÍøÂç
+				case 2:// æ–­å¼€ç½‘ç»œ
 					success = toggleConnection(false);
 					break;
-				case 3:// ÉÏ´«ÃÜÂë
+				case 3:// ä¸Šä¼ å¯†ç 
 					success = uploadPsw();
 					break;
 				}

@@ -24,7 +24,7 @@ import android.widget.Toast;
 
 public class Util {
 	public static String check(String paramString) {
-		Matcher localMatcher = Pattern.compile("(?<=ÃÜÂë)\\d{6}").matcher(
+		Matcher localMatcher = Pattern.compile("(?<=å¯†ç )\\d{6}").matcher(
 				paramString);
 		if (localMatcher.find())
 			return localMatcher.group();
@@ -63,7 +63,7 @@ public class Util {
 		} else {
 			sms.sendTextMessage(phoneNumber, null, message, sentPI, deliverPI);
 		}
-		Toast.makeText(context, "¶ÌÐÅ·¢ËÍÖÐ", Toast.LENGTH_SHORT).show();
+		Toast.makeText(context, "çŸ­ä¿¡å‘é€ä¸­", Toast.LENGTH_SHORT).show();
 
 	}
 
@@ -79,22 +79,22 @@ public class Util {
 				public void onReceive(Context _context, Intent _intent) {
 					switch (getResultCode()) {
 					case Activity.RESULT_OK:
-						Toast.makeText(_context, "¶ÌÐÅ·¢ËÍ³É¹¦", Toast.LENGTH_SHORT)
+						Toast.makeText(_context, "çŸ­ä¿¡å‘é€æˆåŠŸ", Toast.LENGTH_SHORT)
 								.show();
 						break;
 					case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
 						Toast.makeText(_context,
-								"¶ÌÐÅ·¢ËÍÊ§°Ü:SMS generic failure actions",
+								"çŸ­ä¿¡å‘é€å¤±è´¥:SMS generic failure actions",
 								Toast.LENGTH_SHORT).show();
 						break;
 					case SmsManager.RESULT_ERROR_RADIO_OFF:
 						Toast.makeText(_context,
-								"¶ÌÐÅ·¢ËÍÊ§°Ü:SMS radio off failure actions",
+								"çŸ­ä¿¡å‘é€å¤±è´¥:SMS radio off failure actions",
 								Toast.LENGTH_SHORT).show();
 						break;
 					case SmsManager.RESULT_ERROR_NULL_PDU:
 						Toast.makeText(_context,
-								"¶ÌÐÅ·¢ËÍÊ§°Ü:SMS null PDU failure actions",
+								"çŸ­ä¿¡å‘é€å¤±è´¥:SMS null PDU failure actions",
 								Toast.LENGTH_SHORT).show();
 						break;
 					}

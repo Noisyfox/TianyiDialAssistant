@@ -98,12 +98,12 @@ public class SettingsActivity extends PreferenceActivity {
 				String text = (String) msg.obj;
 				activity.processDialog = new ProgressDialog(activity);
 				activity.processDialog
-						.setProgressStyle(ProgressDialog.STYLE_SPINNER);// ÉèÖÃ·ç¸ñÎªÔ²ĞÎ½ø¶ÈÌõ
+						.setProgressStyle(ProgressDialog.STYLE_SPINNER);// è®¾ç½®é£æ ¼ä¸ºåœ†å½¢è¿›åº¦æ¡
 				activity.processDialog
-						.setTitle(R.string.dlgSettings_process_title);// ÉèÖÃ±êÌâ
+						.setTitle(R.string.dlgSettings_process_title);// è®¾ç½®æ ‡é¢˜
 				activity.processDialog.setMessage(text);
-				activity.processDialog.setIndeterminate(true);// ÉèÖÃ½ø¶ÈÌõÊÇ·ñÎª²»Ã÷È·
-				activity.processDialog.setCancelable(false);// ÉèÖÃ½ø¶ÈÌõÊÇ·ñ¿ÉÒÔ°´ÍË»Ø¼üÈ¡Ïû
+				activity.processDialog.setIndeterminate(true);// è®¾ç½®è¿›åº¦æ¡æ˜¯å¦ä¸ºä¸æ˜ç¡®
+				activity.processDialog.setCancelable(false);// è®¾ç½®è¿›åº¦æ¡æ˜¯å¦å¯ä»¥æŒ‰é€€å›é”®å–æ¶ˆ
 				activity.processDialog.show();
 			}
 				break;
@@ -310,7 +310,7 @@ public class SettingsActivity extends PreferenceActivity {
 		bindPreferenceSummaryToValue(findPreference("wan_interface"));
 		bindPreferenceSummaryToValue(findPreference("phone_number"));
 
-		// ¶ÁÈ¡ÅäÖÃ
+		// è¯»å–é…ç½®
 		updateUI();
 		bindPreferenceSummaryToValue(findPreference("wifi_ssid"));
 
@@ -372,7 +372,7 @@ public class SettingsActivity extends PreferenceActivity {
 		} else if ("pc_pairing".equals(key)) {
 			final EncryptedUploader uploader = new EncryptedUploader(mActivity);
 			if (uploader.isPaired()) {
-				// ½â³ıÅä¶Ô
+				// è§£é™¤é…å¯¹
 				AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(
 						mActivity);
 				AlertDialog dlg = dialogBuilder.create();
@@ -407,7 +407,7 @@ public class SettingsActivity extends PreferenceActivity {
 						(Dialog.OnClickListener) null);
 				dlg.show();
 			} else if (uploader.isPairing()) {
-				// ·ÅÆúÅä¶Ô
+				// æ”¾å¼ƒé…å¯¹
 				AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(
 						mActivity);
 				AlertDialog dlg = dialogBuilder.create();
@@ -437,7 +437,7 @@ public class SettingsActivity extends PreferenceActivity {
 						(Dialog.OnClickListener) null);
 				dlg.show();
 			} else {
-				// ¿ªÊ¼Åä¶Ô
+				// å¼€å§‹é…å¯¹
 				LayoutInflater inflater = getLayoutInflater();
 				View layout = inflater.inflate(R.layout.pairing_primary_code,
 						(ViewGroup) findViewById(R.id.edit_primary_code));
@@ -501,7 +501,7 @@ public class SettingsActivity extends PreferenceActivity {
 						.show();
 			}
 		} else if ("pc_pairing_check".equals(key)) {
-			// ÖØÊÔÅä¶Ô
+			// é‡è¯•é…å¯¹
 			final EncryptedUploader uploader = new EncryptedUploader(mActivity);
 			if (uploader.isPairing()) {
 				new Thread() {
@@ -514,10 +514,10 @@ public class SettingsActivity extends PreferenceActivity {
 		} else if ("checkbox_advertisement".equals(key)) {
 			CheckBoxPreference cp = (CheckBoxPreference) preference;
 			if (cp.isChecked()) {
-				Toast.makeText(this, "¸ĞĞ»ÄúµÄÖ§³Ö~ÔÛ»áÔÙ½ÓÔÙÀ÷×ö³ö¸üºÃµÄapp!\n(ÖØÆô³ÌĞòÉúĞ§)",
+				Toast.makeText(this, "æ„Ÿè°¢æ‚¨çš„æ”¯æŒ~å’±ä¼šå†æ¥å†å‰åšå‡ºæ›´å¥½çš„app!\n(é‡å¯ç¨‹åºç”Ÿæ•ˆ)",
 						Toast.LENGTH_SHORT).show();
 			} else {
-				Toast.makeText(this, "555~²»ÒªÂï¡£¡£ÔÛµÄ¹ã¸æ²»»áÂÒµ¯µÄÀ²\n(ÖØÆô³ÌĞòÉúĞ§)",
+				Toast.makeText(this, "555~ä¸è¦å˜›ã€‚ã€‚å’±çš„å¹¿å‘Šä¸ä¼šä¹±å¼¹çš„å•¦\n(é‡å¯ç¨‹åºç”Ÿæ•ˆ)",
 						Toast.LENGTH_SHORT).show();
 			}
 		} else {
@@ -552,7 +552,7 @@ public class SettingsActivity extends PreferenceActivity {
 					PhoneNumberVerification pnv = new PhoneNumberVerification(
 							mActivity);
 					if (pnv.isPhoneNumberConfirmed()) {
-						// Æô¶¯ºóÌ¨·şÎñ
+						// å¯åŠ¨åå°æœåŠ¡
 					} else {
 						AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(
 								mActivity);
@@ -578,9 +578,9 @@ public class SettingsActivity extends PreferenceActivity {
 						return false;
 					}
 				} else {
-					// ½áÊøºóÌ¨·şÎñ
+					// ç»“æŸåå°æœåŠ¡
 				}
-				return false;// Ä¿Ç°Ç¿ÖÆ¹Ø±Õ´Ë¹¦ÄÜ
+				return false;// ç›®å‰å¼ºåˆ¶å…³é—­æ­¤åŠŸèƒ½
 			}
 			return true;
 		}

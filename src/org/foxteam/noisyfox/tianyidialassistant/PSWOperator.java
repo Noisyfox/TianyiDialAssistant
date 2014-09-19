@@ -81,11 +81,11 @@ public class PSWOperator {
 					Long dTime_request = time
 							- mPreferences.getLong(SP_VALUE_LONG_TIME_REQUEST,
 									0);
-					if (dTime_get > 5.5 * 60 * 60 * 1000) {// ÃÜÂëÒÑ¾­Ê§Ğ§
+					if (dTime_get > 5.5 * 60 * 60 * 1000) {// å¯†ç å·²ç»å¤±æ•ˆ
 						psw = "";
 					} else if (dTime_request < 2 * 60 * 1000
 							&& dTime_request > 20 * 1000
-							&& dTime_request < dTime_get) {// ÇëÇóÆµ·±£¬¿ÉÄÜÊÇÃÜÂëÊ§Ğ§ÁË
+							&& dTime_request < dTime_get) {// è¯·æ±‚é¢‘ç¹ï¼Œå¯èƒ½æ˜¯å¯†ç å¤±æ•ˆäº†
 						psw = "";
 					}
 				}
@@ -108,7 +108,7 @@ public class PSWOperator {
 			long currentTime = System.currentTimeMillis();
 			long frequency = Long.valueOf(mDefaultPreferences.getString(
 					"refresh_frequency", "300")) * 60 * 1000;
-			// ¼ì²éÉÏÒ»´ÎË¢ĞÂÊ±¼ä
+			// æ£€æŸ¥ä¸Šä¸€æ¬¡åˆ·æ–°æ—¶é—´
 			long lstUpdateTime = mPreferences.getLong(
 					SP_VALUE_LONG_TIME_UPDATE, 0);
 			long dTimeUpdate = currentTime - lstUpdateTime;
@@ -117,7 +117,7 @@ public class PSWOperator {
 			if (dTimeRecord > frequency) {
 				requestNewPassword();
 			} else if (dTimeUpdate > frequency && isUpdateAvailable()) {
-				doUpdate(); // Ìá½»·şÎñÆ÷
+				doUpdate(); // æäº¤æœåŠ¡å™¨
 			} else {
 				return false;
 			}
@@ -129,7 +129,7 @@ public class PSWOperator {
 	}
 
 	/**
-	 * ¼ì²âÊÇ·ñ¿ÉÒÔ¸üĞÂ£¬¾ßÌåÖ¸ ÓĞÃ»ÓĞ¿ªÆô¸üĞÂÒÔ¼°ÓĞÃ»ÓĞ½øĞĞÅä¶Ô
+	 * æ£€æµ‹æ˜¯å¦å¯ä»¥æ›´æ–°ï¼Œå…·ä½“æŒ‡ æœ‰æ²¡æœ‰å¼€å¯æ›´æ–°ä»¥åŠæœ‰æ²¡æœ‰è¿›è¡Œé…å¯¹
 	 * 
 	 * @return
 	 */

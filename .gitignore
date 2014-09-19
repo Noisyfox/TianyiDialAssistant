@@ -2,6 +2,9 @@
 bin/
 gen/
 obj/
+out/
+
+.idea/
 
 # Local configuration file (sdk path, etc)
 proguard.cfg

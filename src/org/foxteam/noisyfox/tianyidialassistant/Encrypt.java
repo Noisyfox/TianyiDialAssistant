@@ -22,7 +22,7 @@ public class Encrypt {
 	public static final String HMAC_SHA1 = "HmacSHA1";
 
 	/**
-	 * RSA×î´ó¼ÓÃÜÃ÷ÎÄ´óĞ¡
+	 * RSAæœ€å¤§åŠ å¯†æ˜æ–‡å¤§å°
 	 */
 	private static final int MAX_ENCRYPT_BLOCK = 117;
 	private static final int[] DIGITS_POWER
@@ -32,11 +32,11 @@ public class Encrypt {
 			'6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
 	/**
-	 * µÃµ½¹«Ô¿
+	 * å¾—åˆ°å…¬é’¥
 	 * 
 	 * @param modulus
-	 *            RSA¹«Ô¿Ä£Êı×Ö·û´®£¨¾­¹ıbase64±àÂë£©
-	 * @return »ñÈ¡Ê§°Ü·µ»Ønull£¬·ñÔò·µ»Ø¹«Ô¿
+	 *            RSAå…¬é’¥æ¨¡æ•°å­—ç¬¦ä¸²ï¼ˆç»è¿‡base64ç¼–ç ï¼‰
+	 * @return è·å–å¤±è´¥è¿”å›nullï¼Œå¦åˆ™è¿”å›å…¬é’¥
 	 */
 	public static PublicKey getPublicKey(String modulus) throws Exception {
 		byte[] modulusBytes = (new BASE64Decoder()).decodeBuffer(modulus);
@@ -55,19 +55,19 @@ public class Encrypt {
 
 	/**
 	 * <p>
-	 * ¹«Ô¿¼ÓÃÜ
+	 * å…¬é’¥åŠ å¯†
 	 * </p>
 	 * 
 	 * @param data
-	 *            Ô´Êı¾İ
+	 *            æºæ•°æ®
 	 * @param publicKey
-	 *            ¹«Ô¿
+	 *            å…¬é’¥
 	 * @return
 	 * @throws Exception
 	 */
 	public static byte[] encryptByPublicKey(byte[] data, PublicKey publicKey)
 			throws Exception {
-		// ¶ÔÊı¾İ¼ÓÃÜ
+		// å¯¹æ•°æ®åŠ å¯†
 		Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
 		cipher.init(Cipher.ENCRYPT_MODE, publicKey);
 		int inputLen = data.length;
@@ -75,7 +75,7 @@ public class Encrypt {
 		int offSet = 0;
 		byte[] cache;
 		int i = 0;
-		// ¶ÔÊı¾İ·Ö¶Î¼ÓÃÜ
+		// å¯¹æ•°æ®åˆ†æ®µåŠ å¯†
 		while (inputLen - offSet > 0) {
 			if (inputLen - offSet > MAX_ENCRYPT_BLOCK) {
 				cache = cipher.doFinal(data, offSet, MAX_ENCRYPT_BLOCK);
@@ -116,13 +116,13 @@ public class Encrypt {
 	}
 
 	/**
-	 * Éú³ÉÇ©ÃûÊı¾İ
+	 * ç”Ÿæˆç­¾åæ•°æ®
 	 * 
 	 * @param data
-	 *            ´ı¼ÓÃÜµÄÊı¾İ
+	 *            å¾…åŠ å¯†çš„æ•°æ®
 	 * @param key
-	 *            ¼ÓÃÜÊ¹ÓÃµÄkey
-	 * @return Éú³ÉSHA1±àÂëµÄ×Ö·û´®
+	 *            åŠ å¯†ä½¿ç”¨çš„key
+	 * @return ç”ŸæˆSHA1ç¼–ç çš„å­—ç¬¦ä¸²
 	 * @throws InvalidKeyException
 	 * @throws NoSuchAlgorithmException
 	 */
@@ -152,7 +152,7 @@ public class Encrypt {
 	private static String getFormattedText(byte[] bytes) {
 		int len = bytes.length;
 		StringBuilder buf = new StringBuilder(len * 2);
-		// °ÑÃÜÎÄ×ª»»³ÉÊ®Áù½øÖÆµÄ×Ö·û´®ĞÎÊ½
+		// æŠŠå¯†æ–‡è½¬æ¢æˆåå…­è¿›åˆ¶çš„å­—ç¬¦ä¸²å½¢å¼
 		for (int j = 0; j < len; j++) {
 			buf.append(HEX_DIGITS[(bytes[j] >> 4) & 0x0f]);
 			buf.append(HEX_DIGITS[bytes[j] & 0x0f]);
@@ -204,7 +204,7 @@ public class Encrypt {
 			NoSuchAlgorithmException {
 		String result = null;
 
-		// ×ª»»Ê±¼äÎªbyte
+		// è½¬æ¢æ—¶é—´ä¸ºbyte
 		long timeMiS = (long) (timeSeconds / 30);
 		String time = Long.toHexString(timeMiS).toUpperCase();
 
