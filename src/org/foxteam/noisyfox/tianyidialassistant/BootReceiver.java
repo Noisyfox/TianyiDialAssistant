@@ -5,15 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 
 public class BootReceiver extends BroadcastReceiver {
-	public BootReceiver() {
-	}
+    public BootReceiver() {
+    }
 
-	@Override
-	public void onReceive(Context context, Intent intent) {
-		String action = intent.getAction();
-		if (action.equals(Intent.ACTION_BOOT_COMPLETED)) {
-			AlarmReceiver.startAlarm(context);
-		}
-	}
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        String action = intent.getAction();
+        if (action.equals(Intent.ACTION_BOOT_COMPLETED)) {
+            AlarmReceiver.startAlarm(context);
+        }
+    }
 
 }
