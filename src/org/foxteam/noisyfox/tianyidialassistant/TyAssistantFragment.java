@@ -1,6 +1,7 @@
 package org.foxteam.noisyfox.tianyidialassistant;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,6 +59,12 @@ public class TyAssistantFragment extends SherlockFragment {
                 t.setText("获取中，请耐心等待哦~");
             }
 
+        });
+        view.findViewById(R.id.btn_dial).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), TyDialActivity.class));
+            }
         });
 
     }

@@ -1,84 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.foxteam.noisyfox.tianyidialassistant"
-    android:versionCode="1"
-    android:versionName="1.1" >
+          package="org.foxteam.noisyfox.tianyidialassistant"
+          android:versionCode="1"
+          android:versionName="1.1">
 
     <uses-sdk
         android:minSdkVersion="9"
-        android:targetSdkVersion="19" />
+        android:targetSdkVersion="19"/>
 
-    <uses-permission android:name="android.permission.SEND_SMS" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission android:name="android.permission.READ_SMS" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.READ_SMS"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" android:name="MyApplication">
+        android:theme="@style/AppTheme"
+        android:name="MyApplication">
 
         <receiver
             android:name="org.foxteam.noisyfox.tianyidialassistant.SmsReceiver"
-            android:enabled="true" >
-            <intent-filter android:priority="1000" >
-                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            android:enabled="true">
+            <intent-filter android:priority="1000">
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
             </intent-filter>
         </receiver>
         <receiver
             android:name="org.foxteam.noisyfox.tianyidialassistant.WidgetReceiver"
-            android:enabled="true" >
+            android:enabled="true">
         </receiver>
-        <receiver android:name="org.foxteam.noisyfox.tianyidialassistant.TYWidgetProvider" >
+        <receiver android:name="org.foxteam.noisyfox.tianyidialassistant.TYWidgetProvider">
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/appwidgetproviderinfo" />
+                android:resource="@xml/appwidgetproviderinfo"/>
 
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>
         </receiver>
         <receiver
             android:name="org.foxteam.noisyfox.tianyidialassistant.AlarmReceiver"
-            android:enabled="true" >
+            android:enabled="true">
             <intent-filter>
-                <action android:name="org.foxteam.noisyfox.tianyidialassistant.refreshPassword" />
+                <action android:name="org.foxteam.noisyfox.tianyidialassistant.refreshPassword"/>
             </intent-filter>
         </receiver>
         <receiver
             android:name="org.foxteam.noisyfox.tianyidialassistant.BootReceiver"
-            android:enabled="true" >
+            android:enabled="true">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
 
         <activity
             android:name="org.foxteam.noisyfox.tianyidialassistant.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName="org.foxteam.noisyfox.tianyidialassistant.TyMainActivity" >
+            android:parentActivityName="org.foxteam.noisyfox.tianyidialassistant.TyMainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.foxteam.noisyfox.tianyidialassistant.TyMainActivity" />
+                android:value="org.foxteam.noisyfox.tianyidialassistant.TyMainActivity"/>
         </activity>
         <activity
             android:name="org.foxteam.noisyfox.tianyidialassistant.TyMainActivity"
-            android:label="@string/app_name" 
-            android:theme="@style/Theme.Sherlock.Light" >
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Sherlock.Light">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity
+            android:name=".TyDialActivity"
+            android:label="@string/title_activity_tydial"
+            android:theme="@style/Theme.Sherlock.Light"/>
     </application>
 
 </manifest>

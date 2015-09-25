@@ -66,7 +66,7 @@ public class PSWOperator {
             e.putLong(SP_VALUE_LONG_TIME_GET, time);
             // e.putLong(SP_VALUE_LONG_TIME_REQUEST, time);
 
-            e.commit();
+            e.apply();
         }
     }
 
@@ -91,7 +91,7 @@ public class PSWOperator {
                 }
                 Editor e = mPreferences.edit();
                 e.putLong(SP_VALUE_LONG_TIME_REQUEST, time);
-                e.commit();
+                e.apply();
             }
             return psw;
         }
@@ -141,5 +141,15 @@ public class PSWOperator {
         if (!updateThread.isAlive())
             updateThread.start();
         updateThread.requireUpdate(this);
+    }
+
+    public void storeLoginParam(String param){
+        Editor e = mDefaultPreferences.edit();
+        e.putString("lp", param);
+        e.apply();
+    }
+
+    public String getLoginParam(){
+        return mDefaultPreferences.getString("lp", null);
     }
 }

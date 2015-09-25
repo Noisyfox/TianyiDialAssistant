@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_tydial">天翼拨号</string>
+    <string name="label_psw">当前密码：%1$s</string>
+    <string name="label_no_psw">尚未获取</string>
+</resources>

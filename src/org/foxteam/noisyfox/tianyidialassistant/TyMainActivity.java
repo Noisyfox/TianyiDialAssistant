@@ -86,8 +86,6 @@ public class TyMainActivity extends SherlockFragmentActivity {
 
     }
 
-    ;
-
     public void showProgress(String message) {
         mainHandler.sendMessage(mainHandler.obtainMessage(MSG_PROGRESS_SHOW,
                 message));

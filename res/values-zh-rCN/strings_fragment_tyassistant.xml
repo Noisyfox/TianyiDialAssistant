@@ -4,4 +4,5 @@
     <string name="psw_err">密码获取失败</string>
     <string name="psw_neverget">尚未获取过密码</string>
     <string name="aboutme">by Noisyfox NUAA</string>
+    <string name="button_dialnow">立即认证上网</string>
 </resources>
