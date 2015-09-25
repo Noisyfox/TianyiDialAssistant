@@ -45,15 +45,6 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/libs/yjfsdk_04.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
           <root url="jar://$MODULE_DIR$/../../../Android/JakeWharton-ActionBarSherlock-5a15d92/actionbarsherlock/libs/android-support-v4.jar!/" />
         </CLASSES>
         <JAVADOC />
@@ -62,4 +53,3 @@
     </orderEntry>
   </component>
 </module>
-

@@ -2,30 +2,22 @@ package org.foxteam.noisyfox.tianyidialassistant;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
-import com.qiang.escore.banner.BannerSDK;
-import com.qiang.escore.sdk.YjfSDK;
-import com.qiang.escore.sdk.view.BannerView;
-import com.qiang.escore.sdk.widget.UpdateScordNotifier;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class TyAssistantFragment extends SherlockFragment implements
-        UpdateScordNotifier {
+public class TyAssistantFragment extends SherlockFragment {
     static final String TAG = "TyAssistantFragment";
     TyMainActivity father = null;
     TextView t;
-    LinearLayout linearLayout;
 
     @Override
     public void onAttach(Activity activity) {
@@ -53,25 +45,6 @@ public class TyAssistantFragment extends SherlockFragment implements
         super.onActivityCreated(savedInstanceState);
         View view = this.getView();
 
-        linearLayout = (LinearLayout) view.findViewById(R.id.banner_linear);
-
-        boolean show_add = PreferenceManager
-                .getDefaultSharedPreferences(father).getBoolean(
-                        "checkbox_advertisement", true);
-
-        // 当Activity第一次创建时调用,此方法需继承接口UpdateScordNotifier
-        YjfSDK.getInstance(father, this).initInstance("", "", "", "");
-        // Banner广告---------------------------------------------------------------------------------------------------------------------------------
-        if (show_add) {
-            // 显示推广条
-            final BannerView bannerView = BannerSDK.getInstance(father)
-                    .getBanner();
-            linearLayout.addView(bannerView);
-            // 推广条轮转
-            BannerSDK.getInstance(father).showBanner(bannerView);
-        }
-        // Banner广告---------------------------------------------------------------------------------------------------------------------------------
-
         t = (TextView) view.findViewById(R.id.textView_info);
         Button b = (Button) view.findViewById(R.id.button_getnow);
 
@@ -91,21 +64,8 @@ public class TyAssistantFragment extends SherlockFragment implements
 
     @Override
     public void onDestroy() {
-        YjfSDK.getInstance(father, this).recordAppClose();
         father.unregisterFragment(TAG);
         super.onDestroy();
-    }
-
-    @Override
-    public void updateScoreFailed(int arg0, int arg1, String arg2) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void updateScoreSuccess(int arg0, int arg1, int arg2, String arg3) {
-        // TODO Auto-generated method stub
-
     }
 
     public void updateMainText() {

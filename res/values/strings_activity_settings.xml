@@ -7,8 +7,6 @@
 
     <!-- General settings -->
     <string name="pref_header_general">General</string>
-    <string name="pref_title_advertisement">Show advertisement</string>
-    <string name="pref_description_advertisement">Please show advertisement to support the developer.</string>
     <string name="pref_title_autorefresh">Auto refresh password</string>
     <string name="pref_description_autorefresh">Auto require new dial password.</string>
     <string name="pref_title_refresh_frequency">Refresh frequency</string>

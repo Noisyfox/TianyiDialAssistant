@@ -7,8 +7,6 @@
 
     <!-- General settings -->
     <string name="pref_header_general">常规</string>
-    <string name="pref_title_advertisement">显示广告</string>
-    <string name="pref_description_advertisement">请显示广告以支持开发者~</string>
     <string name="pref_title_autorefresh">自动刷新密码</string>
     <string name="pref_description_autorefresh">每隔一定时间自动获取最新上网密码</string>
     <string name="pref_title_refresh_frequency">密码刷新间隔</string>

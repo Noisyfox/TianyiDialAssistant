@@ -11,10 +11,8 @@
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -27,35 +25,6 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" android:name="MyApplication">
-
-        <!-- 应用编号  由易积分平台添加 应用时自动生成 查看详情可见 777 -->
-        <meta-data
-            android:name="YJF_APP_ID"
-            android:value="1838" />
-        <!-- 应用密钥  由易积分平台添加 应用时自动生成 查看详情可见   QIANCHIANDEMARDEZIJIRENZHANGHAO -->
-        <meta-data
-            android:name="YJF_APP_KEY"
-            android:value="EMPKYHN8UOWAGQDBQ5HH1QP3ONALBSUU0M" />
-        <!-- 开发者ID  由易积分平台添加 应用时自动生成 查看详情可见  888 -->
-        <meta-data
-            android:name="YJF_DEV_ID"
-            android:value="272" />
-        <!-- 渠道号 开发者为自己应用在不同平台推广的标识参数  自定义6-20位字符串 yjf_adwall_v2.0.1 -->
-        <meta-data
-            android:name="YJF_APP_CHANNEL"
-            android:value="jifeng" />
-        <!-- 积分显示开关 -->
-        <meta-data
-            android:name="SHOW_SCORE"
-            android:value="OPEN" />
-        <!-- 注册详情Activity (必填) -->
-        <activity
-            android:name="com.qiang.escore.sdk.view.DetailActivity"
-            android:configChanges="keyboardHidden|orientation" />
-        <!-- 注册网页Activity (必填) -->
-        <activity
-            android:name="com.qiang.escore.sdk.view.WebActivity"
-            android:configChanges="keyboardHidden|orientation" />
 
         <receiver
             android:name="org.foxteam.noisyfox.tianyidialassistant.SmsReceiver"
@@ -98,7 +67,7 @@
             android:parentActivityName="org.foxteam.noisyfox.tianyidialassistant.TyMainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.foxteam.noisyfox.tianyidialassistant.MainActivity" />
+                android:value="org.foxteam.noisyfox.tianyidialassistant.TyMainActivity" />
         </activity>
         <activity
             android:name="org.foxteam.noisyfox.tianyidialassistant.TyMainActivity"
