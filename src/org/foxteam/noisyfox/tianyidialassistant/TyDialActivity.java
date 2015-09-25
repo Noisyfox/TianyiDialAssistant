@@ -39,6 +39,7 @@ public class TyDialActivity extends SherlockActivity {
         mWebView = (WebView) findViewById(R.id.webView_ty);
 
         mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.getSettings().setUseWideViewPort(true);
         mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.setWebViewClient(new WebViewClient(){
             @Override
@@ -177,6 +178,8 @@ public class TyDialActivity extends SherlockActivity {
                 }
                 mWebView.setVisibility(View.VISIBLE);
                 mWebView.loadUrl(url);
+                mWebView.requestFocus();
+                mWebView.requestFocusFromTouch();
             }
         });
     }
