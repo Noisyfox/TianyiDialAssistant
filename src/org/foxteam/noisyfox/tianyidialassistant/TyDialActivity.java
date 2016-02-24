@@ -1,6 +1,7 @@
 package org.foxteam.noisyfox.tianyidialassistant;
 
 import android.app.ProgressDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -27,6 +28,8 @@ public class TyDialActivity extends SherlockActivity {
 
     private ProgressDialog mProgressDialog = null;
 
+    private final static String JS_ShowLogin = "document.getElementById('form1').getElementsByClassName('loginb1')[1].removeAttribute('style');";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +43,20 @@ public class TyDialActivity extends SherlockActivity {
 
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setUseWideViewPort(true);
-        mWebView.setWebChromeClient(new WebChromeClient());
+        mWebView.setWebChromeClient(new WebChromeClient(){
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                if (newProgress == 100) {
+                    if (view.getUrl().contains("index.jsp")) {
+                        if (Build.VERSION.SDK_INT >= 19) {
+                            mWebView.evaluateJavascript(JS_ShowLogin, null);
+                        } else {
+                            mWebView.loadUrl("javascript:" + JS_ShowLogin + ";undefined;");
+                        }
+                    }
+                }
+            }
+        });
         mWebView.setWebViewClient(new WebViewClient(){
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -87,7 +103,8 @@ public class TyDialActivity extends SherlockActivity {
         try {
             doRefreshInternetStatus();
         } catch (Exception e) {
-
+            e.printStackTrace();
+            updateStatus("未知错误，请坐和放宽。");
         }
 
         hideProgress();
