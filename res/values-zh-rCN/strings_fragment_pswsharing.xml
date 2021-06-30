@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_pswsharing">共享密码</string>
+    <string name="checkbox_use_psw_sharing">启用共享密码</string>
+    <string name="radiobtn_i_want_share">我要共享给他人</string>
+    <string name="radiobtn_i_use_share">从他人处获得密码</string>
+    <string name="label_psw_sharing_port">服务端口：</string>
+    <string name="label_psw_sharing_password">服务密码：</string>
+    <string name="label_psw_sharing_ip">IP：</string>
+    <string name="label_psw_sharing_hint_get">启用此选项，将不会再从短信中获取密码。每次更新的密码将从你设置的位置获取。</string>
+    <string name="button_save_sharing">保存设置</string>
+</resources>

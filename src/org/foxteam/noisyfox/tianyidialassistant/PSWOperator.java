@@ -12,21 +12,21 @@ public class PSWOperator {
     static final String SP_VALUE_LONG_TIME_REQUEST = "time_request";
     static final String SP_VALUE_LONG_TIME_UPDATE = "time_update";
 
-    static final String STR_SERVER_URL = "http://192.168.0.13/tyserver/tyapp.php";
-    static final String STR_SERVER_ARGS_KEY_METHOD = "method";
-    static final String STR_SERVER_ARGS_KEY_NUMBER = "number";
-    static final String STR_SERVER_ARGS_KEY_CODE = "code";
-    static final String STR_SERVER_ARGS_KEY_PWD = "pwd";
-    static final String STR_SERVER_ARGS_KEY_DEVICE_KEY = "device_key";
-    static final String STR_SERVER_ARGS_KEY_CLIENT = "client";
-    static final String STR_SERVER_ARGS_KEY_STAT = "stat";
-    static final String STR_SERVER_ARGS_VALUE_GET = "get";
-    static final String STR_SERVER_ARGS_VALUE_PUT = "put";
-    static final String STR_SERVER_ARGS_VALUE_CLIENT = "TianyiDA/%s";
+//    static final String STR_SERVER_URL = "http://192.168.0.13/tyserver/tyapp.php";
+//    static final String STR_SERVER_ARGS_KEY_METHOD = "method";
+//    static final String STR_SERVER_ARGS_KEY_NUMBER = "number";
+//    static final String STR_SERVER_ARGS_KEY_CODE = "code";
+//    static final String STR_SERVER_ARGS_KEY_PWD = "pwd";
+//    static final String STR_SERVER_ARGS_KEY_DEVICE_KEY = "device_key";
+//    static final String STR_SERVER_ARGS_KEY_CLIENT = "client";
+//    static final String STR_SERVER_ARGS_KEY_STAT = "stat";
+//    static final String STR_SERVER_ARGS_VALUE_GET = "get";
+//    static final String STR_SERVER_ARGS_VALUE_PUT = "put";
+//    static final String STR_SERVER_ARGS_VALUE_CLIENT = "TianyiDA/%s";
     static final String STR_SMS_NUMBER = "10001";
     static final String STR_SMS_CONTENT = "xykdmm";
 
-    private final static UpdateThread updateThread = new UpdateThread();
+//    private final static UpdateThread updateThread = new UpdateThread();
 
     Context mContext = null;
     SharedPreferences mPreferences = null;
@@ -52,9 +52,9 @@ public class PSWOperator {
         MyApplication.getPlanManager().postTask(
                 MyApplication.getPlanManager().getAllPlans(0));
 
-        if (isUpdateAvailable()) {
-            doUpdate();
-        }
+//        if (isUpdateAvailable()) {
+//            doUpdate();
+//        }
     }
 
     public void recordLastPsw(String psw) {
@@ -116,9 +116,9 @@ public class PSWOperator {
 
             if (dTimeRecord > frequency) {
                 requestNewPassword();
-            } else if (dTimeUpdate > frequency && isUpdateAvailable()) {
+            } /*else if (dTimeUpdate > frequency && isUpdateAvailable()) {
                 doUpdate(); // 提交服务器
-            } else {
+            } */else {
                 return false;
             }
         } else {
@@ -133,15 +133,15 @@ public class PSWOperator {
      *
      * @return
      */
-    private boolean isUpdateAvailable() {
-        return mDefaultPreferences.getBoolean("enable_pc_assistant", false);
-    }
-
-    private void doUpdate() {
-        if (!updateThread.isAlive())
-            updateThread.start();
-        updateThread.requireUpdate(this);
-    }
+//    private boolean isUpdateAvailable() {
+//        return mDefaultPreferences.getBoolean("enable_pc_assistant", false);
+//    }
+//
+//    private void doUpdate() {
+//        if (!updateThread.isAlive())
+//            updateThread.start();
+//        updateThread.requireUpdate(this);
+//    }
 
     public void storeLoginParam(String param){
         Editor e = mDefaultPreferences.edit();

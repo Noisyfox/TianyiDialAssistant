@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_pswsharing">Sharing Password</string>
+    <string name="checkbox_use_psw_sharing">Use password sharing</string>
+    <string name="radiobtn_i_want_share">Use password sharing</string>
+    <string name="radiobtn_i_use_share">Use password sharing</string>
+    <string name="label_psw_sharing_port">Use password sharing</string>
+    <string name="label_psw_sharing_password">Use password sharing</string>
+    <string name="label_psw_sharing_ip">Use password sharing</string>
+    <string name="button_save_sharing">Save</string>
+</resources>

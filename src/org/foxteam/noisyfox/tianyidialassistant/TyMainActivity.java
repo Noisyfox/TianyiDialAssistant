@@ -17,8 +17,8 @@ import java.util.HashMap;
 public class TyMainActivity extends SherlockFragmentActivity {
     public static final int REQUEST_SETTINGS = 1;
 
-    public static final int MSG_PHONE_NUMBER_VERIFICATION_SUCCESS = 1;
-    public static final int MSG_PHONE_NUMBER_VERIFICATION_START = 2;
+//    public static final int MSG_PHONE_NUMBER_VERIFICATION_SUCCESS = 1;
+//    public static final int MSG_PHONE_NUMBER_VERIFICATION_START = 2;
     public static final int MSG_UPDATE_MAIN_TEXT = 3;
     public static final int MSG_PROGRESS_SHOW = 4;
     public static final int MSG_PROGRESS_HIDE = 5;
@@ -28,7 +28,7 @@ public class TyMainActivity extends SherlockFragmentActivity {
     ViewPager mViewPager;
     TabsAdapter mTabsAdapter;
 
-    PhoneNumberVerification mPhoneNumberVerification = null;
+//    PhoneNumberVerification mPhoneNumberVerification = null;
     PSWOperator mPSWOperator = null;
     private ProgressDialog mProgressDialog = null;
 
@@ -47,11 +47,11 @@ public class TyMainActivity extends SherlockFragmentActivity {
             if (activity == null)
                 return;
             switch (msg.what) {
-                case MSG_PHONE_NUMBER_VERIFICATION_SUCCESS:
-                    break;
-                case MSG_PHONE_NUMBER_VERIFICATION_START:
-                    activity.mPhoneNumberVerification.beginConfirm();
-                    break;
+//                case MSG_PHONE_NUMBER_VERIFICATION_SUCCESS:
+//                    break;
+//                case MSG_PHONE_NUMBER_VERIFICATION_START:
+//                    activity.mPhoneNumberVerification.beginConfirm();
+//                    break;
                 case MSG_UPDATE_MAIN_TEXT:
                     activity.mViewPager.getChildAt(0);
                     TyAssistantFragment taf = (TyAssistantFragment) activity
@@ -105,7 +105,7 @@ public class TyMainActivity extends SherlockFragmentActivity {
         mTabHost.setup();
         mViewPager = (ViewPager) findViewById(R.id.pager);
 
-        mPhoneNumberVerification = new PhoneNumberVerification(this);
+ //       mPhoneNumberVerification = new PhoneNumberVerification(this);
         mPSWOperator = new PSWOperator(this);
         Util.registerReceiver(this);
         SmsReceiver.registerActivity(this);
@@ -117,25 +117,25 @@ public class TyMainActivity extends SherlockFragmentActivity {
                         getText(R.string.title_activity_tyassistant)),
                 TyAssistantFragment.class, null);
         mTabsAdapter.addTab(
-                mTabHost.newTabSpec("openwrt").setIndicator(
-                        getText(R.string.title_activity_openwrt)),
-                OpenWrtFragment.class, null);
+                mTabHost.newTabSpec("sharing").setIndicator(
+                        getText(R.string.title_activity_pswsharing)),
+                PSWSharingFragment.class, null);
 
         if (savedInstanceState != null) {
             mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
         }
 
-        if (mPhoneNumberVerification.isPhoneNumberConfirmed()) {
-            // Toast.makeText(this, pnv.getPhoneNumber(), Toast.LENGTH_LONG)
-            // .show();
-
-            // mPSWOperator.update(mPhoneNumberVerification.getPhoneNumber(),
-            // mPSWOperator.getLastPsw(false), "123456",
-            // mPhoneNumberVerification.getDeviceKey());
-        } else if (!mPhoneNumberVerification.isRunAtOnce()) {
-            mainHandler.sendMessage(mainHandler
-                    .obtainMessage(MSG_PHONE_NUMBER_VERIFICATION_START));
-        }
+//        if (mPhoneNumberVerification.isPhoneNumberConfirmed()) {
+//            // Toast.makeText(this, pnv.getPhoneNumber(), Toast.LENGTH_LONG)
+//            // .show();
+//
+//            // mPSWOperator.update(mPhoneNumberVerification.getPhoneNumber(),
+//            // mPSWOperator.getLastPsw(false), "123456",
+//            // mPhoneNumberVerification.getDeviceKey());
+//        } else if (!mPhoneNumberVerification.isRunAtOnce()) {
+//            mainHandler.sendMessage(mainHandler
+//                    .obtainMessage(MSG_PHONE_NUMBER_VERIFICATION_START));
+//        }
 
     }
 
@@ -162,16 +162,16 @@ public class TyMainActivity extends SherlockFragmentActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_SETTINGS) {
-            switch (resultCode) {
-                case SettingsActivity.RESULT_REQUIRE_PHONEVER:
-                    mainHandler.sendMessage(mainHandler
-                            .obtainMessage(MSG_PHONE_NUMBER_VERIFICATION_START));
-                    break;
-                case SettingsActivity.RESULT_OK:
-                default:
-            }
-        }
+//        if (requestCode == REQUEST_SETTINGS) {
+//            switch (resultCode) {
+//                case SettingsActivity.RESULT_REQUIRE_PHONEVER:
+//                    mainHandler.sendMessage(mainHandler
+//                            .obtainMessage(MSG_PHONE_NUMBER_VERIFICATION_START));
+//                    break;
+//                case SettingsActivity.RESULT_OK:
+//                default:
+//            }
+//        }
         super.onActivityResult(requestCode, resultCode, data);
     }
 

@@ -31,9 +31,9 @@ public class SmsReceiver extends BroadcastReceiver {
                     msg[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
                 }
 
-                PhoneNumberVerification nv = new PhoneNumberVerification(
-                        context);
-                String unconfirmedNumber = nv.getUnconfrimedNumber();
+//                PhoneNumberVerification nv = new PhoneNumberVerification(
+//                        context);
+//                String unconfirmedNumber = nv.getUnconfrimedNumber();
 
                 Handler handler = null;
                 if (mActivityRef != null) {
@@ -76,7 +76,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
                             // break;
                         }
-                    } else if (addr.equals(unconfirmedNumber)) {
+                    }/* else if (addr.equals(unconfirmedNumber)) {
                         if (nv.confirmTextMessage(unconfirmedNumber,
                                 curMsg.getDisplayMessageBody())) {
                             if (handler != null)
@@ -84,7 +84,7 @@ public class SmsReceiver extends BroadcastReceiver {
                                         .obtainMessage(TyMainActivity.MSG_PHONE_NUMBER_VERIFICATION_SUCCESS));
                             abortBroadcast();
                         }
-                    }
+                    }*/
                 }
             }
             // Intent testIntent = new Intent(arg0, MainActivity.class);

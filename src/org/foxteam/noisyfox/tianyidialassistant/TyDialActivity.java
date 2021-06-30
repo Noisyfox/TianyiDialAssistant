@@ -29,6 +29,7 @@ public class TyDialActivity extends SherlockActivity {
     private ProgressDialog mProgressDialog = null;
 
     private final static String JS_ShowLogin = "document.getElementById('form1').getElementsByClassName('loginb1')[1].removeAttribute('style');";
+    private final static String JS_EnterPsw = "document.getElementById('PassWord1').value='%s'";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,10 +49,17 @@ public class TyDialActivity extends SherlockActivity {
             public void onProgressChanged(WebView view, int newProgress) {
                 if (newProgress == 100) {
                     if (view.getUrl().contains("index.jsp")) {
+                        String psw = mPswOper.getLastPsw(false);
+                        String pswJs = "undefined;";
+                        if(!psw.isEmpty()){
+                            pswJs = String.format(JS_EnterPsw, psw);
+                        }
                         if (Build.VERSION.SDK_INT >= 19) {
                             mWebView.evaluateJavascript(JS_ShowLogin, null);
+                            mWebView.evaluateJavascript(pswJs, null);
                         } else {
                             mWebView.loadUrl("javascript:" + JS_ShowLogin + ";undefined;");
+                            mWebView.loadUrl("javascript:" + pswJs + ";undefined;");
                         }
                     }
                 }
@@ -83,16 +91,6 @@ public class TyDialActivity extends SherlockActivity {
         if (psw.equals("")) {
             mTextView_psw.setText(getString(R.string.label_psw, getString(R.string.label_no_psw)));
         } else {
-//            Long time = mPswOper.getRecordTime();
-//            SimpleDateFormat formatter = new SimpleDateFormat(
-//                    "yyyy年MM月dd日\nHH:mm:ss", Locale.getDefault());
-//            Date curDate = new Date(time);
-//            String str = formatter.format(curDate);
-//            String w = "当前密码:\n" + psw + "\n获取时间:\n" + str;
-//            Long dTime_get = System.currentTimeMillis() - time;
-//            if (dTime_get > 5.5 * 60 * 60 * 1000) {
-//                w += "\n密码可能已经过期!";
-//            }
             mTextView_psw.setText(getString(R.string.label_psw, psw));
         }
     }

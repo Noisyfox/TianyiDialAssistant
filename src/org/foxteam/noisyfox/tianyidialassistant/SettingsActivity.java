@@ -1,17 +1,12 @@
 package org.foxteam.noisyfox.tianyidialassistant;
 
 import android.annotation.TargetApi;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.net.wifi.WifiConfiguration;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,15 +15,10 @@ import android.preference.*;
 import android.support.v4.app.NavUtils;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,15 +36,15 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class SettingsActivity extends PreferenceActivity {
     public static final int RESULT_OK = 0;
-    public static final int RESULT_REQUIRE_PHONEVER = 1;
+//    public static final int RESULT_REQUIRE_PHONEVER = 1;
 
-    private static final int MSG_PAIRING_REMOVED = 1;
-    private static final int MSG_PAIRING_PAIRED = 2;
-    private static final int MSG_PAIRING_SHOW_SECONDARYCODE_WAIT = 3;
+//    private static final int MSG_PAIRING_REMOVED = 1;
+//    private static final int MSG_PAIRING_PAIRED = 2;
+//    private static final int MSG_PAIRING_SHOW_SECONDARYCODE_WAIT = 3;
     private static final int MSG_PROCESS_SHOW = 4;
     private static final int MSG_PROCESS_DISSMISS = 5;
     private static final int MSG_TOAST = 6;
-    private static final int MSG_UPDATE_UI = 7;
+//    private static final int MSG_UPDATE_UI = 7;
 
     private ProgressDialog processDialog = null;
 
@@ -75,12 +65,12 @@ public class SettingsActivity extends PreferenceActivity {
             if (activity == null)
                 return;
             switch (msg.what) {
-                case MSG_PAIRING_REMOVED:
-                    activity.updateUI();
-                    break;
-                case MSG_PAIRING_PAIRED:
-                    activity.updateUI();
-                    break;
+//                case MSG_PAIRING_REMOVED:
+//                    activity.updateUI();
+//                    break;
+//                case MSG_PAIRING_PAIRED:
+//                    activity.updateUI();
+//                    break;
                 case MSG_PROCESS_SHOW: {
                     if (activity.processDialog != null) {
                         activity.processDialog.dismiss();
@@ -104,35 +94,35 @@ public class SettingsActivity extends PreferenceActivity {
                         activity.processDialog = null;
                     }
                     break;
-                case MSG_PAIRING_SHOW_SECONDARYCODE_WAIT: {
-                    String secondaryCode = (String) msg.obj;
-
-                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(
-                            activity);
-                    AlertDialog dlg = dialogBuilder.create();
-                    dlg.setTitle(R.string.dlgPairing_secondary_code_title);
-                    dlg.setMessage(secondaryCode);
-                    dlg.setButton(Dialog.BUTTON_POSITIVE,
-                            activity.getText(R.string.button_ok),
-                            new Dialog.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface arg0, int arg1) {
-                                    synchronized (mSyncObject) {
-                                        mSyncObject.notifyAll();
-                                    }
-                                }
-                            });
-                    dlg.show();
-                }
-                break;
+//                case MSG_PAIRING_SHOW_SECONDARYCODE_WAIT: {
+//                    String secondaryCode = (String) msg.obj;
+//
+//                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(
+//                            activity);
+//                    AlertDialog dlg = dialogBuilder.create();
+//                    dlg.setTitle(R.string.dlgPairing_secondary_code_title);
+//                    dlg.setMessage(secondaryCode);
+//                    dlg.setButton(Dialog.BUTTON_POSITIVE,
+//                            activity.getText(R.string.button_ok),
+//                            new Dialog.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface arg0, int arg1) {
+//                                    synchronized (mSyncObject) {
+//                                        mSyncObject.notifyAll();
+//                                    }
+//                                }
+//                            });
+//                    dlg.show();
+//                }
+//                break;
                 case MSG_TOAST: {
                     String text = (String) msg.obj;
                     Toast.makeText(activity, text, Toast.LENGTH_LONG).show();
                 }
                 break;
-                case MSG_UPDATE_UI:
-                    activity.updateUI();
-                    break;
+//                case MSG_UPDATE_UI:
+//                    activity.updateUI();
+//                    break;
             }
         }
 
@@ -198,76 +188,76 @@ public class SettingsActivity extends PreferenceActivity {
         setupSimplePreferencesScreen();
     }
 
-    private void updateUI() {
-        Preference phoneVer = findPreference("phone_number_verification");
-        PhoneNumberVerification pnv = new PhoneNumberVerification(this);
-        if (pnv.isPhoneNumberConfirmed()) {
-            phoneVer.setTitle(R.string.pref_title_phone_number_verification_ed);
-            phoneVer.setSummary(R.string.pref_description_phone_number_verification_ed);
-        } else {
-            ((CheckBoxPreference) findPreference("enable_pc_assistant"))
-                    .setChecked(false);
-
-            String pnum = pnv.getUnconfrimedNumber();
-            if (pnum != null) {
-                phoneVer.setTitle(R.string.pref_title_phone_number_verification_ing);
-                phoneVer.setSummary(this
-                        .getString(
-                                R.string.pref_description_phone_number_verification_ing,
-                                pnum));
-            } else {
-                phoneVer.setTitle(R.string.pref_title_phone_number_verification);
-                phoneVer.setSummary("");
-            }
-        }
-
-        Preference pcPairing = findPreference("pc_pairing");
-        Preference pcPairing_check = findPreference("pc_pairing_check");
-        EncryptedUploader uploader = new EncryptedUploader(mActivity);
-        if (uploader.isPaired()) {
-            pcPairing_check.setEnabled(false);
-            pcPairing.setTitle(R.string.pref_title_pc_pairing_paired);
-            pcPairing.setSummary(R.string.pref_description_pc_pairing_paired);
-        } else if (uploader.isPairing()) {
-            pcPairing_check.setEnabled(true);
-            pcPairing.setTitle(R.string.pref_title_pc_pairing_pairing);
-            pcPairing.setSummary(R.string.pref_description_pc_pairing_pairing);
-        } else {
-            pcPairing_check.setEnabled(false);
-
-            ((CheckBoxPreference) findPreference("enable_pc_assistant"))
-                    .setChecked(false);
-
-            pcPairing.setTitle(R.string.pref_title_pc_pairing);
-            pcPairing.setSummary("");
-        }
-
-        ListPreference lp_wifi_ssid = (ListPreference) findPreference("wifi_ssid");
-        WifiManager wifiService = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        List<WifiConfiguration> wcs = wifiService.getConfiguredNetworks();
-        if (wcs == null || wcs.size() == 0) {
-            String ssid = lp_wifi_ssid.getSharedPreferences().getString(
-                    "wifi_ssid", "");
-            String ssids[];
-            if (!ssid.isEmpty()) {
-                ssids = new String[]{ssid};
-            } else {
-                ssids = new String[]{};
-            }
-            lp_wifi_ssid.setEntries(ssids);
-            lp_wifi_ssid.setEntryValues(ssids);
-        } else {
-            ArrayList<String> ssidsl = new ArrayList<String>();
-            for (WifiConfiguration wc : wcs) {
-                ssidsl.add(wc.SSID);
-            }
-            String ssids[] = new String[ssidsl.size()];
-            ssidsl.toArray(ssids);
-
-            lp_wifi_ssid.setEntries(ssids);
-            lp_wifi_ssid.setEntryValues(ssids);
-        }
-    }
+//    private void updateUI() {
+//        Preference phoneVer = findPreference("phone_number_verification");
+//        PhoneNumberVerification pnv = new PhoneNumberVerification(this);
+//        if (pnv.isPhoneNumberConfirmed()) {
+//            phoneVer.setTitle(R.string.pref_title_phone_number_verification_ed);
+//            phoneVer.setSummary(R.string.pref_description_phone_number_verification_ed);
+//        } else {
+//            ((CheckBoxPreference) findPreference("enable_pc_assistant"))
+//                    .setChecked(false);
+//
+//            String pnum = pnv.getUnconfrimedNumber();
+//            if (pnum != null) {
+//                phoneVer.setTitle(R.string.pref_title_phone_number_verification_ing);
+//                phoneVer.setSummary(this
+//                        .getString(
+//                                R.string.pref_description_phone_number_verification_ing,
+//                                pnum));
+//            } else {
+//                phoneVer.setTitle(R.string.pref_title_phone_number_verification);
+//                phoneVer.setSummary("");
+//            }
+//        }
+//
+//        Preference pcPairing = findPreference("pc_pairing");
+//        Preference pcPairing_check = findPreference("pc_pairing_check");
+//        EncryptedUploader uploader = new EncryptedUploader(mActivity);
+//        if (uploader.isPaired()) {
+//            pcPairing_check.setEnabled(false);
+//            pcPairing.setTitle(R.string.pref_title_pc_pairing_paired);
+//            pcPairing.setSummary(R.string.pref_description_pc_pairing_paired);
+//        } else if (uploader.isPairing()) {
+//            pcPairing_check.setEnabled(true);
+//            pcPairing.setTitle(R.string.pref_title_pc_pairing_pairing);
+//            pcPairing.setSummary(R.string.pref_description_pc_pairing_pairing);
+//        } else {
+//            pcPairing_check.setEnabled(false);
+//
+//            ((CheckBoxPreference) findPreference("enable_pc_assistant"))
+//                    .setChecked(false);
+//
+//            pcPairing.setTitle(R.string.pref_title_pc_pairing);
+//            pcPairing.setSummary("");
+//        }
+//
+//        ListPreference lp_wifi_ssid = (ListPreference) findPreference("wifi_ssid");
+//        WifiManager wifiService = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+//        List<WifiConfiguration> wcs = wifiService.getConfiguredNetworks();
+//        if (wcs == null || wcs.size() == 0) {
+//            String ssid = lp_wifi_ssid.getSharedPreferences().getString(
+//                    "wifi_ssid", "");
+//            String ssids[];
+//            if (!ssid.isEmpty()) {
+//                ssids = new String[]{ssid};
+//            } else {
+//                ssids = new String[]{};
+//            }
+//            lp_wifi_ssid.setEntries(ssids);
+//            lp_wifi_ssid.setEntryValues(ssids);
+//        } else {
+//            ArrayList<String> ssidsl = new ArrayList<String>();
+//            for (WifiConfiguration wc : wcs) {
+//                ssidsl.add(wc.SSID);
+//            }
+//            String ssids[] = new String[ssidsl.size()];
+//            ssidsl.toArray(ssids);
+//
+//            lp_wifi_ssid.setEntries(ssids);
+//            lp_wifi_ssid.setEntryValues(ssids);
+//        }
+//    }
 
     /**
      * Shows the simplified settings UI if the device configuration if the
@@ -283,29 +273,29 @@ public class SettingsActivity extends PreferenceActivity {
         addPreferencesFromResource(R.xml.pref_general);
         bindPreferenceSummaryToValue(findPreference("refresh_frequency"));
 
-        // Add 'pc assistant' preferences.
-        PreferenceCategory fakeHeader = new PreferenceCategory(this);
-        fakeHeader.setTitle(R.string.pref_header_pc_assistant);
-        getPreferenceScreen().addPreference(fakeHeader);
-        addPreferencesFromResource(R.xml.pref_pc_assistant);
-        findPreference("enable_pc_assistant").setOnPreferenceChangeListener(
-                sPCAssistantListener);
+//        // Add 'pc assistant' preferences.
+//        PreferenceCategory fakeHeader = new PreferenceCategory(this);
+//        fakeHeader.setTitle(R.string.pref_header_pc_assistant);
+//        getPreferenceScreen().addPreference(fakeHeader);
+//        addPreferencesFromResource(R.xml.pref_pc_assistant);
+//        findPreference("enable_pc_assistant").setOnPreferenceChangeListener(
+//                sPCAssistantListener);
 
-        // Add 'openwrt' preferences.
-        fakeHeader = new PreferenceCategory(this);
-        fakeHeader.setTitle(R.string.pref_header_openwrt);
-        getPreferenceScreen().addPreference(fakeHeader);
-        addPreferencesFromResource(R.xml.pref_openwrt);
-        bindPreferenceSummaryToValue(findPreference("ssh_address"));
-        bindPreferenceSummaryToValue(findPreference("ssh_port"));
-        bindPreferenceSummaryToValue(findPreference("login_user"));
-        bindPreferenceSummaryToValue(findPreference("login_passwd"));
-        bindPreferenceSummaryToValue(findPreference("wan_interface"));
-        bindPreferenceSummaryToValue(findPreference("phone_number"));
+//        // Add 'openwrt' preferences.
+//        fakeHeader = new PreferenceCategory(this);
+//        fakeHeader.setTitle(R.string.pref_header_openwrt);
+//        getPreferenceScreen().addPreference(fakeHeader);
+//        addPreferencesFromResource(R.xml.pref_openwrt);
+//        bindPreferenceSummaryToValue(findPreference("ssh_address"));
+//        bindPreferenceSummaryToValue(findPreference("ssh_port"));
+//        bindPreferenceSummaryToValue(findPreference("login_user"));
+//        bindPreferenceSummaryToValue(findPreference("login_passwd"));
+//        bindPreferenceSummaryToValue(findPreference("wan_interface"));
+//        bindPreferenceSummaryToValue(findPreference("phone_number"));
 
         // 读取配置
-        updateUI();
-        bindPreferenceSummaryToValue(findPreference("wifi_ssid"));
+//        updateUI();
+//        bindPreferenceSummaryToValue(findPreference("wifi_ssid"));
 
     }
 
@@ -356,233 +346,233 @@ public class SettingsActivity extends PreferenceActivity {
         boolean result = true;
         String key = preference.getKey();
 
-        if ("phone_number_verification".equals(key)) {
-            // NavUtils.navigateUpFromSameTask(this);
-            ((CheckBoxPreference) findPreference("enable_pc_assistant"))
-                    .setChecked(false);
-
-            // mParent.mainHandler
-            // .sendMessage(mParent.mainHandler
-            // .obtainMessage(TyMainActivity.MSG_PHONE_NUMBER_VERIFICATION_START));
-            this.setResult(RESULT_REQUIRE_PHONEVER);
-            this.finish();
-        } else if ("pc_pairing".equals(key)) {
-            final EncryptedUploader uploader = new EncryptedUploader(mActivity);
-            if (uploader.isPaired()) {
-                // 解除配对
-                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(
-                        mActivity);
-                AlertDialog dlg = dialogBuilder.create();
-                dlg.setTitle(R.string.dlgPairing_remove_title);
-                dlg.setMessage(mActivity
-                        .getText(R.string.dlgPairing_remove_text));
-                dlg.setButton(Dialog.BUTTON_POSITIVE,
-                        mActivity.getText(R.string.button_remove_pairing),
-                        new Dialog.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                showProcess(mActivity
-                                        .getString(R.string.dlgPairing_remove_removing));
-                                new Thread() {
-                                    @Override
-                                    public void run() {
-                                        boolean result = uploader
-                                                .removePairing();
-                                        dismissProcess();
-                                        if (result)
-                                            mHandler.sendMessage(mHandler
-                                                    .obtainMessage(MSG_PAIRING_REMOVED));
-                                        showToast(mActivity
-                                                .getString(result ? R.string.toastPairing_remove_successful
-                                                        : R.string.toastPairing_remove_failed));
-                                    }
-                                }.start();
-                            }
-                        });
-                dlg.setButton(Dialog.BUTTON_NEGATIVE,
-                        mActivity.getText(R.string.button_cancel),
-                        (Dialog.OnClickListener) null);
-                dlg.show();
-            } else if (uploader.isPairing()) {
-                // 放弃配对
-                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(
-                        mActivity);
-                AlertDialog dlg = dialogBuilder.create();
-                dlg.setTitle(R.string.dlgPairing_giveup_title);
-                dlg.setMessage(mActivity
-                        .getText(R.string.dlgPairing_giveup_text));
-                dlg.setButton(Dialog.BUTTON_POSITIVE,
-                        mActivity.getText(R.string.button_giveup_pairing),
-                        new Dialog.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                showProcess(mActivity
-                                        .getString(R.string.dlgPairing_giveup_givingup));
-                                new Thread() {
-                                    @Override
-                                    public void run() {
-                                        uploader.giveupPairing();
-                                        mHandler.sendMessage(mHandler
-                                                .obtainMessage(MSG_UPDATE_UI));
-                                        dismissProcess();
-                                    }
-                                }.start();
-                            }
-                        });
-                dlg.setButton(Dialog.BUTTON_NEGATIVE,
-                        mActivity.getText(R.string.button_cancel),
-                        (Dialog.OnClickListener) null);
-                dlg.show();
-            } else {
-                // 开始配对
-                LayoutInflater inflater = getLayoutInflater();
-                View layout = inflater.inflate(R.layout.pairing_primary_code,
-                        (ViewGroup) findViewById(R.id.edit_primary_code));
-
-                final EditText editText = (EditText) layout
-                        .findViewById(R.id.edit_primary_code);
-
-                new AlertDialog.Builder(mActivity)
-                        .setTitle(R.string.dlgPairing_primary_code_title)
-                        .setIcon(android.R.drawable.ic_dialog_info)
-                        .setView(layout)
-                        .setPositiveButton(
-                                mActivity.getText(R.string.button_ok),
-                                new Dialog.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface arg0,
-                                                        int arg1) {
-                                        new Thread() {
-                                            @Override
-                                            public void run() {
-
-                                                synchronized (mSyncObject) {
-                                                    String primaryCode = editText
-                                                            .getText()
-                                                            .toString();
-
-                                                    showProcess(mActivity
-                                                            .getString(R.string.dlgPairing_requiring_secondary));
-
-                                                    String secondaryCode = uploader
-                                                            .getSecondaryPairingCode(primaryCode);
-
-                                                    dismissProcess();
-
-                                                    if (secondaryCode == null) {
-                                                        String errmsg = uploader
-                                                                .checkLastErrorMessage();
-                                                        showToast("Error: "
-                                                                + errmsg);
-                                                        return;
-                                                    }
-
-                                                    mHandler.sendMessage(mHandler
-                                                            .obtainMessage(
-                                                                    MSG_PAIRING_SHOW_SECONDARYCODE_WAIT,
-                                                                    secondaryCode));
-
-                                                    try {
-                                                        mSyncObject.wait();
-                                                    } catch (InterruptedException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                    checkPairing(uploader);
-                                                }
-                                            }
-                                        }.start();
-                                    }
-                                })
-                        .setNegativeButton(
-                                mActivity.getText(R.string.button_cancel), null)
-                        .show();
-            }
-        } else if ("pc_pairing_check".equals(key)) {
-            // 重试配对
-            final EncryptedUploader uploader = new EncryptedUploader(mActivity);
-            if (uploader.isPairing()) {
-                new Thread() {
-                    @Override
-                    public void run() {
-                        checkPairing(uploader);
-                    }
-                }.start();
-            }
-        } else if ("checkbox_advertisement".equals(key)) {
-            CheckBoxPreference cp = (CheckBoxPreference) preference;
-            if (cp.isChecked()) {
-                Toast.makeText(this, "感谢您的支持~咱会再接再厉做出更好的app!\n(重启程序生效)",
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "555~不要嘛。。咱的广告不会乱弹的啦\n(重启程序生效)",
-                        Toast.LENGTH_SHORT).show();
-            }
-        } else {
+//        if ("phone_number_verification".equals(key)) {
+//            // NavUtils.navigateUpFromSameTask(this);
+//            ((CheckBoxPreference) findPreference("enable_pc_assistant"))
+//                    .setChecked(false);
+//
+//            // mParent.mainHandler
+//            // .sendMessage(mParent.mainHandler
+//            // .obtainMessage(TyMainActivity.MSG_PHONE_NUMBER_VERIFICATION_START));
+//            this.setResult(RESULT_REQUIRE_PHONEVER);
+//            this.finish();
+//        } else if ("pc_pairing".equals(key)) {
+//            final EncryptedUploader uploader = new EncryptedUploader(mActivity);
+//            if (uploader.isPaired()) {
+//                // 解除配对
+//                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(
+//                        mActivity);
+//                AlertDialog dlg = dialogBuilder.create();
+//                dlg.setTitle(R.string.dlgPairing_remove_title);
+//                dlg.setMessage(mActivity
+//                        .getText(R.string.dlgPairing_remove_text));
+//                dlg.setButton(Dialog.BUTTON_POSITIVE,
+//                        mActivity.getText(R.string.button_remove_pairing),
+//                        new Dialog.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface arg0, int arg1) {
+//                                showProcess(mActivity
+//                                        .getString(R.string.dlgPairing_remove_removing));
+//                                new Thread() {
+//                                    @Override
+//                                    public void run() {
+//                                        boolean result = uploader
+//                                                .removePairing();
+//                                        dismissProcess();
+//                                        if (result)
+//                                            mHandler.sendMessage(mHandler
+//                                                    .obtainMessage(MSG_PAIRING_REMOVED));
+//                                        showToast(mActivity
+//                                                .getString(result ? R.string.toastPairing_remove_successful
+//                                                        : R.string.toastPairing_remove_failed));
+//                                    }
+//                                }.start();
+//                            }
+//                        });
+//                dlg.setButton(Dialog.BUTTON_NEGATIVE,
+//                        mActivity.getText(R.string.button_cancel),
+//                        (Dialog.OnClickListener) null);
+//                dlg.show();
+//            } else if (uploader.isPairing()) {
+//                // 放弃配对
+//                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(
+//                        mActivity);
+//                AlertDialog dlg = dialogBuilder.create();
+//                dlg.setTitle(R.string.dlgPairing_giveup_title);
+//                dlg.setMessage(mActivity
+//                        .getText(R.string.dlgPairing_giveup_text));
+//                dlg.setButton(Dialog.BUTTON_POSITIVE,
+//                        mActivity.getText(R.string.button_giveup_pairing),
+//                        new Dialog.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface arg0, int arg1) {
+//                                showProcess(mActivity
+//                                        .getString(R.string.dlgPairing_giveup_givingup));
+//                                new Thread() {
+//                                    @Override
+//                                    public void run() {
+//                                        uploader.giveupPairing();
+//                                        mHandler.sendMessage(mHandler
+//                                                .obtainMessage(MSG_UPDATE_UI));
+//                                        dismissProcess();
+//                                    }
+//                                }.start();
+//                            }
+//                        });
+//                dlg.setButton(Dialog.BUTTON_NEGATIVE,
+//                        mActivity.getText(R.string.button_cancel),
+//                        (Dialog.OnClickListener) null);
+//                dlg.show();
+//            } else {
+//                // 开始配对
+//                LayoutInflater inflater = getLayoutInflater();
+//                View layout = inflater.inflate(R.layout.pairing_primary_code,
+//                        (ViewGroup) findViewById(R.id.edit_primary_code));
+//
+//                final EditText editText = (EditText) layout
+//                        .findViewById(R.id.edit_primary_code);
+//
+//                new AlertDialog.Builder(mActivity)
+//                        .setTitle(R.string.dlgPairing_primary_code_title)
+//                        .setIcon(android.R.drawable.ic_dialog_info)
+//                        .setView(layout)
+//                        .setPositiveButton(
+//                                mActivity.getText(R.string.button_ok),
+//                                new Dialog.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface arg0,
+//                                                        int arg1) {
+//                                        new Thread() {
+//                                            @Override
+//                                            public void run() {
+//
+//                                                synchronized (mSyncObject) {
+//                                                    String primaryCode = editText
+//                                                            .getText()
+//                                                            .toString();
+//
+//                                                    showProcess(mActivity
+//                                                            .getString(R.string.dlgPairing_requiring_secondary));
+//
+//                                                    String secondaryCode = uploader
+//                                                            .getSecondaryPairingCode(primaryCode);
+//
+//                                                    dismissProcess();
+//
+//                                                    if (secondaryCode == null) {
+//                                                        String errmsg = uploader
+//                                                                .checkLastErrorMessage();
+//                                                        showToast("Error: "
+//                                                                + errmsg);
+//                                                        return;
+//                                                    }
+//
+//                                                    mHandler.sendMessage(mHandler
+//                                                            .obtainMessage(
+//                                                                    MSG_PAIRING_SHOW_SECONDARYCODE_WAIT,
+//                                                                    secondaryCode));
+//
+//                                                    try {
+//                                                        mSyncObject.wait();
+//                                                    } catch (InterruptedException e) {
+//                                                        e.printStackTrace();
+//                                                    }
+//                                                    checkPairing(uploader);
+//                                                }
+//                                            }
+//                                        }.start();
+//                                    }
+//                                })
+//                        .setNegativeButton(
+//                                mActivity.getText(R.string.button_cancel), null)
+//                        .show();
+//            }
+//        } else if ("pc_pairing_check".equals(key)) {
+//            // 重试配对
+//            final EncryptedUploader uploader = new EncryptedUploader(mActivity);
+//            if (uploader.isPairing()) {
+//                new Thread() {
+//                    @Override
+//                    public void run() {
+//                        checkPairing(uploader);
+//                    }
+//                }.start();
+//            }
+//        } else if ("checkbox_advertisement".equals(key)) {
+//            CheckBoxPreference cp = (CheckBoxPreference) preference;
+//            if (cp.isChecked()) {
+//                Toast.makeText(this, "感谢您的支持~咱会再接再厉做出更好的app!\n(重启程序生效)",
+//                        Toast.LENGTH_SHORT).show();
+//            } else {
+//                Toast.makeText(this, "555~不要嘛。。咱的广告不会乱弹的啦\n(重启程序生效)",
+//                        Toast.LENGTH_SHORT).show();
+//            }
+//        } else {
             result = super.onPreferenceTreeClick(preferenceScreen, preference);
-        }
+//        }
         return result;
     }
 
-    private void checkPairing(EncryptedUploader uploader) {
-        showProcess(mActivity.getString(R.string.dlgPairing_verify));
-        boolean result = uploader.finishPairing();
+//    private void checkPairing(EncryptedUploader uploader) {
+//        showProcess(mActivity.getString(R.string.dlgPairing_verify));
+//        boolean result = uploader.finishPairing();
+//
+//        dismissProcess();
+//
+//        if (result) {
+//            mHandler.sendMessage(mHandler.obtainMessage(MSG_PAIRING_PAIRED));
+//        } else {
+//            mHandler.sendMessage(mHandler.obtainMessage(MSG_UPDATE_UI));
+//        }
+//        String msgTost = mActivity
+//                .getString(result ? R.string.toastPairing_pair_successful
+//                        : R.string.toastPairing_pair_failed);
+//        showToast(msgTost);
+//    }
 
-        dismissProcess();
-
-        if (result) {
-            mHandler.sendMessage(mHandler.obtainMessage(MSG_PAIRING_PAIRED));
-        } else {
-            mHandler.sendMessage(mHandler.obtainMessage(MSG_UPDATE_UI));
-        }
-        String msgTost = mActivity
-                .getString(result ? R.string.toastPairing_pair_successful
-                        : R.string.toastPairing_pair_failed);
-        showToast(msgTost);
-    }
-
-    private Preference.OnPreferenceChangeListener sPCAssistantListener = new Preference.OnPreferenceChangeListener() {
-
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object value) {
-            if (preference.getKey().equals("enable_pc_assistant")) {
-                if (value.equals(true)) {
-                    PhoneNumberVerification pnv = new PhoneNumberVerification(
-                            mActivity);
-                    if (pnv.isPhoneNumberConfirmed()) {
-                        // 启动后台服务
-                    } else {
-                        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(
-                                mActivity);
-                        AlertDialog dlg = dialogBuilder.create();
-                        dlg.setTitle(R.string.dlgPhoneVer_need_to_ver_title);
-                        dlg.setMessage(mActivity
-                                .getText(R.string.dlgPhoneVer_need_to_ver_text));
-                        dlg.setButton(Dialog.BUTTON_POSITIVE,
-                                mActivity.getText(R.string.button_ver_now),
-                                new Dialog.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface arg0,
-                                                        int arg1) {
-                                        mActivity
-                                                .setResult(RESULT_REQUIRE_PHONEVER);
-                                        mActivity.finish();
-                                    }
-                                });
-                        dlg.setButton(Dialog.BUTTON_NEGATIVE,
-                                mActivity.getText(R.string.button_cancel),
-                                (Dialog.OnClickListener) null);
-                        dlg.show();
-                        return false;
-                    }
-                } else {
-                    // 结束后台服务
-                }
-                return false;// 目前强制关闭此功能
-            }
-            return true;
-        }
-
-    };
+//    private Preference.OnPreferenceChangeListener sPCAssistantListener = new Preference.OnPreferenceChangeListener() {
+//
+//        @Override
+//        public boolean onPreferenceChange(Preference preference, Object value) {
+//            if (preference.getKey().equals("enable_pc_assistant")) {
+//                if (value.equals(true)) {
+//                    PhoneNumberVerification pnv = new PhoneNumberVerification(
+//                            mActivity);
+//                    if (pnv.isPhoneNumberConfirmed()) {
+//                        // 启动后台服务
+//                    } else {
+//                        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(
+//                                mActivity);
+//                        AlertDialog dlg = dialogBuilder.create();
+//                        dlg.setTitle(R.string.dlgPhoneVer_need_to_ver_title);
+//                        dlg.setMessage(mActivity
+//                                .getText(R.string.dlgPhoneVer_need_to_ver_text));
+//                        dlg.setButton(Dialog.BUTTON_POSITIVE,
+//                                mActivity.getText(R.string.button_ver_now),
+//                                new Dialog.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface arg0,
+//                                                        int arg1) {
+//                                        mActivity
+//                                                .setResult(RESULT_REQUIRE_PHONEVER);
+//                                        mActivity.finish();
+//                                    }
+//                                });
+//                        dlg.setButton(Dialog.BUTTON_NEGATIVE,
+//                                mActivity.getText(R.string.button_cancel),
+//                                (Dialog.OnClickListener) null);
+//                        dlg.show();
+//                        return false;
+//                    }
+//                } else {
+//                    // 结束后台服务
+//                }
+//                return false;// 目前强制关闭此功能
+//            }
+//            return true;
+//        }
+//
+//    };
 
     /**
      * A preference value change listener that updates the preference's summary
@@ -682,34 +672,34 @@ public class SettingsActivity extends PreferenceActivity {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class PCAssistantPreferenceFragment extends
-            PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_pc_assistant);
-        }
-    }
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class OpenWrtPreferenceFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_openwrt);
-            bindPreferenceSummaryToValue(findPreference("wifi_ssid"));
-            bindPreferenceSummaryToValue(findPreference("ssh_address"));
-            bindPreferenceSummaryToValue(findPreference("ssh_port"));
-            bindPreferenceSummaryToValue(findPreference("login_user"));
-            bindPreferenceSummaryToValue(findPreference("login_passwd"));
-            bindPreferenceSummaryToValue(findPreference("wan_interface"));
-            bindPreferenceSummaryToValue(findPreference("phone_number"));
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            // bindPreferenceSummaryToValue(findPreference("enable_pc_assistant"));
-        }
-    }
+//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+//    public static class PCAssistantPreferenceFragment extends
+//            PreferenceFragment {
+//        @Override
+//        public void onCreate(Bundle savedInstanceState) {
+//            super.onCreate(savedInstanceState);
+//            addPreferencesFromResource(R.xml.pref_pc_assistant);
+//        }
+//    }
+//
+//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+//    public static class OpenWrtPreferenceFragment extends PreferenceFragment {
+//        @Override
+//        public void onCreate(Bundle savedInstanceState) {
+//            super.onCreate(savedInstanceState);
+//            addPreferencesFromResource(R.xml.pref_openwrt);
+//            bindPreferenceSummaryToValue(findPreference("wifi_ssid"));
+//            bindPreferenceSummaryToValue(findPreference("ssh_address"));
+//            bindPreferenceSummaryToValue(findPreference("ssh_port"));
+//            bindPreferenceSummaryToValue(findPreference("login_user"));
+//            bindPreferenceSummaryToValue(findPreference("login_passwd"));
+//            bindPreferenceSummaryToValue(findPreference("wan_interface"));
+//            bindPreferenceSummaryToValue(findPreference("phone_number"));
+//            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
+//            // to their values. When their values change, their summaries are
+//            // updated to reflect the new value, per the Android Design
+//            // guidelines.
+//            // bindPreferenceSummaryToValue(findPreference("enable_pc_assistant"));
+//        }
+//    }
 }
